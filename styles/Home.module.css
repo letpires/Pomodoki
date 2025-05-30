@@ -115,3 +115,39 @@
     flex-direction: column;
   }
 }
+
+.flowLogin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  margin: 2rem 0;
+}
+
+.flowButton {
+  background-color: #00ef8b;
+  color: #000;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.flowButton:hover {
+  background-color: #00d47e;
+  transform: translateY(-2px);
+}
+
+.userInfo {
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.userInfo p {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  color: #333;
+}
