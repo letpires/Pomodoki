@@ -2,12 +2,14 @@
   "name": "nextjs-chrome-extension",
   "private": true,
   "scripts": {
-    "dev": "npm-watch",
+    "dev": "next dev",
     "build": "next build && next export && npm run lint:build",
     "lint:build": "mv out/_next out/assets && gsed -i 's/\\/_next/\\/assets/g' out/**.html",
     "lint": "next lint"
   },
   "dependencies": {
+    "@onflow/fcl": "^1.18.0",
+    "@onflow/types": "^1.4.1",
     "next": "12.1.6",
     "react": "18.1.0",
     "react-dom": "18.1.0"

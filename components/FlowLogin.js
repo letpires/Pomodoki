@@ -1,0 +1,65 @@
+import { useEffect, useState } from "react";
+import * as fcl from "@onflow/fcl";
+
+// Configure Flow Client Library
+fcl.config({
+  "accessNode.api": "https://rest-testnet.onflow.org",
+  "discovery.wallet": "https://fcl-discovery.onflow.org/testnet/authn",
+  "app.detail.title": "Pomodoki App",
+  "app.detail.icon": "https://placekitten.com/g/200/200",
+});
+
+export default function FlowLogin() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Check if user is already logged in
+    fcl.currentUser().subscribe((user) => {
+      console.log("currentUser", user);
+      if (user && user.addr) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
+    });
+    setLoading(false);
+  }, []);
+
+  const handleLogin = async () => {
+    try {
+      await fcl.logIn();
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await fcl.unauthenticate();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div className="flow-login">
+      {!user ? (
+        <button onClick={handleLogin} className="flow-button">
+          Connect Flow Wallet
+        </button>
+      ) : (
+        <div className="user-info">
+          <p>Connected as: {user.addr}</p>
+          <button onClick={handleLogout} className="flow-button">
+            Disconnect
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
