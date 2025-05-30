@@ -9,20 +9,31 @@ export default function Home() {
         <title>Pomodoki - Flow Blockchain App</title>
         <meta name="description" content="A Next.js app with Flow blockchain integration" />
         <link rel="icon" href="/favicon.ico" />
+        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
       </Head>
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Pomodoki</a>
+          Welcome to<br />
+          <span className={styles.brand}>Pomodoki</span>
         </h1>
 
-        <p className={styles.description}>
-          Connect your Flow wallet to get started
-        </p>
+        <img
+          src="/images/avatar.png"
+          alt="Pomodoki Avatar"
+          style={{ display: "block", margin: "32px auto", width: "180px" }}
+        />
+
 
         <div className={styles.flowLogin}>
           <FlowLogin />
         </div>
+
+        <button className="pixelButton">
+          <span role="img" aria-label="key" style={{ fontSize: '1.5em' }}>🔑</span>
+          Connect Wallet
+        </button>
  
       </main>
 

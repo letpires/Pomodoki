@@ -1,5 +1,6 @@
 .container {
   padding: 0 1rem;
+  background: #ffedae;
 }
 
 .main {
@@ -43,7 +44,9 @@
 .title {
   margin: 0;
   line-height: 1.15;
-  font-size: 4rem;
+  font-size: 2.5rem;
+  font-family: 'Press Start 2P', cursive, sans-serif;
+  color: #5c4435;
 }
 
 .title,
@@ -150,4 +153,14 @@
   margin-bottom: 1rem;
   font-size: 1.1rem;
   color: #333;
+}
+
+.brand {
+  color: #5c4435;
+  display: block;
+  margin-top: 0.5em;
+}
+
+.title {
+  text-align: center;
 }
