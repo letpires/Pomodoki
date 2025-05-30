@@ -2,28 +2,25 @@
   "emulators": {
       "default": {
           "port": 3569,
-          "serviceAccount": "emulator-account"
+          "serviceAccount": "testnet-account"
       }
   },
   "contracts": {
-      "StakingContract": {
-          "source": "./cadence/contracts/StakingContract.cdc",
-          "aliases": {
-              "testnet": "0xacdf784e6e2a83f0"
-          }
-      }
+      "StakingContract": "./cadence/contracts/StakingContract.cdc"
   },
   "networks": {
       "testnet": "access.devnet.nodes.onflow.org:9000"
   },
   "accounts": {
-      "emulator-account": {
-          "address": "1885b3ca354ef234b770fe28e3dd85052933a47e853d454ac11744798c82b8e3769e499e959381ab0a00da86e895292b4db059f7ef3e4fb631c978955c43abf9",
-          "key": "c015ea356f2ce6fd6ebd6066430b881c4596426739c6ec7a5106ac182af026a6"
-      },
       "testnet-account": {
-          "address": "1885b3ca354ef234b770fe28e3dd85052933a47e853d454ac11744798c82b8e3769e499e959381ab0a00da86e895292b4db059f7ef3e4fb631c978955c43abf9",
-          "key": "c015ea356f2ce6fd6ebd6066430b881c4596426739c6ec7a5106ac182af026a6"
+          "address": "0xacdf784e6e2a83f0",
+          "key": {
+              "type": "hex",
+              "index": 0,
+              "signatureAlgorithm": "ECDSA_secp256k1",
+              "hashAlgorithm": "SHA2_256",
+              "privateKey": "$PRIVATE_KEY"
+          }
       }
   },
   "deployments": {
