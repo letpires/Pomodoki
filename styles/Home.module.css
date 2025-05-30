@@ -1,9 +1,10 @@
 .container {
-  padding: 0 2rem;
+  padding: 0 1rem;
 }
 
 .main {
   min-height: 100vh;
+  min-width: 100vw;
   padding: 4rem 0;
   flex: 1;
   display: flex;
@@ -70,7 +71,7 @@
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  max-width: 800px;
+  max-width: 1200px;
 }
 
 .card {
