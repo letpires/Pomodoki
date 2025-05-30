@@ -55,6 +55,7 @@ export default function FlowLogin() {
       ) : (
         <div className="user-info">
           <p>Connected as: {user.addr}</p>
+          <p>Balance: {user?.balance || '0.0'} FLOW</p>
           <button onClick={handleLogout} className="flow-button">
             Disconnect
           </button>
