@@ -13,7 +13,7 @@ const AvatarSelection = ({ onConfirm }) => {
   ];
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: '#ffedae' }}>
+    <div className=" items-center justify-center p-4" style={{ backgroundColor: '#ffedae' }}>
       <Head>
         <link
           href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
@@ -21,7 +21,7 @@ const AvatarSelection = ({ onConfirm }) => {
         />
       </Head>
 
-      <div className="w-full max-w-3xl text-center">
+      <div className=" text-center">
         <h1
           className="text-2xl mb-12 text-[#5c4435]"
           style={{ fontFamily: "'Press Start 2P', cursive" }}

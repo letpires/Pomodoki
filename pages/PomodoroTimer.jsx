@@ -6,16 +6,33 @@ import AvatarSelection from "./AvatarSelection";
 import Success from "./Success";
 import Failure from "./Failure";
 
-const PomodoroTimer = ({ avatar, onComplete, onFail }) => {
-  // Funções de callback para o Timer
+const PomodoroTimer = ({ avatar, pomodoro, breakTime, stake, onComplete, onFail }) => {
+  const [isBreak, setIsBreak] = useState(false);
+
   const handleComplete = () => {
-    if (onComplete) onComplete();
+    if (!isBreak) {
+      setIsBreak(true); // Vai para o break
+    } else {
+      if (onComplete) onComplete(); // Finaliza ciclo completo
+    }
   };
+
   const handleCancel = () => {
     if (onFail) onFail();
   };
+
   const handleLoseFocus = () => {
     if (onFail) onFail();
+  };
+
+  const getDurations = () => {
+    if (selectedTime === '50/10') {
+      return { pomodoro: 50, breakTime: 10 };
+    }
+    if (selectedTime === '1/0.5') {
+      return { pomodoro: 1, breakTime: 0.5 };
+    }
+    return { pomodoro: 25, breakTime: 5 };
   };
 
   return (
@@ -27,12 +44,15 @@ const PomodoroTimer = ({ avatar, onComplete, onFail }) => {
       </Head>
       <div className="popup-container">
         <Timer
-          duration={25} // 25 minutos
+          duration={isBreak ? breakTime : pomodoro}
           avatar={avatar}
           onComplete={handleComplete}
           onCancel={handleCancel}
           onLoseFocus={handleLoseFocus}
         />
+        <div style={{ textAlign: 'center', marginTop: 12, fontFamily: "'Press Start 2P', cursive", color: '#5c4435' }}>
+          {isBreak ? 'Break Time!' : 'Focus!'}
+        </div>
       </div>
     </>
   );
