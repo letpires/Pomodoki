@@ -45,6 +45,17 @@ If the user visits any blacklisted sites (e.g., YouTube, Instagram), the session
 > - [ ] `🔜 Token utility: rewards, marketplace`
 ---
 
+## 🍅 Meet Your Pomodoki
+Every Pomodoki has its own vibe. Which one matches your focus style?
+
+Character	Personality Snapshot
+- 🧡 **Tomash:**	Disciplined and balanced. Timer on, tea in hand, checklist ready. Loves clean code and tidy terminals.
+- 💛 **Batatack:**	Ultra focused, ultra chaotic. Runs on caffeine with 42 tabs open. Breaks? Only if the coffee runs out.
+- 💙 **Bubbiberry:**	Calm and mindful. Breaks = breathing, not burnout. Says no to Friday deploys.
+
+🧠 Choose your Pomodoki and start your focus journey with personality!
+
+---
 ## 🎯 Contract Deployment
 Pomodoki uses smart contracts written in Cadence on the Flow blockchain to manage staking logic and session validation.
 
