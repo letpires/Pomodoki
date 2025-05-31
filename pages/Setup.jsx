@@ -1,10 +1,89 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PixelButton from '../src/components/PixelButton';
 import Head from 'next/head';
+import * as fcl from '@onflow/fcl';
 
 const Setup = ({ onStart }) => {
   const [selectedTime, setSelectedTime] = useState('25/5');
   const [stake, setStake] = useState(1.0);
+  const [balance, setBalance] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    // Initialize Flow client
+    fcl.config({
+      'accessNode.api': 'https://rest-testnet.onflow.org',
+      'discovery.wallet': 'https://fcl-discovery.onflow.org/testnet/authn',
+    });
+
+    // Get user's Flow balance
+    const getBalance = async () => {
+      try {
+        const user = await fcl.currentUser();
+        if (user.loggedIn) {
+          const balance = await fcl.account(user.addr);
+          setBalance(balance.balance / 100000000); // Convert from UFix64 to decimal
+        }
+      } catch (error) {
+        console.error('Error fetching balance:', error);
+      }
+    };
+
+    getBalance();
+  }, []);
+
+  const handleStart = async () => {
+    try {
+      setIsLoading(true);
+      const { pomodoro, breakTime } = getDurations();
+
+      // Create and execute the staking transaction
+      const transactionId = await fcl.mutate({
+        cadence: `
+          import FungibleToken from 0x9a0766d93b6608b7
+          import FlowToken from 0x7e60df042a9c0868
+          import StakingContract3 from 0xacdf784e6e2a83f0
+
+          transaction(amount: UFix64) {
+              let stakingRef: &StakingContract3.Staking
+              let flowVault: @FungibleToken.Vault
+
+              prepare(signer: auth(Storage, Capabilities) &Account) {
+                  let flowVaultRef = signer.capabilities.borrow<&FlowToken.Vault>(/public/flowTokenBalance)
+                      ?? panic("Could not borrow Flow token vault reference")
+
+                  self.flowVault <- flowVaultRef.withdraw(amount: amount)
+
+                  let staking <- StakingContract3.createStaking(vault: <- self.flowVault)
+                  
+                  signer.storage.save(<- staking, to: /storage/Staking)
+                  signer.capabilities.link<&StakingContract3.Staking>(/public/Staking, target: /storage/Staking)
+
+                  self.stakingRef = signer.capabilities.borrow<&StakingContract3.Staking>(/public/Staking)
+                      ?? panic("Could not borrow Staking reference")
+              }
+
+              execute {
+                  self.stakingRef.stake(amount: amount)
+              }
+          }
+        `,
+        args: (arg, t) => [arg(stake, t.UFix64)],
+        limit: 9999,
+      });
+
+      // Wait for transaction to be sealed
+      await fcl.tx(transactionId).onceSealed();
+      
+      // Start the pomodoro session
+      onStart(pomodoro, breakTime, stake);
+    } catch (error) {
+      console.error('Error staking tokens:', error);
+      alert('Failed to stake tokens. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const getDurations = () => {
     if (selectedTime === '50/10') {
@@ -26,7 +105,6 @@ const Setup = ({ onStart }) => {
       </Head>
 
       <div className="popup-container" style={{ backgroundColor: '#ffedae' }}>
-        
         <div className="w-full max-w-3xl text-center mx-auto p-6">
           <h1
             style={{
@@ -40,9 +118,6 @@ const Setup = ({ onStart }) => {
           >
             Setup your<br />focus session
           </h1>
-
-
-
 
           <div className="space-y-6 text-left max-w-md mx-auto">
             <div>
@@ -83,7 +158,7 @@ const Setup = ({ onStart }) => {
                 />
                 <span className="text-xs">Flow</span>
               </div>
-              <div className="text-xs mt-1">Balance: 3.74 Flow</div>
+              <div className="text-xs mt-1">Balance: {balance.toFixed(2)} Flow</div>
             </div>
 
             <div className="bg-gray-100 p-3 rounded text-xs">
@@ -91,13 +166,11 @@ const Setup = ({ onStart }) => {
             </div>
 
             <PixelButton
-              onClick={() => {
-                const { pomodoro, breakTime } = getDurations();
-                onStart(pomodoro, breakTime, stake);
-              }}
+              onClick={handleStart}
               className="w-full"
+              disabled={isLoading}
             >
-              🚀 Start pomodoro
+              {isLoading ? 'Processing...' : '🚀 Start pomodoro'}
             </PixelButton>
           </div>
         </div>

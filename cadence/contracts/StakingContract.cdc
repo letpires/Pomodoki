@@ -1,7 +1,7 @@
 import FungibleToken from 0x9a0766d93b6608b7
 import FlowToken from 0x7e60df042a9c0868
 
-access(all) contract StakingContract {
+access(all) contract StakingContract3 {
     // Store the deployer's address
     access(all) let deployer: Address
 
@@ -10,16 +10,16 @@ access(all) contract StakingContract {
     }
 
     // Admin resource that controls the staking contract
-    access(all) resource Admin {
-        // Function to release staked tokens
-        access(all) fun releaseStakedTokens(userAddress: Address, amount: UFix64) {
-            let stakingRef = getAccount(userAddress)
-                .capabilities.get<&Staking>(/public/Staking)
-                .borrow() ?? panic("Could not borrow Staking reference at path /public/Staking! Make sure that the account address is correct and that it has properly set up its account with a Staking resource.")
+    // access(all) resource Admin {
+    //     // Function to release staked tokens
+    //     access(all) fun releaseStakedTokens(userAddress: Address, amount: UFix64) {
+    //         let stakingRef = getAccount(userAddress)
+    //             .capabilities.get<&Staking>(/public/Staking)
+    //             .borrow() ?? panic("Could not borrow Staking reference at path /public/Staking! Make sure that the account address is correct and that it has properly set up its account with a Staking resource.")
             
-            stakingRef.releaseTokens(amount: amount)
-        }
-    }
+    //         stakingRef.releaseTokens(amount: amount)
+    //     }
+    // }
 
     // Resource that represents a user's staking position
     access(all) resource Staking {
@@ -63,8 +63,8 @@ access(all) contract StakingContract {
     }
 
     // Function to create admin resource - only callable by deployer
-    access(account) fun createAdmin(): @Admin {
-        assert(self.account.address == self.deployer, message: "Only the deployer can create admin")
-        return <- create Admin()
-    }
+    // access(account) fun createAdmin(): @Admin {
+    //     assert(self.account.address == self.deployer, message: "Only the deployer can create admin")
+    //     return <- create Admin()
+    // }
 } 

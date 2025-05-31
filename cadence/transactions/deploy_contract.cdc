@@ -1,7 +1,7 @@
 import StakingContract from "../contracts/StakingContract.cdc"
 
 transaction {
-    prepare(signer: AuthAccount) {
+    prepare(signer: auth(Contracts, Storage, Capabilities) &Account) {
         // Deploy the contract
         signer.contracts.add(
             name: "StakingContract",
@@ -10,12 +10,10 @@ transaction {
 
         // Create and store the admin resource
         let admin <- StakingContract.createAdmin()
-        signer.save(<- admin, to: /storage/StakingContractAdmin)
+        signer.storage.save(<- admin, to: /storage/StakingContractAdmin)
         
         // Create a public capability for the admin
-        signer.link<&StakingContract.Admin>(
-            /public/StakingContractAdmin,
-            target: /storage/StakingContractAdmin
-        )
+        let adminCap = signer.capabilities.storage.issue<&{StakingContract.Admin}>(/storage/StakingContractAdmin)
+        signer.capabilities.publish(adminCap, at: /public/StakingContractAdmin)
     }
 } 
