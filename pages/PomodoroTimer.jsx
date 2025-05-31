@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
-import Timer from '../src/components/Timer';
-import Welcome from "./Welcome";
-import AvatarSelection from "./AvatarSelection";
-import Success from "./Success";
-import Failure from "./Failure";
+import Timer from '../src/components/Timer'; 
 
 const PomodoroTimer = ({ avatar, pomodoro, breakTime, stake, onComplete, onFail }) => {
   const [isBreak, setIsBreak] = useState(false);
