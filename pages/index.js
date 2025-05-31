@@ -4,7 +4,7 @@ import FlowLogin from "../components/FlowLogin"
 
 export default function Home() {
   return (
-    <div className={styles.container}>
+    <>
       <Head>
         <title>Pomodoki - Flow Blockchain App</title>
         <meta name="description" content="A Next.js app with Flow blockchain integration" />
@@ -13,42 +13,44 @@ export default function Home() {
         <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to<br />
-          <span className={styles.brand}>Pomodoki</span>
-        </h1>
+      <div className="popup-container">
+        <div className="w-full max-w-3xl text-center">
+          <main className={styles.main}>
+            <h1 className={styles.title}>
+              Welcome to<br />
+              <span className={styles.brand}>Pomodoki</span>
+            </h1>
 
-        <img
-          src="/images/avatar.png"
-          alt="Pomodoki Avatar"
-          style={{ display: "block", margin: "32px auto", width: "180px" }}
-        />
+            <img
+              src="/images/avatar.png"
+              alt="Pomodoki Avatar"
+              style={{ display: "block", margin: "32px auto", width: "180px" }}
+            />
 
+            <div className={styles.flowLogin}>
+              <FlowLogin />
+            </div>
 
-        <div className={styles.flowLogin}>
-          <FlowLogin />
+            <button className="pixelButton">
+              <span role="img" aria-label="key" style={{ fontSize: '1.5em' }}>🔑</span>
+              Connect Wallet
+            </button>
+          </main>
+
+          <footer className={styles.footer}>
+            <a
+              href="https://flow.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Powered by{" "}
+              <span className={styles.logo}>
+                Flow Blockchain
+              </span>
+            </a>
+          </footer>
         </div>
-
-        <button className="pixelButton">
-          <span role="img" aria-label="key" style={{ fontSize: '1.5em' }}>🔑</span>
-          Connect Wallet
-        </button>
- 
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://flow.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{" "}
-          <span className={styles.logo}>
-            Flow Blockchain
-          </span>
-        </a>
-      </footer>
-    </div>
+      </div>
+    </>
   )
 }
