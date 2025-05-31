@@ -13,45 +13,85 @@ const AvatarSelection = ({ onConfirm }) => {
   ];
 
   return (
-    <div className=" items-center justify-center p-4" style={{ backgroundColor: '#ffedae' }}>
+    <div
+      className="popup-container min-h-screen flex items-center justify-center"
+      style={{ backgroundColor: "#ffedae" }}
+    >
       <Head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
-          rel="stylesheet"
-        />
+        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
       </Head>
 
-      <div className=" text-center">
+      <div className="w-full max-w-xs text-center">
+        {/* Título */}
         <h1
-          className="text-2xl mb-12 text-[#5c4435]"
-          style={{ fontFamily: "'Press Start 2P', cursive" }}
+          className="mb-8"
+          style={{
+            fontFamily: "'Press Start 2P', cursive",
+            color: "#5c4435",
+            fontSize: "1.2rem",
+            textAlign: 'center',
+            lineHeight: "1.8rem",
+          }}
         >
-          Choose your
-          <br />
-          Pomodoki!
+          Choose your<br />
+          <span>Pomodoki!</span>
         </h1>
 
-        <div className="flex flex-wrap justify-center gap-6 mb-10">
-          {avatars.map((avatar) => (
+        {/* Avatar de cima */}
+        <div style={{ textAlign: "center", marginBottom: "28px" }}>
+          <button
+            onClick={() => setSelectedAvatar(avatars[0].type)}
+            className={`p-1 rounded transition-all ${selectedAvatar === avatars[0].type ? 'border-2 border-green-500' : ''}`}
+            style={{
+              imageRendering: 'pixelated',
+              background: 'transparent',
+              border: selectedAvatar === avatars[0].type ? '3px solid #22c55e' : 'none',
+              padding: 0
+            }}
+          >
+            <PixelAvatar type={avatars[0].type} />
+          </button>
+        </div>
+
+        {/* Linha de baixo */}
+        <div style={{ display: "flex", justifyContent: "center", gap: "24px" }}>
+          {avatars.slice(1).map((avatar) => (
             <button
               key={avatar.type}
               onClick={() => setSelectedAvatar(avatar.type)}
-              className={`p-2 rounded border-2 transition-all bg-[#fdf1d1] ${selectedAvatar === avatar.type
-                  ? 'border-green-500'
-                  : 'border-gray-400 hover:border-black'
-                }`}
+              className={`p-1 rounded transition-all ${selectedAvatar === avatar.type ? 'border-2 border-green-500' : ''}`}
+              style={{
+                imageRendering: 'pixelated',
+                background: 'transparent',
+                border: selectedAvatar === avatar.type ? '3px solid #22c55e' : 'none',
+                padding: 0
+              }}
             >
               <PixelAvatar type={avatar.type} />
             </button>
           ))}
         </div>
 
-
-        <PixelButton onClick={() => onConfirm(selectedAvatar)} className="w-full max-w-xs mx-auto mt-8">
+        {/* Botão Confirmar */}
+        <button
+          onClick={() => onConfirm(selectedAvatar)}
+          style={{
+            backgroundColor: "#5aad00",
+            color: "#ffedae",
+            fontFamily: "'VT323', monospace",
+            fontSize: "1.25rem",
+            padding: "10px 24px",
+            border: "2px solid #5c4435",
+            borderRadius: "4px",
+            cursor: "pointer",
+            boxShadow: "4px 4px #5c4435",
+            textTransform: "uppercase",
+            marginTop: "40px",
+          }}
+        >
           ✓ Confirm Avatar
-        </PixelButton>
-
-        <PixelButton onClick={() => onConfirm(selectedAvatar)} className="w-full max-w-xs mx-auto"></PixelButton>
+        </button>
       </div>
     </div>
   );
