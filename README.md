@@ -8,7 +8,8 @@
 ## 📖 Table of Contents
 
 - [📍 Overview](#-overview)
-- [🛣 Roadmap](#-roadmap) 
+- [🛣 Roadmap](#-roadmap)
+- [🍅 Meet Your Pomodoki](#-meet-your-pomodoki)
 - [🎯 Contract Deployment](#-contract-deployment)
 - [🙏 Acknowledgments](#acknowledgments)
 
