@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import * as fcl from "@onflow/fcl";
 
-// Configure Flow Client Library
+// Configuração do Flow
 fcl.config({
   "accessNode.api": "https://rest-testnet.onflow.org",
   "discovery.wallet": "https://fcl-discovery.onflow.org/testnet/authn",
@@ -26,7 +26,7 @@ export default function FlowLogin({ onConnect }) {
       const user = await fcl.currentUser().snapshot();
       setUser(user);
       if (onConnect && user.addr) {
-        onConnect(); // <-- aqui acontece a mudança de tela
+        onConnect();
       }
     } catch (error) {
       console.error("Login failed:", error);
@@ -45,16 +45,53 @@ export default function FlowLogin({ onConnect }) {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div className="flow-login">
+    <div className="flow-login text-center">
+      <link
+        href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
+        rel="stylesheet"
+      />
       {!user ? (
-        <button onClick={handleLogin} className="flow-button">
+        <button
+          onClick={handleLogin}
+          style={{
+            backgroundColor: "#c5361b",
+            color: "#ffedae",
+            fontFamily: "'VT323', monospace",
+            fontSize: "1.25rem",
+            padding: "10px 24px",
+            border: "2px solid #5c4435",
+            borderRadius: "4px",
+            cursor: "pointer",
+            boxShadow: "4px 4px #5c4435",
+            marginTop: "32px", // <-- empurra o botão para baixo
+
+  
+          }}
+        >
           Connect Flow Wallet
         </button>
       ) : (
-        <div className="user-info">
+        <div
+          style={{
+            color: "#5c4435",
+            fontSize: "0.9rem",
+            fontFamily: "'VT323', monospace",
+          }}
+        >
           <p>Connected as: {user.addr}</p>
-          <p>Balance: {user?.balance || '0.0'} FLOW</p>
-          <button onClick={handleLogout} className="flow-button">
+          <p>Balance: {user?.balance || "0.0"} FLOW</p>
+          <button
+            onClick={handleLogout}
+            style={{
+              marginTop: "10px",
+              backgroundColor: "#eee",
+              fontFamily: "'VT323', monospace",
+              fontSize: "1rem",
+              padding: "6px 14px",
+              border: "1px solid #888",
+              cursor: "pointer",
+            }}
+          >
             Disconnect
           </button>
         </div>
