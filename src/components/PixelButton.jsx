@@ -1,12 +1,11 @@
 import React from 'react';
 
-
-const PixelButton = ({ 
-  children, 
-  onClick, 
-  variant = 'primary', 
+const PixelButton = ({
+  children,
+  onClick,
+  variant = 'primary',
   disabled = false,
-  className = '' 
+  className = ''
 }) => {
   const variantClasses = {
     primary: 'bg-green-500 hover:bg-green-600 text-white',
