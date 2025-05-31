@@ -103,7 +103,7 @@ const Setup = ({ onStart }) => {
       return { pomodoro: 50, breakTime: 10 };
     }
     if (selectedTime === '1') {
-      return { pomodoro: 1, breakTime: 0.5 };
+      return { pomodoro: 0.5, breakTime: 0.5 };
     }
     return { pomodoro: 25, breakTime: 5 };
   };
