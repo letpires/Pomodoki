@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PixelButton from './PixelButton';
-import PixelAvatar from './PixelAvatar';
+import PixelPomo from './PixelPomo';
 
 const Timer = ({ duration, avatar, onComplete, onCancel, onLoseFocus }) => {
   const [timeLeft, setTimeLeft] = useState(duration * 60);
@@ -79,41 +79,64 @@ const Timer = ({ duration, avatar, onComplete, onCancel, onLoseFocus }) => {
   return (
     <div className="flex flex-col items-center justify-center h-full w-full text-center">
       <div className="mb-4">
-        <div className="bg-yellow-400 text-black px-2 py-1 rounded text-xs mb-2">200</div>
-        <p className="text-sm mb-4">Start growing today!</p>
+        <p
+          className="mb-4"
+          style={{
+            fontFamily: "'VT323', monospace",
+            fontSize: "1.25rem",
+            color: "#5c4435",
+            textAlign: "center"
+          }}
+        >
+          Start growing today!
+        </p>
       </div>
 
       <div className="mb-6">
-        <PixelAvatar type={avatar} size="large" className="mx-auto mb-4" />
+        <PixelPomo type={avatar} size="large" className="mx-auto mb-4" />
         <div
           className="text-4xl font-bold mb-2"
           style={{
             fontFamily: "'Press Start 2P', cursive",
             fontSize: '3rem',
             letterSpacing: '2px',
+            color: '#5c4435',
+            textAlign: 'center',
+            margin: '0 auto',
+            width: 'fit-content',
           }}
         >
           {formatTime(timeLeft)}
         </div>
-        <div
-          className="bg-green-500 text-white px-3 py-1 rounded text-xs"
-          style={{ fontFamily: "'Press Start 2P', cursive" }}
-        >
-          Focused
-        </div>
       </div>
 
-      <PixelButton
+      {/* Botão Cancelar centralizado e estilizado */}
+      <button
         onClick={() => {
           localStorage.removeItem("pomodokiStart"); // limpa ao cancelar
           onCancel();
         }}
-        variant="secondary"
-        className="w-full max-w-xs mx-auto mt-8"
+        style={{
+          background: 'transparent',
+          color: '#5c4435',
+          fontFamily: "'VT323', monospace",
+          fontSize: '1.1rem',
+          border: '2px solid #5c4435',
+          borderRadius: '4px',
+          cursor: 'pointer',
+          boxShadow: 'none',
+          textTransform: 'uppercase',
+          margin: '24px auto 0 auto',
+          display: 'block',
+          padding: '6px 24px',
+          minWidth: '100px',
+        }}
       >
         Cancel
-      </PixelButton>
+      </button>
+
     </div>
+
   );
 };
 
