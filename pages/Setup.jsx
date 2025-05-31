@@ -40,35 +40,39 @@ const Setup = ({ onStart }) => {
       // Create and execute the staking transaction
       const transactionId = await fcl.mutate({
         cadence: `
-          import FungibleToken from 0x9a0766d93b6608b7
-          import FlowToken from 0x7e60df042a9c0868
-          import StakingContract3 from 0xacdf784e6e2a83f0
+        import FungibleToken from 0x9a0766d93b6608b7
+        import FlowToken from 0x7e60df042a9c0868
+        import StakingContract3 from 0xacdf784e6e2a83f0
 
-          transaction(amount: UFix64) {
-              let stakingRef: &StakingContract3.Staking
-              let flowVault: @FungibleToken.Vault
+        transaction(amount: UFix64) {
+            let stakingRef: &StakingContract3.Staking
 
-              prepare(signer: auth(Storage, Capabilities) &Account) {
-                  let flowVaultRef = signer.capabilities.borrow<&FlowToken.Vault>(/public/flowTokenBalance)
-                      ?? panic("Could not borrow Flow token vault reference")
+            prepare(signer: auth(Storage, Capabilities, FungibleToken.Withdraw) &Account) {
+                // Borrow a reference with Withdraw entitlement from storage
+                let flowVaultRef = signer.storage.borrow<auth(FungibleToken.Withdraw) &FlowToken.Vault>(
+                    from: /storage/flowTokenVault
+                ) ?? panic("Could not borrow Flow token vault reference")
 
-                  self.flowVault <- flowVaultRef.withdraw(amount: amount)
+                let flowVault <- flowVaultRef.withdraw(amount: amount)
 
-                  let staking <- StakingContract3.createStaking(vault: <- self.flowVault)
-                  
-                  signer.storage.save(<- staking, to: /storage/Staking)
-                  signer.capabilities.link<&StakingContract3.Staking>(/public/Staking, target: /storage/Staking)
+                let staking <- StakingContract3.createStaking(vault: <- flowVault)
+                
+                signer.storage.save(<- staking, to: /storage/Staking)
+                signer.capabilities.publish(
+                    signer.capabilities.storage.issue<&StakingContract3.Staking>(/storage/Staking),
+                    at: /public/Staking
+                )
 
-                  self.stakingRef = signer.capabilities.borrow<&StakingContract3.Staking>(/public/Staking)
-                      ?? panic("Could not borrow Staking reference")
-              }
+                self.stakingRef = signer.capabilities.borrow<&StakingContract3.Staking>(/public/Staking)
+                    ?? panic("Could not borrow Staking reference")
+            }
 
-              execute {
-                  self.stakingRef.stake(amount: amount)
-              }
-          }
+            execute {
+                self.stakingRef.stake(amount: amount)
+            }
+        }
         `,
-        args: (arg, t) => [arg(stake, t.UFix64)],
+        args: (arg, t) => [arg(stake.toFixed(1), t.UFix64)],
         limit: 9999,
       });
 
