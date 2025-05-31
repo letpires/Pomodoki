@@ -11,7 +11,11 @@ export default function Home() {
   const [selectedAvatar, setSelectedAvatar] = useState(null);
 
   // Simule o login da wallet
-  const handleConnectWallet = () => setPage("avatar");
+  // const handleConnectWallet = () => setPage("avatar");
+  const handleConnectWallet = () => {
+    setPage('avatar'); // esse é o gatilho pra avançar
+  };
+  
 
   // Quando o avatar for confirmado
   const handleConfirmAvatar = (avatar) => {

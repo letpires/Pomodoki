@@ -9,19 +9,13 @@ fcl.config({
   "app.detail.icon": "https://placekitten.com/g/200/200",
 });
 
-export default function FlowLogin() {
+export default function FlowLogin({ onConnect }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is already logged in
     fcl.currentUser().subscribe((user) => {
-      console.log("currentUser", user);
-      if (user && user.addr) {
-        setUser(user);
-      } else {
-        setUser(null);
-      }
+      setUser(user && user.addr ? user : null);
     });
     setLoading(false);
   }, []);
@@ -29,6 +23,11 @@ export default function FlowLogin() {
   const handleLogin = async () => {
     try {
       await fcl.logIn();
+      const user = await fcl.currentUser().snapshot();
+      setUser(user);
+      if (onConnect && user.addr) {
+        onConnect(); // <-- aqui acontece a mudança de tela
+      }
     } catch (error) {
       console.error("Login failed:", error);
     }
@@ -37,14 +36,13 @@ export default function FlowLogin() {
   const handleLogout = async () => {
     try {
       await fcl.unauthenticate();
+      setUser(null);
     } catch (error) {
       console.error("Logout failed:", error);
     }
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div className="flow-login">
