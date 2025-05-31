@@ -34,11 +34,12 @@ export default function Home() {
 
   useEffect(() => {
     const checkFailure = () => {
-      const status = localStorage.getItem("pomodokiStatus");
-      if (status === "failure") {
-        localStorage.removeItem("pomodokiStatus");
-        setPage("failure");
-      }
+      chrome.storage?.local.get("pomodokiStatus", (result) => {
+        if (result.pomodokiStatus === "failure") {
+          chrome.storage.local.remove("pomodokiStatus");
+          setPage("failure");
+        }
+      });
     };
   
     const interval = setInterval(checkFailure, 1000); // checa a cada 1s
