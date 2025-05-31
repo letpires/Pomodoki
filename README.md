@@ -1,45 +1,74 @@
-# nextjs-chrome-extension
+<div align="center">
+  <h1 align="center">
+    <img src="https://raw.githubusercontent.com/letpires/Pomodoki/main/public/images/avatar.png" width="200" />
+  </h1> 
+  <h3>◦ Stay focused, earn rewards. Meet your productivity pet with Pomodoki.</h3>
+</div>
 
-An unopiniated starter for developing Chrome extensions using Next.js
+## 📖 Table of Contents
 
-<p align="center">
-<img src="./images/nextjs-chrome-extension.png" alt="Screenshot of nextjs-chrome-extension" width="616">
-</p>
-  
-## Getting Started
+- [📍 Overview](#-overview)
+- [🛣 Roadmap](#-roadmap) 
+- [🎯 Contract Deployment](#-contract-deployment)
+- [🙏 Acknowledgments](#acknowledgments)
 
-First, install dependencies and build the project:
+---
+
+## 📍 Overview
+
+**Pomodoki** is a **Chrome extension** that gamifies productivity by combining the **Pomodoro technique** with **Flow blockchain staking** and a **Tamagotchi-style pet**. Users focus in timed intervals, stake FLOW tokens, and interact with an animated pet that responds to their performance.
+
+### 🧩 Core Features
+
+- Pomodoro timer (25/5, 50/10, or custom)
+- FLOW token staking via smart contracts
+- Tab-switch & distraction site monitoring
+- Animated pet that reacts to your success or failure 
+- Token rewards for completing sessions
+
+If the user visits any blacklisted sites (e.g., YouTube, Instagram), the session fails and the staked tokens are lost to a community pool.
+
+---
+
+## 🛣 Roadmap
+
+> - [x] `✅ Pomodoro timer`
+> - [x] `✅ Chrome extension with onboarding`
+> - [x] `✅ FLOW staking & reward mechanism`
+> - [x] `✅ Pet avatars with emotion states`
+> - [x] `✅ Tab and inactivity detection`
+> - [ ] `🔜 Pet evolution system`
+> - [ ] `🔜 NFT avatar integration`
+> - [ ] `🔜 Group Pomodoro & social challenges`
+> - [ ] `🔜 Webcam validation for high-stakes mode`
+> - [ ] `🔜 Token utility: rewards, marketplace, rep`
+
+---
+
+## 🎯 Contract Deployment
+Pomodoki uses smart contracts written in Cadence on the Flow blockchain to manage staking logic and session validation.
+
+## 🛠 What the contract does
+Users stake FLOW tokens before a Pomodoro session.
+
+If the session is completed successfully, the user receives their stake back along with a reward.
+
+If the session fails (due to tab-switching, inactivity, or visiting a blocked site), the stake is lost to a community pool.
+
+## 🚀 Deploying the contract with Flow CLI
+Prerequisites:
+
+Install the Flow CLI
+
+Set up a Flow account and add it to your CLI
+
 ```bash
-npm install && npm run build
-```
-This will create an `/out` directory that can you can add to Chrome as an extension. The `manifest.json` links `pages/index.js` to the generated `index.html`. On top of that, the `/public/inject.js` script is configured to run on any host url.
-
-Second, start developing:
-```bash
-npm run dev
-```
-You can start editing the extension by modifying `pages/index.js` or any file in `/public`. The extension will automatically re-build as you make changes.
-
-**🚩 Note**: [`gsed`](https://formulae.brew.sh/formula/gnu-sed#default) is used during `build` and `development` steps to bundle the project in a Chrome extension. Therefore, you will need to have this CLI installed on your development machine.
-```bash
-brew install gsed // homebrew installation
+# Deploy the smart contract to Flow testnet
+flow project deploy cadence/contracts/StakingContract.cdc --network testnet
 ```
 
-## Add extension to chrome
+## 🙏 Acknowledgments
+Built during a hackathon to make focus fun and rewarding.
 
-Open the Extension Management page by navigating to `chrome://extensions`. Enable Developer Mode by clicking the toggle switch next to Developer mode. Click the Load unpacked button and select the `/out` directory.
-
-<p align="center">
-<img src="/images/add-extension-to-chrome.png" alt="Screenshot of chrome://extensions page" width="616">
-</p>
-
-## Learn More
-
-To learn more about Next.js or extensions, take a look at the following resources:
-
-- [Chrome Extensions Documentation](https://developer.chrome.com/docs/extensions/)
-- [Next.js Documentation](https://nextjs.org/docs)
-
-This template was originally inspired by the following article, [Creating a Chrome Extension with NextJS](https://aaronscherer.me/blog/post/creating-a-chrome-extension-with-nextjs).
-
-
+Inspired by productivity techniques like the Pomodoro method and the nostalgia of Tamagotchi pets.
+ 
