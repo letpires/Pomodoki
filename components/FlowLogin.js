@@ -11,11 +11,20 @@ fcl.config({
 
 export default function FlowLogin({ onConnect }) {
   const [user, setUser] = useState(null);
+  const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fcl.currentUser().subscribe((user) => {
-      setUser(user && user.addr ? user : null);
+    fcl.currentUser().subscribe(async (user) => {
+      setUser(user && user.addr ? user : null); 
+
+      if (onConnect && user.addr) {
+        onConnect();
+      }
+      if (user.loggedIn) {
+        const balance = await fcl.account(user.addr); 
+        setBalance(balance.balance / 100000000); // Convert from UFix64 to decimal
+      }
     });
     setLoading(false);
   }, []);
@@ -23,7 +32,13 @@ export default function FlowLogin({ onConnect }) {
   const handleLogin = async () => {
     try {
       await fcl.logIn();
+
       const user = await fcl.currentUser().snapshot();
+      if (user.loggedIn) {
+        const balance = await fcl.account(user.addr); 
+        setBalance(balance.balance / 100000000); // Convert from UFix64 to decimal
+      }
+
       setUser(user);
       if (onConnect && user.addr) {
         onConnect();
@@ -64,8 +79,6 @@ export default function FlowLogin({ onConnect }) {
             cursor: "pointer",
             boxShadow: "4px 4px #5c4435",
             marginTop: "32px", // <-- empurra o botão para baixo
-
-  
           }}
         >
           Connect Flow Wallet
@@ -79,7 +92,7 @@ export default function FlowLogin({ onConnect }) {
           }}
         >
           <p>Connected as: {user.addr}</p>
-          <p>Balance: {user?.balance || "0.0"} FLOW</p>
+          <p>Balance: {balance || "0.0"} FLOW</p>
           <button
             onClick={handleLogout}
             style={{
