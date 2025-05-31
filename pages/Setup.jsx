@@ -101,7 +101,7 @@ const Setup = ({ onStart }) => {
       return { pomodoro: 50, breakTime: 10 };
     }
     if (selectedTime === '1') {
-      return { pomodoro: 0.5, breakTime: 0.5 };
+      return { pomodoro: 0.2, breakTime: 0.5 };
     }
     return { pomodoro: 25, breakTime: 5 };
   };
@@ -269,23 +269,26 @@ const Setup = ({ onStart }) => {
 
           <button
             onClick={handleStart}
+            disabled={isLoading}
             style={{
-              background: '#5aad00',
+              background: isLoading ? '#cccccc' : '#5aad00',
               color: '#fffbe6',
               fontFamily: "'VT323', monospace",
               fontSize: '1.25rem',
               border: "2px solid #5c4435",
               borderRadius: "4px",
-              boxShadow: '4px 4px #5c4435',
+              boxShadow: isLoading ? '2px 2px #5c4435' : '4px 4px #5c4435',
               padding: "10px 24px",
               marginTop: "40px",
-              cursor: 'pointer',
+              cursor: isLoading ? 'not-allowed' : 'pointer',
               display: 'block',
               marginLeft: 'auto',
               marginRight: 'auto',
+              opacity: isLoading ? 0.8 : 1,
+              transition: 'all 0.2s ease',
             }}
           >
-            Start pomodoro
+            {isLoading ? 'Loading...' : 'Start pomodoro'}
           </button>
         </div>
       </div>
