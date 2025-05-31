@@ -19,11 +19,9 @@ const Setup = ({ onStart }) => {
     // Get user's Flow balance
     const getBalance = async () => {
       try {
-        const user = await fcl.currentUser().snapshot();
-        console.log(user);
+        const user = await fcl.currentUser().snapshot(); 
         if (user.loggedIn) {
-          const balance = await fcl.account(user.addr);
-          console.log(balance);
+          const balance = await fcl.account(user.addr); 
           setBalance(balance.balance / 100000000); // Convert from UFix64 to decimal
         }
       } catch (error) {
