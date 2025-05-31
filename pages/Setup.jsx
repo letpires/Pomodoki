@@ -97,10 +97,10 @@ const Setup = ({ onStart }) => {
   };
 
   const getDurations = () => {
-    if (selectedTime === '50/10') {
+    if (selectedTime === '50') {
       return { pomodoro: 50, breakTime: 10 };
     }
-    if (selectedTime === '1/0.5') {
+    if (selectedTime === '1') {
       return { pomodoro: 1, breakTime: 0.5 };
     }
     return { pomodoro: 25, breakTime: 5 };
@@ -113,77 +113,180 @@ const Setup = ({ onStart }) => {
           href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
           rel="stylesheet"
         />
+        <link
+          href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
+          rel="stylesheet"
+        />
       </Head>
 
       <div className="popup-container" style={{ backgroundColor: '#ffedae' }}>
-        <div className="w-full max-w-3xl text-center mx-auto p-6">
+        <div
+          className="w-full"
+          style={{
+            maxWidth: 320,
+            margin: "0 auto",
+            padding: "24px 12px",
+          }}
+        >
           <h1
             style={{
               fontFamily: "'Press Start 2P', cursive",
               color: '#5c4435',
-              fontSize: '1.5rem',
-              margin: '32px 0 16px 0',
+              fontSize: '1.2rem',
               textAlign: 'center',
-              letterSpacing: '2px',
+              lineHeight: "1.8rem"
             }}
           >
             Setup your<br />focus session
+
+            
           </h1>
 
-          <div className="space-y-6 text-left max-w-md mx-auto">
-            <div>
-              <label className="block text-sm font-bold mb-2">Pomodoro time</label>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setSelectedTime('25/5')}
-                  className={`px-3 py-1 text-xs border ${selectedTime === '25/5' ? 'bg-green-500 text-white' : 'bg-white'}`}
-                >
-                  25/5
-                </button>
-                <button
-                  onClick={() => setSelectedTime('50/10')}
-                  className={`px-3 py-1 text-xs border ${selectedTime === '50/10' ? 'bg-green-500 text-white' : 'bg-white'}`}
-                >
-                  50/10
-                </button>
-                <button
-                  onClick={() => setSelectedTime('1/0.5')}
-                  className={`px-3 py-1 text-xs border ${selectedTime === '1/0.5' ? 'bg-green-500 text-white' : 'bg-white'}`}
-                >
-                  Teste 1/0.5
-                </button>
-              </div>
+          <div
+            style={{
+              border: '2px solid #5c4435',
+              borderRadius: '6px',
+              padding: '10px 10px 8px 10px',
+              marginBottom: '10px',
+              background: '#fffbe6',
+              fontFamily: "'VT323', monospace",
+              fontSize: '1.3rem',
+              color: '#5c4435',
+            }}
+          >
+            <div style={{ marginBottom: 12 }}>Pomodoro time</div>
+            <div style={{ display: 'flex', gap: 12 }}>
+              <button
+                onClick={() => setSelectedTime('25')}
+                style={{
+                  background: selectedTime === '25' ? '#5aad00' : 'transparent',
+                  color: selectedTime === '25' ? '#fffbe6' : '#5c4435',
+                  border: '2px solid #5c4435',
+                  borderRadius: 8,
+                  fontFamily: "'VT323', monospace",
+                  fontSize: '1.25rem',
+                  padding: '4px 24px',
+                  cursor: 'pointer',
+                  fontWeight: 'bold',
+                  boxShadow: selectedTime === '25' ? '2px 2px #5c4435' : 'none',
+                  transition: 'all 0.2s',
+                }}
+              >
+                25
+              </button>
+              <button
+                onClick={() => setSelectedTime('50')}
+                style={{
+                  background: selectedTime === '50' ? '#5aad00' : 'transparent',
+                  color: selectedTime === '50' ? '#fffbe6' : '#5c4435',
+                  border: '2px solid #5c4435',
+                  borderRadius: 8,
+                  fontFamily: "'VT323', monospace",
+                  fontSize: '1.25rem',
+                  padding: '4px 24px',
+                  cursor: 'pointer',
+                  fontWeight: 'bold',
+                  boxShadow: selectedTime === '50' ? '2px 2px #5c4435' : 'none',
+                  transition: 'all 0.2s',
+                }}
+              >
+                50
+              </button>
+              <button
+                onClick={() => setSelectedTime('1')}
+                style={{
+                  background: selectedTime === '1' ? '#5aad00' : 'transparent',
+                  color: selectedTime === '1' ? '#fffbe6' : '#5c4435',
+                  border: '2px solid #5c4435',
+                  borderRadius: 8,
+                  fontFamily: "'VT323', monospace",
+                  fontSize: '1.25rem',
+                  padding: '4px 24px',
+                  cursor: 'pointer',
+                  fontWeight: 'bold',
+                  boxShadow: selectedTime === '1' ? '2px 2px #5c4435' : 'none',
+                  transition: 'all 0.2s',
+                }}
+              >
+                1
+              </button>
             </div>
-
-            <div>
-              <label className="block text-sm font-bold mb-2">Stake</label>
-              <div className="flex items-center gap-2">
-                <span className="text-xs">Stake:</span>
-                <input
-                  type="number"
-                  value={stake}
-                  onChange={(e) => setStake(Number(e.target.value))}
-                  step="0.1"
-                  min="0.1"
-                  className="flex-1 px-2 py-1 text-xs border"
-                />
-                <span className="text-xs">Flow</span>
-              </div>
-              <div className="text-xs mt-1">Balance: {balance.toFixed(2)} Flow</div>
-            </div>
-
-            <div className="bg-gray-100 p-3 rounded text-xs">
-              Stay focused! If you lose focus, your stake is gone.
-            </div>
-
-            <PixelButton
-              onClick={handleStart}
-              className="w-full"
-              disabled={isLoading}
-            >
-              {isLoading ? 'Processing...' : '🚀 Start pomodoro'}
-            </PixelButton>
           </div>
+
+          <div
+            style={{
+              border: '2px solid #5c4435',
+              borderRadius: '6px',
+              padding: '10px 10px 8px 10px',
+              marginBottom: '10px',
+              background: '#fffbe6',
+              fontFamily: "'VT323', monospace",
+              fontSize: '1.3rem',
+              color: '#5c4435',
+            }}
+          >
+            <div style={{ marginBottom: 12 }}>Stake</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+              <span style={{ fontSize: '1.3rem' }}>Stake:</span>
+              <input
+                type="number"
+                value={stake}
+                onChange={(e) => setStake(Number(e.target.value))}
+                min={0.1}
+                step={0.1}
+                style={{
+                  fontFamily: "'VT323', monospace",
+                  fontSize: '1.25rem',
+                  border: '2px solid #5c4435',
+                  borderRadius: 6,
+                  padding: '2px 8px',
+                  width: 70,
+                  background: '#fff',
+                  color: '#5c4435',
+                  textAlign: 'center',
+                }}
+              />
+              <span style={{ fontSize: '1.25rem' }}>Flow</span>
+            </div>
+            <div style={{ fontSize: '1.25rem' }}>Balance: {balance.toFixed(2)} Flow</div>
+          </div>
+
+          <div
+            style={{
+              border: '2px solid #5c4435',
+              borderRadius: '6px',
+              padding: '10px 10px 8px 10px',
+              marginBottom: '10px',
+              background: '#fffbe6',
+              fontFamily: "'VT323', monospace",
+              fontSize: '1.25rem',
+              color: '#5c4435',
+              textAlign: "center",
+            }}
+          >
+            Stay focused! If you lose focus, your stake is gone.
+          </div>
+
+          <button
+            onClick={handleStart}
+            style={{
+              background: '#5aad00',
+              color: '#fffbe6',
+              fontFamily: "'VT323', monospace",
+              fontSize: '1.25rem',
+              border: "2px solid #5c4435",
+              borderRadius: "4px",
+              boxShadow: '4px 4px #5c4435',
+              padding: "10px 24px",
+              marginTop: "40px",
+              cursor: 'pointer',
+              display: 'block',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+            }}
+          >
+            Start pomodoro
+          </button>
         </div>
       </div>
     </>
