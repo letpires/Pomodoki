@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
 import Timer from '../src/components/Timer';
+import Welcome from "./Welcome";
+import AvatarSelection from "./AvatarSelection";
+import Success from "./Success";
+import Failure from "./Failure";
 
-const PomodoroTimer = () => {
-  // Exemplo: avatar selecionado hardcoded, pode ser "tomash", "bubbiberry" ou "batatack"
-  const [avatar] = useState('tomash');
-
+const PomodoroTimer = ({ avatar, onComplete, onFail }) => {
   // Funções de callback para o Timer
   const handleComplete = () => {
-    alert('Pomodoro completo!');
+    if (onComplete) onComplete();
   };
   const handleCancel = () => {
-    alert('Pomodoro cancelado!');
+    if (onFail) onFail();
   };
   const handleLoseFocus = () => {
-    alert('Você perdeu o foco!');
+    if (onFail) onFail();
   };
 
   return (
