@@ -19,9 +19,11 @@ const Setup = ({ onStart }) => {
     // Get user's Flow balance
     const getBalance = async () => {
       try {
-        const user = await fcl.currentUser();
+        const user = await fcl.currentUser().snapshot();
+        console.log(user);
         if (user.loggedIn) {
           const balance = await fcl.account(user.addr);
+          console.log(balance);
           setBalance(balance.balance / 100000000); // Convert from UFix64 to decimal
         }
       } catch (error) {
@@ -42,10 +44,10 @@ const Setup = ({ onStart }) => {
         cadence: `
         import FungibleToken from 0x9a0766d93b6608b7
         import FlowToken from 0x7e60df042a9c0868
-        import StakingContract3 from 0xacdf784e6e2a83f0
+        import StakingContract4 from 0xacdf784e6e2a83f0
 
         transaction(amount: UFix64) {
-            let stakingRef: &StakingContract3.Staking
+            let stakingRef: &StakingContract4.Staking
 
             prepare(signer: auth(Storage, Capabilities, FungibleToken.Withdraw) &Account) {
                 // Borrow a reference with Withdraw entitlement from storage
@@ -55,22 +57,22 @@ const Setup = ({ onStart }) => {
 
                 let flowVault <- flowVaultRef.withdraw(amount: amount)
 
-                let staking <- StakingContract3.createStaking(vault: <- flowVault)
+                let staking <- StakingContract4.createStaking(vault: <- flowVault)
                 
                 // Check if storage path exists and remove if it does
-                if signer.storage.check<@StakingContract3.Staking>(from: /storage/Staking) {
-                    let oldStaking <- signer.storage.load<@StakingContract3.Staking>(from: /storage/Staking)
+                if signer.storage.check<@StakingContract4.Staking>(from: /storage/Staking) {
+                    let oldStaking <- signer.storage.load<@StakingContract4.Staking>(from: /storage/Staking)
                     destroy oldStaking
                     signer.capabilities.unpublish(/public/Staking)
                 }
                 
                 signer.storage.save(<- staking, to: /storage/Staking)
                 signer.capabilities.publish(
-                    signer.capabilities.storage.issue<&StakingContract3.Staking>(/storage/Staking),
+                    signer.capabilities.storage.issue<&StakingContract4.Staking>(/storage/Staking),
                     at: /public/Staking
                 )
 
-                self.stakingRef = signer.capabilities.borrow<&StakingContract3.Staking>(/public/Staking)
+                self.stakingRef = signer.capabilities.borrow<&StakingContract4.Staking>(/public/Staking)
                     ?? panic("Could not borrow Staking reference")
             }
 
@@ -101,7 +103,7 @@ const Setup = ({ onStart }) => {
       return { pomodoro: 50, breakTime: 10 };
     }
     if (selectedTime === '1/0.5') {
-      return { pomodoro: 1, breakTime: 0.5 };
+      return { pomodoro: 0.5, breakTime: 0.5 };
     }
     return { pomodoro: 25, breakTime: 5 };
   };

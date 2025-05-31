@@ -1,45 +1,25 @@
 import FungibleToken from 0x9a0766d93b6608b7
 import FlowToken from 0x7e60df042a9c0868
 
-access(all) contract StakingContract3 {
-    // Store the deployer's address
-    access(all) let deployer: Address
-
-    init() {
-        self.deployer = self.account.address
-    }
-
-    // Admin resource that controls the staking contract
-    // access(all) resource Admin {
-    //     // Function to release staked tokens
-    //     access(all) fun releaseStakedTokens(userAddress: Address, amount: UFix64) {
-    //         let stakingRef = getAccount(userAddress)
-    //             .capabilities.get<&Staking>(/public/Staking)
-    //             .borrow() ?? panic("Could not borrow Staking reference at path /public/Staking! Make sure that the account address is correct and that it has properly set up its account with a Staking resource.")
-            
-    //         stakingRef.releaseTokens(amount: amount)
-    //     }
-    // }
-
+access(all) contract StakingContract4 {  
     // Resource that represents a user's staking position
     access(all) resource Staking {
         access(all) var stakedAmount: UFix64
         access(all) var releasedAmount: UFix64
         access(all) let vault: @{FungibleToken.Vault}
-        access(all) let ownerAddress: Address
+        access(all) let flowVault: @{FungibleToken.Vault} 
 
-        init(vault: @{FungibleToken.Vault}, ownerAddress: Address) {
+        init(vault: @{FungibleToken.Vault}) {
             self.stakedAmount = 0.0
             self.releasedAmount = 0.0
-            self.vault <- vault
-            self.ownerAddress = ownerAddress
+            self.vault <- vault 
+            self.flowVault <- FlowToken.createEmptyVault(vaultType: Type<@FlowToken.Vault>())
         }
 
         // Function to stake tokens
         access(all) fun stake(amount: UFix64) {
-            let tempVault <- self.vault.withdraw(amount: amount)
-            self.stakedAmount = self.stakedAmount + amount
-            destroy tempVault
+            self.flowVault.deposit(from: <- self.vault.withdraw(amount: amount))
+            self.stakedAmount = amount 
         }
 
         // Function to release tokens (can only be called by admin)
@@ -53,18 +33,12 @@ access(all) contract StakingContract3 {
         access(all) fun cleanup(): @{FungibleToken.Vault} {
             let remainingAmount = self.stakedAmount
             self.stakedAmount = 0.0
-            return <- self.vault.withdraw(amount: remainingAmount)
+            return <- self.flowVault.withdraw(amount: remainingAmount)
         }
     }
 
     // Function to create a new staking position
     access(all) fun createStaking(vault: @{FungibleToken.Vault}): @Staking {
-        return <- create Staking(vault: <- vault, ownerAddress: self.account.address)
-    }
-
-    // Function to create admin resource - only callable by deployer
-    // access(account) fun createAdmin(): @Admin {
-    //     assert(self.account.address == self.deployer, message: "Only the deployer can create admin")
-    //     return <- create Admin()
-    // }
+        return <- create Staking(vault: <- vault)
+    } 
 } 

@@ -1,9 +1,9 @@
 import FungibleToken from 0x9a0766d93b6608b7
 import FlowToken from 0x7e60df042a9c0868
-import StakingContract3 from 0x01
+import StakingContract4 from 0x01
 
 transaction(amount: UFix64) {
-    let stakingRef: &StakingContract3.Staking
+    let stakingRef: &StakingContract4.Staking
     let flowVault: @FungibleToken.Vault
 
     prepare(signer: auth(Storage, Capabilities) &Account) {
@@ -15,16 +15,16 @@ transaction(amount: UFix64) {
         self.flowVault <- flowVaultRef.withdraw(amount: amount)
 
         // Create the staking position
-        let staking <- StakingContract3.createStaking(vault: <- self.flowVault)
+        let staking <- StakingContract4.createStaking(vault: <- self.flowVault)
         
         // Save the staking resource to the account
         signer.storage.save(<- staking, to: /storage/Staking)
 
         // Create a public capability for the staking resource
-        signer.capabilities.link<&StakingContract3.Staking>(/public/Staking, target: /storage/Staking)
+        signer.capabilities.link<&StakingContract4.Staking>(/public/Staking, target: /storage/Staking)
 
         // Get a reference to the staking resource
-        self.stakingRef = signer.capabilities.borrow<&StakingContract3.Staking>(/public/Staking)
+        self.stakingRef = signer.capabilities.borrow<&StakingContract4.Staking>(/public/Staking)
             ?? panic("Could not borrow Staking reference")
     }
 
