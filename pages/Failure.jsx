@@ -54,6 +54,11 @@ const Failure = ({ avatar = 'bubbiberry' }) => {
           }}
         />
         <PixelButton
+          onClick={() => {
+            localStorage.removeItem("pomodokiState"); // Limpa estado salvo
+            chrome.storage.local.remove("pomodokiStatus"); // Remove status de falha
+            window.location.reload(); // Recarrega popup
+          }}
           className="w-full max-w-xs mx-auto mt-8 flex items-center justify-center gap-2"
           style={{
             background: '#6d5747',

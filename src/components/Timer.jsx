@@ -23,6 +23,20 @@ const Timer = ({ duration, avatar, onComplete, onCancel, onLoseFocus }) => {
     }
   }, [duration, onComplete]);
 
+  useEffect(() => {
+    const handleLoseFocus = (message) => {
+      if (message.action === "loseFocus") {
+        onLoseFocus();
+      }
+    };
+  
+    chrome.runtime?.onMessage.addListener(handleLoseFocus);
+  
+    return () => {
+      chrome.runtime?.onMessage.removeListener(handleLoseFocus);
+    };
+  }, []);
+  
   // Atualiza o cronômetro a cada segundo
   useEffect(() => {
     let interval = null;

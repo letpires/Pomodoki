@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import Head from "next/head";
 import Welcome from "./Welcome";
 import AvatarSelection from "./AvatarSelection";
 import Setup from "./Setup";
@@ -14,7 +13,7 @@ export default function Home() {
   const [breakTime, setBreakTime] = useState(5);
   const [stake, setStake] = useState(1);
 
-  // 🔄 Carrega o estado salvo ao abrir
+  // Carrega o estado salvo (persistência)
   useEffect(() => {
     const saved = localStorage.getItem("pomodokiState");
     if (saved) {
@@ -27,51 +26,54 @@ export default function Home() {
     }
   }, []);
 
-  // 💾 Salva o estado sempre que mudar
+  // Salva o estado sempre que mudar
   useEffect(() => {
-    const state = {
-      page,
-      selectedAvatar,
-      pomodoro,
-      breakTime,
-      stake,
-    };
+    const state = { page, selectedAvatar, pomodoro, breakTime, stake };
     localStorage.setItem("pomodokiState", JSON.stringify(state));
   }, [page, selectedAvatar, pomodoro, breakTime, stake]);
 
-  // 👛 Após conectar a carteira
+  useEffect(() => {
+    const checkFailure = () => {
+      chrome.storage?.local.get("pomodokiStatus", (result) => {
+        if (result.pomodokiStatus === "failure") {
+          chrome.storage.local.remove("pomodokiStatus");
+          setPage("failure");
+        }
+      });
+    };
+  
+    const interval = setInterval(checkFailure, 1000); // checa a cada 1s
+    return () => clearInterval(interval); // limpa ao desmontar
+  }, []);
+
+  // Funções de navegação do fluxo
   const handleConnectWallet = () => setPage("avatar");
 
-  // ✅ Após escolher o avatar
   const handleConfirmAvatar = (avatar) => {
     setSelectedAvatar(avatar);
     setPage("setup");
   };
 
-  // ✅ Após configurar stake e tempo
   const handleSetup = (pomodoro, breakTime, stake) => {
     setPomodoro(pomodoro);
     setBreakTime(breakTime);
     setStake(stake);
+
+    chrome.runtime?.sendMessage({
+      action: "startTimer",
+      duration: pomodoro * 60,
+    });
+
     setPage("timer");
   };
 
-  // 🟢 Após completar o pomodoro
   const handleTimerComplete = () => setPage("success");
-
-  // 🔴 Se falhar (ex: perder foco)
   const handleTimerFail = () => setPage("failure");
 
-  // 📦 Render das páginas
-  if (page === "welcome") {
-    return <Welcome onConnectWallet={handleConnectWallet} />;
-  }
-  if (page === "avatar") {
-    return <AvatarSelection onConfirm={handleConfirmAvatar} />;
-  }
-  if (page === "setup") {
-    return <Setup onStart={handleSetup} />;
-  }
+  // Renderiza a página correta
+  if (page === "welcome") return <Welcome onConnectWallet={handleConnectWallet} />;
+  if (page === "avatar") return <AvatarSelection onConfirm={handleConfirmAvatar} />;
+  if (page === "setup") return <Setup onStart={handleSetup} />;
   if (page === "timer") {
     return (
       <PomodoroTimer
@@ -84,12 +86,8 @@ export default function Home() {
       />
     );
   }
-  if (page === "success") {
-    return <Success avatar={selectedAvatar} />;
-  }
-  if (page === "failure") {
-    return <Failure avatar={selectedAvatar} />;
-  }
+  if (page === "success") return <Success avatar={selectedAvatar} />;
+  if (page === "failure") return <Failure avatar={selectedAvatar} />;
 
   return null;
 }

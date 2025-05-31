@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Timer from '../src/components/Timer';
 import Welcome from "./Welcome";
@@ -10,6 +10,8 @@ const PomodoroTimer = ({ avatar, pomodoro, breakTime, stake, onComplete, onFail 
   const [isBreak, setIsBreak] = useState(false);
 
   const handleComplete = () => {
+    chrome.runtime?.sendMessage({ action: 'stopTimer' });
+
     if (!isBreak) {
       setIsBreak(true); // Vai para o break
     } else {
@@ -18,22 +20,30 @@ const PomodoroTimer = ({ avatar, pomodoro, breakTime, stake, onComplete, onFail 
   };
 
   const handleCancel = () => {
+    chrome.runtime?.sendMessage({ action: 'stopTimer' });
     if (onFail) onFail();
   };
 
   const handleLoseFocus = () => {
+    chrome.runtime?.sendMessage({ action: 'stopTimer' });
     if (onFail) onFail();
   };
 
-  const getDurations = () => {
-    if (selectedTime === '50/10') {
-      return { pomodoro: 50, breakTime: 10 };
-    }
-    if (selectedTime === '1/0.5') {
-      return { pomodoro: 1, breakTime: 0.5 };
-    }
-    return { pomodoro: 25, breakTime: 5 };
-  };
+  // Escutar mensagens do background (ex: tentativa de abrir sites bloqueados)
+  useEffect(() => {
+    const listener = (message) => {
+      if (message.action === "triggerFailure") {
+        console.warn("⚠️ Site bloqueado acessado:", message.reason);
+        handleLoseFocus(); // Gatilho para falha
+      }
+    };
+
+    chrome.runtime?.onMessage?.addListener(listener);
+
+    return () => {
+      chrome.runtime?.onMessage?.removeListener(listener);
+    };
+  }, []);
 
   return (
     <>
@@ -58,4 +68,4 @@ const PomodoroTimer = ({ avatar, pomodoro, breakTime, stake, onComplete, onFail 
   );
 };
 
-export default PomodoroTimer; 
+export default PomodoroTimer;
