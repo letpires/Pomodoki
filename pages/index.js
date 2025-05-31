@@ -1,56 +1,53 @@
-import Head from "next/head"
-import styles from "../styles/Home.module.css"
-import FlowLogin from "../components/FlowLogin"
+import { useState } from "react";
+import Head from "next/head";
+import Welcome from "./Welcome";
+import AvatarSelection from "./AvatarSelection";
+import PomodoroTimer from "./PomodoroTimer";
+import Success from "./Success";
+import Failure from "./Failure";
 
 export default function Home() {
-  return (
-    <>
-      <Head>
-        <title>Pomodoki - Flow Blockchain App</title>
-        <meta name="description" content="A Next.js app with Flow blockchain integration" />
-        <link rel="icon" href="/favicon.ico" />
-        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
-      </Head>
+  const [page, setPage] = useState("welcome");
+  const [selectedAvatar, setSelectedAvatar] = useState(null);
 
-      <div className="popup-container">
-        <div className="w-full max-w-3xl text-center">
-          <main className={styles.main}>
-            <h1 className={styles.title}>
-              Welcome to<br />
-              <span className={styles.brand}>Pomodoki</span>
-            </h1>
+  // Simule o login da wallet
+  const handleConnectWallet = () => setPage("avatar");
 
-            <img
-              src="/images/avatar.png"
-              alt="Pomodoki Avatar"
-              style={{ display: "block", margin: "32px auto", width: "180px" }}
-            />
+  // Quando o avatar for confirmado
+  const handleConfirmAvatar = (avatar) => {
+    setSelectedAvatar(avatar);
+    setPage("timer");
+  };
 
-            <div className={styles.flowLogin}>
-              <FlowLogin />
-            </div>
+  // Timer completo
+  const handleTimerComplete = () => setPage("success");
+  // Timer falhou
+  const handleTimerFail = () => setPage("failure");
 
-            <button className="pixelButton">
-              <span role="img" aria-label="key" style={{ fontSize: '1.5em' }}>🔑</span>
-              Connect Wallet
-            </button>
-          </main>
-
-          <footer className={styles.footer}>
-            <a
-              href="https://flow.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Powered by{" "}
-              <span className={styles.logo}>
-                Flow Blockchain
-              </span>
-            </a>
-          </footer>
-        </div>
-      </div>
-    </>
-  )
+  if (page === "welcome") {
+    return (
+      <Welcome onConnectWallet={handleConnectWallet} />
+    );
+  }
+  if (page === "avatar") {
+    return (
+      <AvatarSelection onConfirm={handleConfirmAvatar} />
+    );
+  }
+  if (page === "timer") {
+    return (
+      <PomodoroTimer
+        avatar={selectedAvatar}
+        onComplete={handleTimerComplete}
+        onFail={handleTimerFail}
+      />
+    );
+  }
+  if (page === "success") {
+    return <Success avatar={selectedAvatar} />;
+  }
+  if (page === "failure") {
+    return <Failure avatar={selectedAvatar} />;
+  }
+  return null;
 }
