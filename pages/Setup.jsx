@@ -85,6 +85,9 @@ const Setup = ({ onStart }) => {
 
       // Wait for transaction to be sealed
       await fcl.tx(transactionId).onceSealed();
+
+
+      localStorage.removeItem("pomodokiStart");
       
       // Start the pomodoro session
       onStart(pomodoro, breakTime, stake);
