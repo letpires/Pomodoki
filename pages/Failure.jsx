@@ -1,5 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
+import PixelFailure from '../src/components/PixelFailure';
 import PixelButton from '../src/components/PixelButton';
 
 const Failure = ({ avatar = 'bubbiberry' }) => {
@@ -41,18 +42,7 @@ const Failure = ({ avatar = 'bubbiberry' }) => {
         >
           Your FLOW went to the pool.
         </div>
-        {/* Avatar triste customizado */}
-        <img
-          src="/images/failure.png"
-          alt="Sad Avatar"
-          style={{
-            width: '180px',
-            height: '180px',
-            imageRendering: 'pixelated',
-            display: 'block',
-            margin: '32px auto',
-          }}
-        />
+        <PixelFailure type={avatar} size="large" className="mx-auto my-6" />
         <PixelButton
           onClick={() => {
             localStorage.removeItem("pomodokiState"); // Limpa estado salvo

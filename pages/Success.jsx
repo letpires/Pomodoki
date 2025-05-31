@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Head from "next/head";
-import PixelAvatar from "../src/components/PixelAvatar";
+import PixelSuccess from "../src/components/PixelSuccess";
 import PixelButton from "../src/components/PixelButton";
 import { useEffect } from "react";
 import * as fcl from "@onflow/fcl";
@@ -100,63 +100,31 @@ const Success = ({ avatar = "bubbiberry" }) => {
         >
           Your Pomodoki levelep up! 
         </div> 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            margin: "8px 0 0 0",
-          }}
-        >
-          <span style={{ fontSize: "2rem", color: "#bfae5a", margin: "0 8px" }}>
-            ✦
-          </span>
-          <span
-            style={{ fontSize: "1.2rem", color: "#bfae5a", margin: "0 8px" }}
-          >
-            ✧
-          </span>
-          <span style={{ fontSize: "2rem", color: "#bfae5a", margin: "0 8px" }}>
-            ✦
-          </span>
-        </div>
-        <PixelAvatar type={avatar} size="large" className="mx-auto my-6" />
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            margin: "8px 0 24px 0",
-          }}
-        >
-          <span style={{ fontSize: "2rem", color: "#bfae5a", margin: "0 8px" }}>
-            ✦
-          </span>
-          <span
-            style={{ fontSize: "1.2rem", color: "#bfae5a", margin: "0 8px" }}
-          >
-            ✧
-          </span>
-          <span style={{ fontSize: "2rem", color: "#bfae5a", margin: "0 8px" }}>
-            ✦
-          </span>
-        </div>
-        <PixelButton
+        <PixelSuccess type={avatar} size="large" className="mx-auto my-6" />
+
+                {/* Botão Confirmar */}
+        
+        <button
           onClick={handleRedeem}
-          className="w-full max-w-xs mx-auto mt-8"
-          style={{
-            background: "#ffe082",
-            color: "#5c4435",
-            fontFamily: "'Press Start 2P', cursive",
-            fontSize: "1rem",
-            boxShadow: "4px 4px #bfae5a",
-            border: "2px solid #bfae5a",
-            letterSpacing: "2px",
-          }}
           disabled={isLoading}
+          style={{
+            backgroundColor: isLoading ? '#ffe082' : '#fed35c',
+            color: '#5c4435',
+            fontFamily: "'VT323', monospace",
+            fontSize: "1.25rem",
+            padding: "10px 24px",
+            border: "2px solid #5c4435",
+            borderRadius: "4px",
+            cursor: isLoading ? 'not-allowed' : 'pointer',
+            boxShadow: "4px 4px #5c4435",
+            textTransform: "uppercase",
+            marginTop: "40px",
+            opacity: isLoading ? 0.7 : 1,
+            transition: 'background 0.2s, opacity 0.2s',
+          }}
         >
-          {isLoading ? "REDEEMING..." : "REDEEM TOKENS"}
-        </PixelButton>
+          {isLoading ? 'Loading...' : 'Redeem'}
+        </button>
       </div>
     </>
   );
