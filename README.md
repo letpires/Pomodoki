@@ -37,12 +37,12 @@ If the user visits any blacklisted sites (e.g., YouTube, Instagram), the session
 > - [x] `✅ FLOW staking & reward mechanism`
 > - [x] `✅ Pet avatars with emotion states`
 > - [x] `✅ Tab and inactivity detection`
+> - [ ] `🔜 Instead of burning your stake, we buy Bitcoin and lock it — for your own good. 💸🔒`
 > - [ ] `🔜 Pet evolution system`
 > - [ ] `🔜 NFT avatar integration`
 > - [ ] `🔜 Group Pomodoro & social challenges`
-> - [ ] `🔜 Webcam validation for high-stakes mode`
-> - [ ] `🔜 Token utility: rewards, marketplace, rep`
-
+> - [ ] `🔜 Physical Tamagotchi-style device synced with your focus account`
+> - [ ] `🔜 Token utility: rewards, marketplace`
 ---
 
 ## 🎯 Contract Deployment
