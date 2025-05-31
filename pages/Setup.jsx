@@ -57,6 +57,13 @@ const Setup = ({ onStart }) => {
 
                 let staking <- StakingContract3.createStaking(vault: <- flowVault)
                 
+                // Check if storage path exists and remove if it does
+                if signer.storage.check<@StakingContract3.Staking>(from: /storage/Staking) {
+                    let oldStaking <- signer.storage.load<@StakingContract3.Staking>(from: /storage/Staking)
+                    destroy oldStaking
+                    signer.capabilities.unpublish(/public/Staking)
+                }
+                
                 signer.storage.save(<- staking, to: /storage/Staking)
                 signer.capabilities.publish(
                     signer.capabilities.storage.issue<&StakingContract3.Staking>(/storage/Staking),
