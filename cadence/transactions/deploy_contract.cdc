@@ -1,4 +1,4 @@
-import StakingContract from "./StakingContract.cdc"
+import StakingContract from "../contracts/StakingContract.cdc"
 
 transaction {
     prepare(signer: AuthAccount) {
