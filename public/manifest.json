@@ -10,15 +10,18 @@
     "48": "/icons/favicon-48.png",
     "128": "/icons/favicon-128.png"
   },
-  "permissions": [],
+  "permissions": ["storage", "alarms"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "index.html"
+  },
   "content_scripts": [
     {
       "matches": ["https://*/*", "http://*/*"],
       "js": ["inject.js"]
     }
-  ],
-  "host_permissions": ["<all_urls>"],
-  "action": {
-    "default_popup": "index.html"
-  }
+  ]
 }

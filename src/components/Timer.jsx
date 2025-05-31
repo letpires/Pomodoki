@@ -3,18 +3,41 @@ import PixelButton from './PixelButton';
 import PixelAvatar from './PixelAvatar';
 
 const Timer = ({ duration, avatar, onComplete, onCancel, onLoseFocus }) => {
-  const [timeLeft, setTimeLeft] = useState(duration * 60); // convert to seconds
+  const [timeLeft, setTimeLeft] = useState(duration * 60);
   const [isActive, setIsActive] = useState(true);
 
+  // Recupera o tempo restante com base no timestamp salvo
+  useEffect(() => {
+    const storedStart = localStorage.getItem("pomodokiStart");
+    if (storedStart) {
+      const elapsed = Math.floor((Date.now() - parseInt(storedStart, 10)) / 1000);
+      const remaining = duration * 60 - elapsed;
+      if (remaining <= 0) {
+        onComplete();
+      } else {
+        setTimeLeft(remaining);
+      }
+    } else {
+      // Se não havia timestamp salvo, cria um novo
+      localStorage.setItem("pomodokiStart", Date.now().toString());
+    }
+  }, [duration, onComplete]);
+
+  // Atualiza o cronômetro a cada segundo
   useEffect(() => {
     let interval = null;
 
     if (isActive && timeLeft > 0) {
       interval = setInterval(() => {
-        setTimeLeft((prevTime) => prevTime - 1);
+        setTimeLeft(prev => {
+          const newTime = prev - 1;
+          if (newTime <= 0) {
+            clearInterval(interval);
+            onComplete();
+          }
+          return newTime;
+        });
       }, 1000);
-    } else if (timeLeft === 0) {
-      onComplete();
     }
 
     return () => {
@@ -22,7 +45,7 @@ const Timer = ({ duration, avatar, onComplete, onCancel, onLoseFocus }) => {
     };
   }, [isActive, timeLeft, onComplete]);
 
-  // Simulate losing focus randomly for demo
+  // Simula perda de foco (opcional)
   useEffect(() => {
     const randomLoseFocus = setTimeout(() => {
       if (Math.random() < 0.1) {
@@ -45,12 +68,35 @@ const Timer = ({ duration, avatar, onComplete, onCancel, onLoseFocus }) => {
         <div className="bg-yellow-400 text-black px-2 py-1 rounded text-xs mb-2">200</div>
         <p className="text-sm mb-4">Start growing today!</p>
       </div>
+
       <div className="mb-6">
         <PixelAvatar type={avatar} size="large" className="mx-auto mb-4" />
-        <div className="text-4xl font-bold mb-2" style={{ fontFamily: "'Press Start 2P', cursive", fontSize: '3rem', letterSpacing: '2px' }}>{formatTime(timeLeft)}</div>
-        <div className="bg-green-500 text-white px-3 py-1 rounded text-xs" style={{ fontFamily: "'Press Start 2P', cursive" }}>Focused</div>
+        <div
+          className="text-4xl font-bold mb-2"
+          style={{
+            fontFamily: "'Press Start 2P', cursive",
+            fontSize: '3rem',
+            letterSpacing: '2px',
+          }}
+        >
+          {formatTime(timeLeft)}
+        </div>
+        <div
+          className="bg-green-500 text-white px-3 py-1 rounded text-xs"
+          style={{ fontFamily: "'Press Start 2P', cursive" }}
+        >
+          Focused
+        </div>
       </div>
-      <PixelButton onClick={onCancel} variant="secondary" className="w-full max-w-xs mx-auto mt-8">
+
+      <PixelButton
+        onClick={() => {
+          localStorage.removeItem("pomodokiStart"); // limpa ao cancelar
+          onCancel();
+        }}
+        variant="secondary"
+        className="w-full max-w-xs mx-auto mt-8"
+      >
         Cancel
       </PixelButton>
     </div>
