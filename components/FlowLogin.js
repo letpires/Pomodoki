@@ -17,6 +17,10 @@ export default function FlowLogin({ onConnect }) {
   useEffect(() => {
     fcl.currentUser().subscribe(async (user) => {
       setUser(user && user.addr ? user : null); 
+
+      if (onConnect && user.addr) {
+        onConnect();
+      }
       if (user.loggedIn) {
         const balance = await fcl.account(user.addr); 
         setBalance(balance.balance / 100000000); // Convert from UFix64 to decimal
