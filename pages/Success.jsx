@@ -5,9 +5,10 @@ import PixelButton from "../src/components/PixelButton";
 import { useEffect } from "react";
 import * as fcl from "@onflow/fcl";
 
-const Success = ({ avatar = "bubbiberry" }) => {
+const Success = ({ avatar = "bubbiberry", onRestart, onBackToHome }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [balance, setBalance] = useState(0);
+  const [redeemed, setRedeemed] = useState(false);
 
   useEffect(() => {
     fcl.currentUser().subscribe(async (user) => {
@@ -53,11 +54,9 @@ const Success = ({ avatar = "bubbiberry" }) => {
         limit: 9999,
       });
 
-      // Wait for transaction to be sealed
       await fcl.tx(transactionId).onceSealed();
 
-      // Refresh the page or show success message
-      window.location.reload();
+      setRedeemed(true);
     } catch (error) {
       console.error("Error redeeming tokens:", error);
       alert("Failed to redeem tokens. Please try again.");
@@ -106,7 +105,7 @@ const Success = ({ avatar = "bubbiberry" }) => {
         
         <button
           onClick={handleRedeem}
-          disabled={isLoading}
+          disabled={isLoading || redeemed}
           style={{
             backgroundColor: isLoading ? '#ffe082' : '#fed35c',
             color: '#5c4435',
@@ -121,10 +120,75 @@ const Success = ({ avatar = "bubbiberry" }) => {
             marginTop: "40px",
             opacity: isLoading ? 0.7 : 1,
             transition: 'background 0.2s, opacity 0.2s',
+            display: redeemed ? 'none' : 'block'
           }}
         >
           {isLoading ? 'Loading...' : 'Redeem'}
         </button>
+
+        {redeemed && (
+          <>
+            <div
+              style={{
+                fontFamily: "'VT323', monospace",
+                color: "#5c4435",
+                fontSize: "1rem",
+                textAlign: "center",
+                marginTop: "12px",
+                marginBottom: "12px",
+                marginLeft: '24px',
+                marginRight: '24px',
+                fontStyle: 'italic',
+                lineHeight: '1.4',
+                padding: '0 8px',
+              }}
+            >
+              Redeem successful!<br />
+              Your FLOW is back in your wallet.
+            </div>
+            <button
+              onClick={onRestart}
+              style={{
+                backgroundColor: "#5aad00",
+                color: "#ffedae",
+                fontFamily: "'VT323', monospace",
+                fontSize: "1.25rem",
+                padding: "10px 24px",
+                border: "2px solid #5c4435",
+                borderRadius: "4px",
+                cursor: "pointer",
+                boxShadow: "4px 4px #5c4435",
+                marginTop: "12px",
+                display: 'block',
+                marginLeft: 'auto',
+                marginRight: 'auto'
+              }}
+            >
+              Start new session
+            </button>
+            <button
+              onClick={onBackToHome}
+              style={{
+                background: 'transparent',
+                color: '#5c4435',
+                fontFamily: "'VT323', monospace",
+                fontSize: '1.1rem',
+                border: '2px solid #5c4435',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                boxShadow: 'none',
+                marginTop: '12px',
+                display: 'block',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                padding: '6px 24px',
+                minWidth: '100px',
+              }}
+            >
+              Back to Home
+            </button>
+          </>
+        )}
       </div>
     </>
   );

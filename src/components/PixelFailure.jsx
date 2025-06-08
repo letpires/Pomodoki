@@ -3,7 +3,7 @@ import React from 'react';
 const PixelPomo = ({ type }) => {
   const avatarImages = {
     tomash: '/images/tomash_failure.png',
-    bubbiberry: '/images/bubbi_failure.png',
+    bubbiberry: '/images/bubby_failure.png',
     batatack: '/images/batatack_failure.png'
   };
 

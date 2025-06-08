@@ -70,6 +70,8 @@ export default function Home() {
   const handleTimerComplete = () => setPage("success");
   const handleTimerFail = () => setPage("failure");
 
+  const handleBackToHome = () => setPage("welcome");
+
   // Renderiza a página correta
   if (page === "welcome") return <Welcome onConnectWallet={handleConnectWallet} />;
   if (page === "avatar") return <AvatarSelection onConfirm={handleConfirmAvatar} />;
@@ -86,7 +88,7 @@ export default function Home() {
       />
     );
   }
-  if (page === "success") return <Success avatar={selectedAvatar} />;
+  if (page === "success") return <Success avatar={selectedAvatar} onRestart={() => setPage("setup")} onBackToHome={handleBackToHome} />;
   if (page === "failure") return <Failure avatar={selectedAvatar} />;
 
   return null;
