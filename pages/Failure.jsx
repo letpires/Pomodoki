@@ -3,7 +3,7 @@ import Head from "next/head";
 import PixelFailure from "../src/components/PixelFailure";
 import PixelButton from "../src/components/PixelButton";
 
-const Failure = ({ avatar = "bubbiberry" }) => {
+const Failure = ({ avatar = "bubbiberry", onBackToHome, onTryAgain }) => {
   return (
     <>
       <Head>
@@ -52,26 +52,56 @@ const Failure = ({ avatar = "bubbiberry" }) => {
           Your FLOW went to the pool.
         </div>
         <PixelFailure type={avatar} size="large" className="mx-auto my-6" />
-        <PixelButton
-          onClick={() => {
-            localStorage.removeItem("pomodokiState"); // Limpa estado salvo
-            chrome.storage.local.remove("pomodokiStatus"); // Remove status de falhaAdd commentMore actions
-            window.location.reload(); // Recarrega popup
-          }}
-          className="w-full max-w-xs mx-auto mt-8 flex items-center justify-center gap-2"
-          style={{
-            background: "#6d5747",
-            color: "#ffe082",
-            fontFamily: "'Press Start 2P', cursive",
-            fontSize: "1rem",
-            boxShadow: "4px 4px #4d3e2a",
-            border: "2px solid #4d3e2a",
-            letterSpacing: "2px",
-          }}
-        >
-          <span style={{ fontSize: "1.3em", marginRight: "8px" }}>↻</span> TRY
-          AGAIN
-        </PixelButton>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px", marginTop: "32px" }}>
+          <button
+            onClick={() => {
+              localStorage.removeItem("pomodokiState");
+              chrome.storage.local.remove("pomodokiStatus");
+              if (onTryAgain) onTryAgain();
+            }}
+            style={{
+              backgroundColor: "transparent",
+              color: "#ffedae",
+              fontFamily: "'VT323', monospace",
+              fontSize: "1.25rem",
+              padding: "10px 24px",
+              border: "2px solid #5c4435",
+              borderRadius: "4px",
+              cursor: "pointer",
+              boxShadow: "4px 4px #5c4435",
+              marginTop: "12px",
+              display: 'block',
+              marginLeft: 'auto',
+              marginRight: 'auto'
+            }}
+          >
+            <span style={{ fontSize: "1.3em", marginRight: "8px" }}>↻</span> TRY AGAIN
+          </button>
+          <button
+            onClick={() => {
+              localStorage.removeItem("pomodokiState");
+              chrome.storage.local.remove("pomodokiStatus");
+              if (onBackToHome) onBackToHome();
+            }}
+            style={{
+              backgroundColor: "transparent",
+              color: "#ffedae",
+              fontFamily: "'VT323', monospace",
+              fontSize: "1.25rem",
+              padding: "10px 24px",
+              border: "2px solid #5c4435",
+              borderRadius: "4px",
+              cursor: "pointer",
+              boxShadow: "4px 4px #5c4435",
+              marginTop: "12px",
+              display: 'block',
+              marginLeft: 'auto',
+              marginRight: 'auto'
+            }}
+          >
+            ⬅ BACK TO HOME
+          </button>
+        </div>
       </div>
     </>
   );
