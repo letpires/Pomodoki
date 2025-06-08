@@ -91,18 +91,24 @@ export default function FlowLogin({ onConnect }) {
             fontFamily: "'VT323', monospace",
           }}
         >
-          <p>Connected as: {user.addr}</p>
-          <p>Balance: {balance || "0.0"} FLOW</p>
+          <p style={{ textAlign: 'center', fontSize: '1.15rem' }}>Connected as: {user.addr}</p>
+          <p style={{ textAlign: 'center', fontSize: '1.15rem' }}>Balance: {balance || "0.0"} FLOW</p>
           <button
             onClick={handleLogout}
             style={{
-              marginTop: "10px",
-              backgroundColor: "#eee",
+              marginTop: "20px",
+              backgroundColor: "#fed35c",
+              color: "#5c4435",
               fontFamily: "'VT323', monospace",
-              fontSize: "1rem",
-              padding: "6px 14px",
-              border: "1px solid #888",
+              fontSize: "1.25rem",
+              padding: "10px 24px",
+              border: "2px solid #5c4435",
               cursor: "pointer",
+              borderRadius: "4px",
+              boxShadow: "4px 4px #5c4435",
+              display: "block",
+              marginLeft: "auto",
+              marginRight: "auto",
             }}
           >
             Disconnect
@@ -112,3 +118,11 @@ export default function FlowLogin({ onConnect }) {
     </div>
   );
 }
+
+
+
+
+
+
+
+
