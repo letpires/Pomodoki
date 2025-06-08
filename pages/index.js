@@ -89,7 +89,7 @@ export default function Home() {
     );
   }
   if (page === "success") return <Success avatar={selectedAvatar} onRestart={() => setPage("setup")} onBackToHome={handleBackToHome} />;
-  if (page === "failure") return <Failure avatar={selectedAvatar} />;
+  if (page === "failure") return <Failure avatar={selectedAvatar} onBackToHome={handleBackToHome} onTryAgain={() => setPage("setup")} />;
 
   return null;
 }
