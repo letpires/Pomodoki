@@ -16,11 +16,5 @@
   },
   "action": {
     "default_popup": "index.html"
-  },
-  "content_scripts": [
-    {
-      "matches": ["https://*/*", "http://*/*"],
-      "js": ["inject.js"]
-    }
-  ]
+  }
 }
