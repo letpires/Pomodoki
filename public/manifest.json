@@ -10,8 +10,7 @@
     "48": "/icons/favicon.png",
     "128": "/icons/favicon.png"
   },
-  "permissions": ["storage", "alarms", "tabs", "scripting"],
-  "host_permissions": ["<all_urls>"],
+  "permissions": ["storage", "tabs"], 
   "background": {
     "service_worker": "background.js"
   },
