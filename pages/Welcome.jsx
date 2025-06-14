@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Head from "next/head";
-import FlowLogin from "../components/FlowLogin";
+import Head from "next/head"; 
 import * as fcl from "@onflow/fcl";
+import FlowLogin from "../components/FlowLogin";
 
 const Welcome = ({ onConnectWallet }) => {
   const [isConnected, setIsConnected] = useState(false);
