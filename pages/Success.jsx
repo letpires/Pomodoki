@@ -1,12 +1,12 @@
-import React, { useState , useContext} from "react"; 
-import PixelSuccess from "../src/components/PixelSuccess"; 
+import React, { useState, useContext } from "react";
+import PixelSuccess from "../src/components/PixelSuccess";
 import { CurrentUserContext } from "../src/context/currentUserProvider";
 import * as fcl from "@onflow/fcl";
 
 const Success = ({ avatar = "bubbiberry", onRestart, onBackToHome }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [redeemed, setRedeemed] = useState(false);
-  const { currentUser, setCurrentUser, userStatusLoading, handleLogin, handleLogout } = useContext(CurrentUserContext);
+  const { balance } = useContext(CurrentUserContext);
 
   const handleRedeem = async () => {
     try {
@@ -92,7 +92,15 @@ const Success = ({ avatar = "bubbiberry", onRestart, onBackToHome }) => {
           You stayed focused! Your FLOW is safe.
         </div>
         <PixelSuccess type={avatar} size="large" className="mx-auto my-6" />
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px", marginTop: "32px" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "12px",
+            marginTop: "32px",
+          }}
+        >
           {!redeemed ? (
             <button
               onClick={handleRedeem}
@@ -108,9 +116,9 @@ const Success = ({ avatar = "bubbiberry", onRestart, onBackToHome }) => {
                 cursor: isLoading ? "not-allowed" : "pointer",
                 boxShadow: "4px 4px #5c4435",
                 marginTop: "12px",
-                display: 'block',
-                marginLeft: 'auto',
-                marginRight: 'auto',
+                display: "block",
+                marginLeft: "auto",
+                marginRight: "auto",
                 opacity: isLoading ? 0.8 : 1,
               }}
             >
@@ -146,12 +154,13 @@ const Success = ({ avatar = "bubbiberry", onRestart, onBackToHome }) => {
               cursor: "pointer",
               boxShadow: "4px 4px #5c4435",
               marginTop: "12px",
-              display: 'block',
-              marginLeft: 'auto',
-              marginRight: 'auto'
+              display: "block",
+              marginLeft: "auto",
+              marginRight: "auto",
             }}
           >
-            <span style={{ fontSize: "1.3em", marginRight: "8px" }}>↻</span> TRY AGAIN
+            <span style={{ fontSize: "1.3em", marginRight: "8px" }}>↻</span> TRY
+            AGAIN
           </button>
           <button
             onClick={() => {
@@ -170,9 +179,9 @@ const Success = ({ avatar = "bubbiberry", onRestart, onBackToHome }) => {
               cursor: "pointer",
               boxShadow: "4px 4px #5c4435",
               marginTop: "12px",
-              display: 'block',
-              marginLeft: 'auto',
-              marginRight: 'auto'
+              display: "block",
+              marginLeft: "auto",
+              marginRight: "auto",
             }}
           >
             ⬅ BACK TO HOME

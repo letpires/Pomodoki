@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext } from "react"; 
+import React, { useState, useEffect, createContext } from "react";
 import magic from "../services/Magic";
 
 export const CurrentUserContext = createContext({});
@@ -10,29 +10,29 @@ const CurrentUserProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        setUserStatusLoading(true);
-        const magicIsLoggedIn = await magic.user.isLoggedIn();
-        if (magicIsLoggedIn) {
-          const metaData = await magic.user.getMetadata();
-          setCurrentUser(metaData);
+    const checkUser = async () => {
+      if (magic) {
+        const isLoggedIn = await magic.user.isLoggedIn();
+        if (isLoggedIn) {
+          const data = await magic.user.getInfo();
+          setCurrentUser(data);
         }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      } finally {
-        setUserStatusLoading(false);
       }
     };
-
-    if (magic) {
-      fetchUserData();
-    }
+    checkUser();
   }, [magic]);
 
   // create a function to handle the login
   const handleLogin = async () => {
-    await magic.auth.loginWithMagicLink({ email: "gjpeixer@gmail.com" });
+    try {
+      await magic.wallet.connectWithUI();
+      const data = await magic.user.getInfo();
+      setCurrentUser(data);
+      setIsLoggedIn(true);
+    } catch (error) {
+      console.error("Error logging in:", error);
+      alert("Failed to log in. Please try again.");
+    }
   };
 
   // create a function to handle the logout
@@ -42,7 +42,15 @@ const CurrentUserProvider = ({ children }) => {
 
   return (
     <CurrentUserContext.Provider
-      value={{ currentUser, setCurrentUser, userStatusLoading, handleLogin, handleLogout, balance, isLoggedIn }}
+      value={{
+        currentUser,
+        setCurrentUser,
+        userStatusLoading,
+        handleLogin,
+        handleLogout,
+        balance,
+        isLoggedIn,
+      }}
     >
       {children}
     </CurrentUserContext.Provider>

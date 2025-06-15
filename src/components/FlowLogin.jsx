@@ -1,10 +1,9 @@
-import React, { useState, useContext } from "react";  
+import React, { useState, useContext } from "react";
 import { CurrentUserContext } from "../context/currentUserProvider";
 
-export default function FlowLogin() { 
-  const { isLoggedIn, handleLogin, handleLogout } = useContext(CurrentUserContext);
-  const [isLoading, setIsLoading] = useState(false); 
- 
+export default function FlowLogin() {
+  const { isLoggedIn, handleLogin, handleLogout, currentUser } =
+    useContext(CurrentUserContext); 
 
   return (
     <div className="flow-login text-center">
@@ -12,22 +11,21 @@ export default function FlowLogin() {
         <div>
           <button
             onClick={handleLogin}
-            disabled={isLoading}
             style={{
               backgroundColor: "#c5361b",
-              color: "#ffedae", 
+              color: "#ffedae",
               fontFamily: "'VT323', monospace",
               fontSize: "1.25rem",
               padding: "10px 24px",
               border: "2px solid #5c4435",
               borderRadius: "4px",
-              cursor: isLoading ? "not-allowed" : "pointer",
+              cursor: "pointer",
               boxShadow: "4px 4px #5c4435",
               width: "100%",
-              opacity: isLoading ? 0.8 : 1,
+              opacity: 1,
             }}
           >
-            {isLoading ? "Loading..." : "Connect Wallet"}
+            {"Connect Wallet"}
           </button>
         </div>
       ) : (
@@ -39,7 +37,7 @@ export default function FlowLogin() {
           }}
         >
           <p style={{ textAlign: "center", fontSize: "1.15rem" }}>
-            Connected as: {user.email}
+            Connected as: {currentUser.email}
           </p>
           <button
             onClick={handleLogout}

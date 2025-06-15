@@ -1,11 +1,11 @@
-import React, { useState, useContext } from "react";  
+import React, { useState, useContext } from "react";
 import * as fcl from "@onflow/fcl";
 import { CurrentUserContext } from "../src/context/currentUserProvider";
 
 const Setup = ({ onStart }) => {
   const [selectedTime, setSelectedTime] = useState("25/5");
   const [stake, setStake] = useState(1.0);
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
   const { balance } = useContext(CurrentUserContext);
 
   const handleStart = async () => {
@@ -159,9 +159,40 @@ const Setup = ({ onStart }) => {
               >
                 50
               </button>
+              <button
+                onClick={() => setSelectedTime("1")}
+                style={{
+                  background: selectedTime === "1" ? "#5aad00" : "transparent",
+                  color: selectedTime === "1" ? "#fffbe6" : "#5c4435",
+                  border: "2px solid #5c4435",
+                  borderRadius: 8,
+                  fontFamily: "'VT323', monospace",
+                  fontSize: "1.25rem",
+                  padding: "4px 24px",
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                  boxShadow: selectedTime === "1" ? "2px 2px #5c4435" : "none",
+                  transition: "all 0.2s",
+                }}
+              >
+                1
+              </button>
             </div>
+          </div>
 
-            <div style={{ marginBottom: 12, marginTop: 12 }}>Stake</div>
+          <div
+            style={{
+              border: "2px solid #5c4435",
+              borderRadius: "6px",
+              padding: "10px 10px 8px 10px",
+              marginBottom: "10px",
+              background: "#fffbe6",
+              fontFamily: "'VT323', monospace",
+              fontSize: "1.3rem",
+              color: "#5c4435",
+            }}
+          >
+            <div style={{ marginBottom: 12 }}>Stake</div>
             <div
               style={{
                 display: "flex",
