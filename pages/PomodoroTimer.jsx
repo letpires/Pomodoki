@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import Head from 'next/head';
+import React, { useState, useEffect } from 'react'; 
 import Timer from '../src/components/Timer'; 
 
 const PomodoroTimer = ({ avatar, pomodoro, breakTime, stake, onComplete, onFail }) => {
@@ -42,12 +41,7 @@ const PomodoroTimer = ({ avatar, pomodoro, breakTime, stake, onComplete, onFail 
   }, []);
 
   return (
-    <>
-      <Head>
-        <title>Pomodoki - Timer</title>
-        <meta name="viewport" content="width=400, initial-scale=1" />
-        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
-      </Head>
+    <> 
       <div className="popup-container">
         <Timer
           duration={isBreak ? breakTime : pomodoro}

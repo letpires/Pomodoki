@@ -1,23 +1,9 @@
 import React from "react";
-import Head from "next/head";
 import PixelFailure from "../src/components/PixelFailure";
-import PixelButton from "../src/components/PixelButton";
 
 const Failure = ({ avatar = "bubbiberry", onBackToHome, onTryAgain }) => {
   return (
     <>
-      <Head>
-        <title>Pomodoki - Failure</title>
-        <meta name="viewport" content="width=400, initial-scale=1" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
-          rel="stylesheet"
-        />
-      </Head>
       <div
         className="popup-container"
         style={{ background: "#655f4d", position: "relative" }}
@@ -52,7 +38,15 @@ const Failure = ({ avatar = "bubbiberry", onBackToHome, onTryAgain }) => {
           Your FLOW went to the pool.
         </div>
         <PixelFailure type={avatar} size="large" className="mx-auto my-6" />
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px", marginTop: "32px" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "12px",
+            marginTop: "32px",
+          }}
+        >
           <button
             onClick={() => {
               localStorage.removeItem("pomodokiState");
@@ -70,12 +64,13 @@ const Failure = ({ avatar = "bubbiberry", onBackToHome, onTryAgain }) => {
               cursor: "pointer",
               boxShadow: "4px 4px #5c4435",
               marginTop: "12px",
-              display: 'block',
-              marginLeft: 'auto',
-              marginRight: 'auto'
+              display: "block",
+              marginLeft: "auto",
+              marginRight: "auto",
             }}
           >
-            <span style={{ fontSize: "1.3em", marginRight: "8px" }}>↻</span> TRY AGAIN
+            <span style={{ fontSize: "1.3em", marginRight: "8px" }}>↻</span> TRY
+            AGAIN
           </button>
           <button
             onClick={() => {
@@ -94,9 +89,9 @@ const Failure = ({ avatar = "bubbiberry", onBackToHome, onTryAgain }) => {
               cursor: "pointer",
               boxShadow: "4px 4px #5c4435",
               marginTop: "12px",
-              display: 'block',
-              marginLeft: 'auto',
-              marginRight: 'auto'
+              display: "block",
+              marginLeft: "auto",
+              marginRight: "auto",
             }}
           >
             ⬅ BACK TO HOME

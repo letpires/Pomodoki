@@ -1,23 +1,14 @@
-import React, { useState } from "react";
-import Head from "next/head";
+import React, { useState, useContext } from "react";
 import PixelSuccess from "../src/components/PixelSuccess";
-import PixelButton from "../src/components/PixelButton";
-import { useEffect } from "react";
+import { CurrentUserContext } from "../src/context/currentUserProvider";
 import * as fcl from "@onflow/fcl";
+import magic from "../src/services/Magic";
 
 const Success = ({ avatar = "bubbiberry", onRestart, onBackToHome }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [balance, setBalance] = useState(0);
   const [redeemed, setRedeemed] = useState(false);
-
-  useEffect(() => {
-    fcl.currentUser().subscribe(async (user) => {
-      if (user.loggedIn) {
-        const balance = await fcl.account(user.addr);
-        setBalance(balance.balance / 100000000); // Convert from UFix64 to decimal
-      }
-    });
-  }, []);
+  const { balance } = useContext(CurrentUserContext);
+  const AUTHORIZATION_FUNCTION = magic?.flow.authorization;
 
   const handleRedeem = async () => {
     try {
@@ -50,7 +41,10 @@ const Success = ({ avatar = "bubbiberry", onRestart, onBackToHome }) => {
                   signer.capabilities.unpublish(/public/Staking)
               }
           }
-        `,
+        `, 
+        proposer: AUTHORIZATION_FUNCTION,
+        authorizations: [AUTHORIZATION_FUNCTION],
+        payer: AUTHORIZATION_FUNCTION,
         limit: 9999,
       });
 
@@ -68,15 +62,7 @@ const Success = ({ avatar = "bubbiberry", onRestart, onBackToHome }) => {
   };
 
   return (
-    <>
-      <Head>
-        <title>Pomodoki - Success</title>
-        <meta name="viewport" content="width=400, initial-scale=1" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
-          rel="stylesheet"
-        />
-      </Head>
+    <> 
       <div className="popup-container" style={{ position: "relative" }}>
         <h1
           style={{
