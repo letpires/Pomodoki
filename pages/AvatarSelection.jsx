@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
-import Head from 'next/head';
-import PixelButton from '../src/components/PixelButton';
+import React, { useState } from 'react'; 
 import PixelAvatar from '../src/components/PixelAvatar';
 
 const AvatarSelection = ({ onConfirm }) => {
@@ -16,11 +14,7 @@ const AvatarSelection = ({ onConfirm }) => {
     <div
       className="popup-container min-h-screen flex items-center justify-center"
       style={{ backgroundColor: "#ffedae" }}
-    >
-      <Head>
-        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
-      </Head>
+    > 
 
       <div className="w-full max-w-xs text-center">
         {/* Título */}

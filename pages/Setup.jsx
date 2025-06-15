@@ -1,36 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import PixelButton from '../src/components/PixelButton';
-import Head from 'next/head';
-import * as fcl from '@onflow/fcl';
+import React, { useState, useContext } from "react";  
+import * as fcl from "@onflow/fcl";
+import { CurrentUserContext } from "../src/context/currentUserProvider";
 
 const Setup = ({ onStart }) => {
-  const [selectedTime, setSelectedTime] = useState('25/5');
+  const [selectedTime, setSelectedTime] = useState("25/5");
   const [stake, setStake] = useState(1.0);
-  const [balance, setBalance] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    // Initialize Flow client
-    fcl.config({
-      'accessNode.api': 'https://rest-testnet.onflow.org',
-      'discovery.wallet': 'https://fcl-discovery.onflow.org/testnet/authn',
-    });
-
-    // Get user's Flow balance
-    const getBalance = async () => {
-      try {
-        const user = await fcl.currentUser().snapshot(); 
-        if (user.loggedIn) {
-          const balance = await fcl.account(user.addr); 
-          setBalance(balance.balance / 100000000); // Convert from UFix64 to decimal
-        }
-      } catch (error) {
-        console.error('Error fetching balance:', error);
-      }
-    };
-
-    getBalance();
-  }, []);
+  const [isLoading, setIsLoading] = useState(false); 
+  const { balance } = useContext(CurrentUserContext);
 
   const handleStart = async () => {
     try {
@@ -86,24 +62,23 @@ const Setup = ({ onStart }) => {
       // Wait for transaction to be sealed
       await fcl.tx(transactionId).onceSealed();
 
-
       localStorage.removeItem("pomodokiStart");
-      
+
       // Start the pomodoro session
       onStart(pomodoro, breakTime, stake);
     } catch (error) {
-      console.error('Error staking tokens:', error);
-      alert('Failed to stake tokens. Please try again.');
+      console.error("Error staking tokens:", error);
+      alert("Failed to stake tokens. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
   const getDurations = () => {
-    if (selectedTime === '50') {
+    if (selectedTime === "50") {
       return { pomodoro: 50, breakTime: 10 };
     }
-    if (selectedTime === '1') {
+    if (selectedTime === "1") {
       return { pomodoro: 0.5, breakTime: 0.5 };
     }
     return { pomodoro: 25, breakTime: 5 };
@@ -111,18 +86,7 @@ const Setup = ({ onStart }) => {
 
   return (
     <>
-      <Head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
-          rel="stylesheet"
-        />
-      </Head>
-
-      <div className="popup-container" style={{ backgroundColor: '#ffedae' }}>
+      <div className="popup-container" style={{ backgroundColor: "#ffedae" }}>
         <div
           className="w-full"
           style={{
@@ -134,103 +98,79 @@ const Setup = ({ onStart }) => {
           <h1
             style={{
               fontFamily: "'Press Start 2P', cursive",
-              color: '#5c4435',
-              fontSize: '1.2rem',
-              textAlign: 'center',
-              lineHeight: "1.8rem"
+              color: "#5c4435",
+              fontSize: "1.2rem",
+              textAlign: "center",
+              lineHeight: "1.8rem",
             }}
           >
-            Setup your<br />focus session
-
-            
+            Setup your
+            <br />
+            focus session
           </h1>
 
           <div
             style={{
-              border: '2px solid #5c4435',
-              borderRadius: '6px',
-              padding: '10px 10px 8px 10px',
-              marginBottom: '10px',
-              background: '#fffbe6',
+              border: "2px solid #5c4435",
+              borderRadius: "6px",
+              padding: "10px 10px 8px 10px",
+              marginBottom: "10px",
+              background: "#fffbe6",
               fontFamily: "'VT323', monospace",
-              fontSize: '1.3rem',
-              color: '#5c4435',
+              fontSize: "1.3rem",
+              color: "#5c4435",
             }}
           >
             <div style={{ marginBottom: 12 }}>Pomodoro time</div>
-            <div style={{ display: 'flex', gap: 12 }}>
+            <div style={{ display: "flex", gap: 12 }}>
               <button
-                onClick={() => setSelectedTime('25')}
+                onClick={() => setSelectedTime("25")}
                 style={{
-                  background: selectedTime === '25' ? '#5aad00' : 'transparent',
-                  color: selectedTime === '25' ? '#fffbe6' : '#5c4435',
-                  border: '2px solid #5c4435',
+                  background: selectedTime === "25" ? "#5aad00" : "transparent",
+                  color: selectedTime === "25" ? "#fffbe6" : "#5c4435",
+                  border: "2px solid #5c4435",
                   borderRadius: 8,
                   fontFamily: "'VT323', monospace",
-                  fontSize: '1.25rem',
-                  padding: '4px 24px',
-                  cursor: 'pointer',
-                  fontWeight: 'bold',
-                  boxShadow: selectedTime === '25' ? '2px 2px #5c4435' : 'none',
-                  transition: 'all 0.2s',
+                  fontSize: "1.25rem",
+                  padding: "4px 24px",
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                  boxShadow: selectedTime === "25" ? "2px 2px #5c4435" : "none",
+                  transition: "all 0.2s",
                 }}
               >
                 25
               </button>
               <button
-                onClick={() => setSelectedTime('50')}
+                onClick={() => setSelectedTime("50")}
                 style={{
-                  background: selectedTime === '50' ? '#5aad00' : 'transparent',
-                  color: selectedTime === '50' ? '#fffbe6' : '#5c4435',
-                  border: '2px solid #5c4435',
+                  background: selectedTime === "50" ? "#5aad00" : "transparent",
+                  color: selectedTime === "50" ? "#fffbe6" : "#5c4435",
+                  border: "2px solid #5c4435",
                   borderRadius: 8,
                   fontFamily: "'VT323', monospace",
-                  fontSize: '1.25rem',
-                  padding: '4px 24px',
-                  cursor: 'pointer',
-                  fontWeight: 'bold',
-                  boxShadow: selectedTime === '50' ? '2px 2px #5c4435' : 'none',
-                  transition: 'all 0.2s',
+                  fontSize: "1.25rem",
+                  padding: "4px 24px",
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                  boxShadow: selectedTime === "50" ? "2px 2px #5c4435" : "none",
+                  transition: "all 0.2s",
                 }}
               >
                 50
               </button>
-              <button
-                onClick={() => setSelectedTime('1')}
-                style={{
-                  background: selectedTime === '1' ? '#5aad00' : 'transparent',
-                  color: selectedTime === '1' ? '#fffbe6' : '#5c4435',
-                  border: '2px solid #5c4435',
-                  borderRadius: 8,
-                  fontFamily: "'VT323', monospace",
-                  fontSize: '1.25rem',
-                  padding: '4px 24px',
-                  cursor: 'pointer',
-                  fontWeight: 'bold',
-                  boxShadow: selectedTime === '1' ? '2px 2px #5c4435' : 'none',
-                  transition: 'all 0.2s',
-                }}
-              >
-                1
-              </button>
             </div>
-          </div>
 
-          <div
-            style={{
-              border: '2px solid #5c4435',
-              borderRadius: '6px',
-              padding: '10px 10px 8px 10px',
-              marginBottom: '10px',
-              background: '#fffbe6',
-              fontFamily: "'VT323', monospace",
-              fontSize: '1.3rem',
-              color: '#5c4435',
-            }}
-          >
-            <div style={{ marginBottom: 12 }}>Stake</div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
-              <span style={{ fontSize: '1.3rem' }}>Stake:</span>
+            <div style={{ marginBottom: 12, marginTop: 12 }}>Stake</div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+                marginBottom: 8,
+              }}
+            >
+              <span style={{ fontSize: "1.3rem" }}>Stake:</span>
               <input
                 type="number"
                 value={stake}
@@ -239,31 +179,33 @@ const Setup = ({ onStart }) => {
                 step={0.1}
                 style={{
                   fontFamily: "'VT323', monospace",
-                  fontSize: '1.25rem',
-                  border: '2px solid #5c4435',
+                  fontSize: "1.25rem",
+                  border: "2px solid #5c4435",
                   borderRadius: 6,
-                  padding: '2px 8px',
+                  padding: "2px 8px",
                   width: 70,
-                  background: '#fff',
-                  color: '#5c4435',
-                  textAlign: 'center',
+                  background: "#fff",
+                  color: "#5c4435",
+                  textAlign: "center",
                 }}
               />
-              <span style={{ fontSize: '1.25rem' }}>Flow</span>
+              <span style={{ fontSize: "1.25rem" }}>Flow</span>
             </div>
-            <div style={{ fontSize: '1.25rem' }}>Balance: {balance.toFixed(2)} Flow</div>
+            <div style={{ fontSize: "1.25rem" }}>
+              Balance: {balance.toFixed(2)} Flow
+            </div>
           </div>
 
           <div
             style={{
-              border: '2px solid #5c4435',
-              borderRadius: '6px',
-              padding: '10px 10px 8px 10px',
-              marginBottom: '10px',
-              background: '#fffbe6',
+              border: "2px solid #5c4435",
+              borderRadius: "6px",
+              padding: "10px 10px 8px 10px",
+              marginBottom: "10px",
+              background: "#fffbe6",
               fontFamily: "'VT323', monospace",
-              fontSize: '1.25rem',
-              color: '#5c4435',
+              fontSize: "1.25rem",
+              color: "#5c4435",
               textAlign: "center",
             }}
           >
@@ -274,24 +216,24 @@ const Setup = ({ onStart }) => {
             onClick={handleStart}
             disabled={isLoading}
             style={{
-              background: isLoading ? '#cccccc' : '#5aad00',
-              color: '#fffbe6',
+              background: isLoading ? "#cccccc" : "#5aad00",
+              color: "#fffbe6",
               fontFamily: "'VT323', monospace",
-              fontSize: '1.25rem',
+              fontSize: "1.25rem",
               border: "2px solid #5c4435",
               borderRadius: "4px",
-              boxShadow: isLoading ? '2px 2px #5c4435' : '4px 4px #5c4435',
+              boxShadow: isLoading ? "2px 2px #5c4435" : "4px 4px #5c4435",
               padding: "10px 24px",
               marginTop: "40px",
-              cursor: isLoading ? 'not-allowed' : 'pointer',
-              display: 'block',
-              marginLeft: 'auto',
-              marginRight: 'auto',
+              cursor: isLoading ? "not-allowed" : "pointer",
+              display: "block",
+              marginLeft: "auto",
+              marginRight: "auto",
               opacity: isLoading ? 0.8 : 1,
-              transition: 'all 0.2s ease',
+              transition: "all 0.2s ease",
             }}
           >
-            {isLoading ? 'Loading...' : 'Start pomodoro'}
+            {isLoading ? "Loading..." : "Start pomodoro"}
           </button>
         </div>
       </div>

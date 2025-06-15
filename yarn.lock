@@ -117,6 +117,11 @@
   dependencies:
     "@lit-labs/ssr-dom-shim" "^1.0.0"
 
+"@magic-ext/flow@^24.1.0":
+  version "24.1.0"
+  resolved "https://registry.yarnpkg.com/@magic-ext/flow/-/flow-24.1.0.tgz#aaf5bb3f4d2447d3e3d9d10239e8658cf2c93171"
+  integrity sha512-4tWxg/l67Jq3QSOQqr5EVuyuK7JO8x4BIWtkCI5AV8fNj1AQW4OXLo9xFVAWK+Vvfh+KaC0MVafcIeok1rt1mA==
+
 "@magic-sdk/commons@^25.1.0":
   version "25.1.0"
   resolved "https://registry.yarnpkg.com/@magic-sdk/commons/-/commons-25.1.0.tgz#aff09527e263d6ed97e22057990be13b6602c4b5"
