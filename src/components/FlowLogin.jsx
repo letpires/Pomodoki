@@ -1,9 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { CurrentUserContext } from "../context/currentUserProvider";
 
 export default function FlowLogin() {
   const { isLoggedIn, handleLogin, handleLogout, currentUser } =
-    useContext(CurrentUserContext); 
+    useContext(CurrentUserContext);
 
   return (
     <div className="flow-login text-center">
@@ -37,7 +37,7 @@ export default function FlowLogin() {
           }}
         >
           <p style={{ textAlign: "center", fontSize: "1.15rem" }}>
-            Connected as: {currentUser.email}
+            Connected as: {currentUser.publicAddress}
           </p>
           <button
             onClick={handleLogout}

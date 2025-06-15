@@ -1,19 +1,25 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import * as fcl from "@onflow/fcl";
 import { CurrentUserContext } from "../src/context/currentUserProvider";
+import magic from "../src/services/Magic";
+
+fcl.config({
+  "flow.network": "testnet",
+  "accessNode.api": "https://rest-testnet.onflow.org",
+  "discovery.wallet": `https://fcl-discovery.onflow.org/testnet/authn`,
+});
 
 const Setup = ({ onStart }) => {
   const [selectedTime, setSelectedTime] = useState("25/5");
   const [stake, setStake] = useState(1.0);
   const [isLoading, setIsLoading] = useState(false);
   const { balance } = useContext(CurrentUserContext);
+  const AUTHORIZATION_FUNCTION = magic?.flow.authorization;
 
   const handleStart = async () => {
     try {
       setIsLoading(true);
       const { pomodoro, breakTime } = getDurations();
-
-      // Create and execute the staking transaction
       const transactionId = await fcl.mutate({
         cadence: `
         import FungibleToken from 0x9a0766d93b6608b7
@@ -56,10 +62,11 @@ const Setup = ({ onStart }) => {
         }
         `,
         args: (arg, t) => [arg(stake.toFixed(1), t.UFix64)],
+        proposer: AUTHORIZATION_FUNCTION,
+        authorizations: [AUTHORIZATION_FUNCTION],
+        payer: AUTHORIZATION_FUNCTION,
         limit: 9999,
       });
-
-      // Wait for transaction to be sealed
       await fcl.tx(transactionId).onceSealed();
 
       localStorage.removeItem("pomodokiStart");

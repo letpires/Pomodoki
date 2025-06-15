@@ -2,11 +2,13 @@ import React, { useState, useContext } from "react";
 import PixelSuccess from "../src/components/PixelSuccess";
 import { CurrentUserContext } from "../src/context/currentUserProvider";
 import * as fcl from "@onflow/fcl";
+import magic from "../src/services/Magic";
 
 const Success = ({ avatar = "bubbiberry", onRestart, onBackToHome }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [redeemed, setRedeemed] = useState(false);
   const { balance } = useContext(CurrentUserContext);
+  const AUTHORIZATION_FUNCTION = magic?.flow.authorization;
 
   const handleRedeem = async () => {
     try {
@@ -39,7 +41,10 @@ const Success = ({ avatar = "bubbiberry", onRestart, onBackToHome }) => {
                   signer.capabilities.unpublish(/public/Staking)
               }
           }
-        `,
+        `, 
+        proposer: AUTHORIZATION_FUNCTION,
+        authorizations: [AUTHORIZATION_FUNCTION],
+        payer: AUTHORIZATION_FUNCTION,
         limit: 9999,
       });
 
@@ -57,136 +62,121 @@ const Success = ({ avatar = "bubbiberry", onRestart, onBackToHome }) => {
   };
 
   return (
-    <>
-      <div
-        className="popup-container"
-        style={{ background: "#5aad00", position: "relative" }}
-      >
+    <> 
+      <div className="popup-container" style={{ position: "relative" }}>
         <h1
           style={{
             fontFamily: "'Press Start 2P', cursive",
-            color: "#fffbe6",
+            color: "#5c4435",
             fontSize: "2rem",
             margin: "32px 0 16px 0",
             textAlign: "center",
             letterSpacing: "2px",
           }}
         >
-          SUCCESS!
+          WELL DONE!
         </h1>
         <div
           style={{
             fontFamily: "VT323, monospace",
-            color: "#fffbe6",
+            color: "#5c4435",
             fontSize: "1.3rem",
             textAlign: "center",
             marginBottom: "16px",
-            background: "transparent",
-            padding: "8px 12px",
-            borderRadius: "4px",
-            display: "inline-block",
-            marginLeft: "auto",
-            marginRight: "auto",
           }}
         >
-          You stayed focused! Your FLOW is safe.
-        </div>
+          Your Pomodoki levelep up! 
+        </div> 
         <PixelSuccess type={avatar} size="large" className="mx-auto my-6" />
-        <div
+
+                {/* Botão Confirmar */}
+        
+        <button
+          onClick={handleRedeem}
+          disabled={isLoading || redeemed}
           style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "12px",
-            marginTop: "32px",
+            backgroundColor: isLoading ? '#ffe082' : '#fed35c',
+            color: '#5c4435',
+            fontFamily: "'VT323', monospace",
+            fontSize: "1.25rem",
+            padding: "10px 24px",
+            border: "2px solid #5c4435",
+            borderRadius: "4px",
+            cursor: isLoading ? 'not-allowed' : 'pointer',
+            boxShadow: "4px 4px #5c4435",
+            textTransform: "uppercase",
+            marginTop: "40px",
+            opacity: isLoading ? 0.7 : 1,
+            transition: 'background 0.2s, opacity 0.2s',
+            display: redeemed ? 'none' : 'block'
           }}
         >
-          {!redeemed ? (
-            <button
-              onClick={handleRedeem}
-              disabled={isLoading}
+          {isLoading ? 'Loading...' : 'Redeem'}
+        </button>
+
+        {redeemed && (
+          <>
+            <div
               style={{
-                backgroundColor: "transparent",
-                color: "#fffbe6",
+                fontFamily: "'VT323', monospace",
+                color: "#5c4435",
+                fontSize: "1rem",
+                textAlign: "center",
+                marginTop: "12px",
+                marginBottom: "12px",
+                marginLeft: '24px',
+                marginRight: '24px',
+                fontStyle: 'italic',
+                lineHeight: '1.4',
+                padding: '0 8px',
+              }}
+            >
+              Redeem successful!<br />
+              Your FLOW is back in your wallet.
+            </div>
+            <button
+              onClick={onRestart}
+              style={{
+                backgroundColor: "#5aad00",
+                color: "#ffedae",
                 fontFamily: "'VT323', monospace",
                 fontSize: "1.25rem",
                 padding: "10px 24px",
                 border: "2px solid #5c4435",
                 borderRadius: "4px",
-                cursor: isLoading ? "not-allowed" : "pointer",
+                cursor: "pointer",
                 boxShadow: "4px 4px #5c4435",
                 marginTop: "12px",
-                display: "block",
-                marginLeft: "auto",
-                marginRight: "auto",
-                opacity: isLoading ? 0.8 : 1,
+                display: 'block',
+                marginLeft: 'auto',
+                marginRight: 'auto'
               }}
             >
-              {isLoading ? "Loading..." : "Redeem FLOW"}
+              Start new session
             </button>
-          ) : (
-            <div
+            <button
+              onClick={onBackToHome}
               style={{
+                background: 'transparent',
+                color: '#5c4435',
                 fontFamily: "'VT323', monospace",
-                color: "#fffbe6",
-                fontSize: "1.3rem",
-                textAlign: "center",
-                marginBottom: "16px",
+                fontSize: '1.1rem',
+                border: '2px solid #5c4435',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                boxShadow: 'none',
+                marginTop: '12px',
+                display: 'block',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                padding: '6px 24px',
+                minWidth: '100px',
               }}
             >
-              FLOW redeemed! New balance: {balance.toFixed(2)} FLOW
-            </div>
-          )}
-          <button
-            onClick={() => {
-              localStorage.removeItem("pomodokiState");
-              chrome.storage.local.remove("pomodokiStatus");
-              if (onRestart) onRestart();
-            }}
-            style={{
-              backgroundColor: "transparent",
-              color: "#fffbe6",
-              fontFamily: "'VT323', monospace",
-              fontSize: "1.25rem",
-              padding: "10px 24px",
-              border: "2px solid #5c4435",
-              borderRadius: "4px",
-              cursor: "pointer",
-              boxShadow: "4px 4px #5c4435",
-              marginTop: "12px",
-              display: "block",
-              marginLeft: "auto",
-              marginRight: "auto",
-            }}
-          >
-            <span style={{ fontSize: "1.3em", marginRight: "8px" }}>↻</span> TRY
-            AGAIN
-          </button>
-          <button
-            onClick={() => {
-              localStorage.removeItem("pomodokiState");
-              chrome.storage.local.remove("pomodokiStatus");
-              if (onBackToHome) onBackToHome();
-            }}
-            style={{
-              backgroundColor: "transparent",
-              color: "#fffbe6",
-              fontFamily: "'VT323', monospace",
-              fontSize: "1.25rem",
-              padding: "10px 24px",
-              border: "2px solid #5c4435",
-              borderRadius: "4px",
-              cursor: "pointer",
-              boxShadow: "4px 4px #5c4435",
-              marginTop: "12px",
-              display: "block",
-              marginLeft: "auto",
-              marginRight: "auto",
-            }}
-          >
-            ⬅ BACK TO HOME
-          </button>
-        </div>
+              Back to Home
+            </button>
+          </>
+        )}
       </div>
     </>
   );
