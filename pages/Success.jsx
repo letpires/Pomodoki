@@ -59,7 +59,9 @@ const Success = ({ avatar = "bubbiberry", onRestart, onBackToHome }) => {
       setRedeemed(true);
     } catch (error) {
       console.error("Error redeeming tokens:", error);
-      alert("Failed to redeem tokens. Please try again.");
+      alert("Failed to redeem tokens. Try a new session.");
+      setRedeemed(true);
+      setIsLoading(false);
     } finally {
       setIsLoading(false);
     }
