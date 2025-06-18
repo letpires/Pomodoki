@@ -117,6 +117,29 @@
   dependencies:
     "@lit-labs/ssr-dom-shim" "^1.0.0"
 
+"@magic-ext/flow@^24.1.0":
+  version "24.1.0"
+  resolved "https://registry.yarnpkg.com/@magic-ext/flow/-/flow-24.1.0.tgz#aaf5bb3f4d2447d3e3d9d10239e8658cf2c93171"
+  integrity sha512-4tWxg/l67Jq3QSOQqr5EVuyuK7JO8x4BIWtkCI5AV8fNj1AQW4OXLo9xFVAWK+Vvfh+KaC0MVafcIeok1rt1mA==
+
+"@magic-sdk/commons@^25.1.0":
+  version "25.1.0"
+  resolved "https://registry.yarnpkg.com/@magic-sdk/commons/-/commons-25.1.0.tgz#aff09527e263d6ed97e22057990be13b6602c4b5"
+  integrity sha512-k+22ICI2I5zQPIYJen4kUB8dT0Nu48nwtJMc/Tm0M4Hm7j9HFldkU3HAQwRtBjMDHaupl0kOlLPnXmsYeVm2QA==
+
+"@magic-sdk/provider@^29.1.0":
+  version "29.1.0"
+  resolved "https://registry.yarnpkg.com/@magic-sdk/provider/-/provider-29.1.0.tgz#7b1e6290339d45baac471b55f68ffb8e8ba12cd5"
+  integrity sha512-gzqwnlGSf/j6gFnVZmSTgQxZUPErRGPnepbWRqlYYwdVEpisSQ6xdl6gLb+/Xa50t7691onlNxM1Sgj2Dqa3jw==
+  dependencies:
+    "@magic-sdk/types" "^24.19.0"
+    eventemitter3 "^4.0.4"
+
+"@magic-sdk/types@^24.19.0":
+  version "24.19.0"
+  resolved "https://registry.yarnpkg.com/@magic-sdk/types/-/types-24.19.0.tgz#3802e1830d4560306a82ae01f1b89597f09a530c"
+  integrity sha512-rA1yRLDJ6+5LN76c9TOS6ThuaiGJEGosv/1zq7ckKpD1Wi37wtYzSAoHK0s033ZtlTAH6+6VuKZIXDag/oS/jQ==
+
 "@motionone/animation@^10.15.1", "@motionone/animation@^10.18.0":
   version "10.18.0"
   resolved "https://registry.npmjs.org/@motionone/animation/-/animation-10.18.0.tgz"
@@ -1747,6 +1770,11 @@ eventemitter3@5.0.1:
   resolved "https://registry.npmjs.org/eventemitter3/-/eventemitter3-5.0.1.tgz"
   integrity sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA==
 
+eventemitter3@^4.0.4:
+  version "4.0.7"
+  resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-4.0.7.tgz#2de9b68f6528d5644ef5c59526a1b4a07306169f"
+  integrity sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==
+
 events@3.3.0, events@^3.3.0:
   version "3.3.0"
   resolved "https://registry.npmjs.org/events/-/events-3.3.0.tgz"
@@ -2126,6 +2154,11 @@ ignore@^5.2.0:
   resolved "https://registry.npmjs.org/ignore/-/ignore-5.2.0.tgz"
   integrity sha512-CmxgYGiEPCLhfLnpPp1MoRmifwEIOgjcHXxOBjv7mY96c+eWScsOP9c112ZyLdWHi0FxHjI+4uVhKYp/gcdRmQ==
 
+immediate@~3.0.5:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/immediate/-/immediate-3.0.6.tgz#9db1dbd0faf8de6fbe0f5dd5e56bb606280de69b"
+  integrity sha512-XXOFtyqDjNDAQxVfYxuF7g9Il/IbWmmlQg2MYKOH8ExIT1qg6xc4zyS3HaEEATgs1btfzxq15ciUiY7gjSXRGQ==
+
 import-fresh@^3.0.0, import-fresh@^3.2.1:
   version "3.3.0"
   resolved "https://registry.npmjs.org/import-fresh/-/import-fresh-3.3.0.tgz"
@@ -2451,6 +2484,13 @@ levn@^0.4.1:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
 
+lie@3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/lie/-/lie-3.1.1.tgz#9a436b2cc7746ca59de7a41fa469b3efb76bd87e"
+  integrity sha512-RiNhHysUjhrDQntfYSfY4MU24coXXdEOgw9WGcKHNeEwffDYbF//u87M1EWaMGzuFoSbqW0C9C6lEEhDOAswfw==
+  dependencies:
+    immediate "~3.0.5"
+
 lilconfig@^3.0.0, lilconfig@^3.1.1, lilconfig@^3.1.3:
   version "3.1.3"
   resolved "https://registry.npmjs.org/lilconfig/-/lilconfig-3.1.3.tgz"
@@ -2485,6 +2525,13 @@ lit@2.8.0:
     "@lit/reactive-element" "^1.6.0"
     lit-element "^3.3.0"
     lit-html "^2.8.0"
+
+localforage@^1.7.4:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/localforage/-/localforage-1.10.0.tgz#5c465dc5f62b2807c3a84c0c6a1b1b3212781dd4"
+  integrity sha512-14/H1aX7hzBBmmh7sGPd+AOMkkIrHM3Z1PAyGgZigA1H1p5O5ANnMyWzvpAETtG68/dC4pC0ncy3+PPGzXZHPg==
+  dependencies:
+    lie "3.1.1"
 
 locate-path@^2.0.0:
   version "2.0.0"
@@ -2534,6 +2581,16 @@ lru-cache@^6.0.0:
   integrity sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==
   dependencies:
     yallist "^4.0.0"
+
+magic-sdk@^29.1.0:
+  version "29.1.0"
+  resolved "https://registry.yarnpkg.com/magic-sdk/-/magic-sdk-29.1.0.tgz#874461da968a7f3e19487a30209800ad6c8ac823"
+  integrity sha512-s7W7RtR5gYf6siv6Og1O123lCsbnz0DzhRKIVUxvpOOzNt4xXP4UX5Qy5Nq1ifKfCEU5tBuTcKMxl48aZZkKMg==
+  dependencies:
+    "@magic-sdk/commons" "^25.1.0"
+    "@magic-sdk/provider" "^29.1.0"
+    "@magic-sdk/types" "^24.19.0"
+    localforage "^1.7.4"
 
 make-dir@^3.0.0:
   version "3.1.0"

@@ -1,26 +1,12 @@
-import React, { useState, useEffect } from "react";
-import Head from "next/head";
-import FlowLogin from "../components/FlowLogin";
-import * as fcl from "@onflow/fcl";
+import React, { useState , useContext} from "react"; 
+import FlowLogin from "../src/components/FlowLogin";
+import { CurrentUserContext } from "../src/context/currentUserProvider";
 
 const Welcome = ({ onConnectWallet }) => {
-  const [isConnected, setIsConnected] = useState(false);
-
-  useEffect(() => {
-    fcl.currentUser().snapshot().then(user => {
-      if (user && user.loggedIn) setIsConnected(true);
-    });
-  }, []);
+  const { isLoggedIn } = useContext(CurrentUserContext);
 
   return (
     <>
-      <Head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
-          rel="stylesheet"
-        />
-      </Head>
-
       <div
         className="popup-container min-h-screen flex items-center justify-center"
         style={{ backgroundColor: "#ffedae" }}
@@ -32,7 +18,7 @@ const Welcome = ({ onConnectWallet }) => {
               fontFamily: "'Press Start 2P', cursive",
               color: "#4c301b",
               fontSize: "1.2rem",
-              textAlign: 'center',
+              textAlign: "center",
               lineHeight: "1.8rem",
             }}
           >
@@ -48,11 +34,11 @@ const Welcome = ({ onConnectWallet }) => {
 
           {/* Botão FlowLogin centralizado */}
           <div className="mt-6 flex justify-center">
-            <FlowLogin onConnect={() => setIsConnected(true)} />
+            <FlowLogin />
           </div>
 
           {/* Botão Continue aparece se já está conectado */}
-          {isConnected && (
+          {isLoggedIn && (
             <button
               onClick={onConnectWallet}
               style={{
@@ -68,7 +54,7 @@ const Welcome = ({ onConnectWallet }) => {
                 boxShadow: "4px 4px #5c4435",
                 display: "block",
                 marginLeft: "auto",
-                marginRight: "auto"
+                marginRight: "auto",
               }}
             >
               Continue
