@@ -22,8 +22,9 @@ const Welcome = ({ onConnectWallet }) => {
               lineHeight: "1.8rem",
             }}
           >
-            Your Focus<br />
-            Has Real Value
+            Welcome to
+            <br />
+            <span>Pomodoki</span>
           </h1>
 
           <img
