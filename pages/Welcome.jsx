@@ -30,14 +30,14 @@ const Welcome = ({ onConnectWallet }) => {
             className="mb-6"
             style={{
               fontFamily: "'Press Start 2P', cursive",
-              color: "#5c4435",
+              color: "#4c301b",
               fontSize: "1.2rem",
               textAlign: 'center',
               lineHeight: "1.8rem",
             }}
           >
-            Welcome to<br />
-            <span>Pomodoki</span>
+            Your Focus<br />
+            Has Real Value
           </h1>
 
           <img
