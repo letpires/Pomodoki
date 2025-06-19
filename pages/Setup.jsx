@@ -13,8 +13,9 @@ const Setup = ({ onStart }) => {
   const [selectedTime, setSelectedTime] = useState("25/5");
   const [stake, setStake] = useState(1.0);
   const [isLoading, setIsLoading] = useState(false);
-  const { balance, balanceLoading, fetchBalance } = useContext(CurrentUserContext);
+  const { balance, balanceLoading, fetchBalance, currentUser } = useContext(CurrentUserContext);
   const AUTHORIZATION_FUNCTION = magic?.flow.authorization;
+ 
 
   const handleStart = async () => {
     try {
@@ -92,6 +93,14 @@ const Setup = ({ onStart }) => {
       return { pomodoro: 0.5, breakTime: 0.5 };
     }
     return { pomodoro: 25, breakTime: 5 };
+  };
+
+  const handleBuyFlow = () => {
+    if (!currentUser?.publicAddress) {
+      alert("Please connect your wallet first");
+      return;
+    }
+    magic.wallet.showOnRamp();
   };
 
   return (
@@ -250,6 +259,28 @@ const Setup = ({ onStart }) => {
                 title="Refresh balance"
               >
                 🔄
+              </button>
+            </div>
+            <div style={{ marginTop: "8px" }}>
+              <button
+                onClick={handleBuyFlow}
+                disabled={!currentUser?.publicAddress}
+                style={{
+                  background: "#5aad00",
+                  color: "#fffbe6",
+                  border: "2px solid #5c4435",
+                  borderRadius: "4px",
+                  fontFamily: "'VT323', monospace",
+                  fontSize: "1rem",
+                  padding: "6px 12px",
+                  cursor: currentUser?.publicAddress ? "pointer" : "not-allowed",
+                  boxShadow: "2px 2px #5c4435",
+                  opacity: currentUser?.publicAddress ? 1 : 0.5,
+                  transition: "all 0.2s ease",
+                }}
+                title={currentUser?.publicAddress ? "Buy FLOW tokens" : "Connect wallet to buy FLOW"}
+              >
+                Buy FLOW
               </button>
             </div>
           </div>
