@@ -13,7 +13,7 @@ const Setup = ({ onStart }) => {
   const [selectedTime, setSelectedTime] = useState("25/5");
   const [stake, setStake] = useState(1.0);
   const [isLoading, setIsLoading] = useState(false);
-  const { balance } = useContext(CurrentUserContext);
+  const { balance, balanceLoading, fetchBalance } = useContext(CurrentUserContext);
   const AUTHORIZATION_FUNCTION = magic?.flow.authorization;
 
   const handleStart = async () => {
@@ -70,6 +70,9 @@ const Setup = ({ onStart }) => {
       await fcl.tx(transactionId).onceSealed();
 
       localStorage.removeItem("pomodokiStart");
+
+      // Refresh balance after successful staking
+      await fetchBalance();
 
       // Start the pomodoro session
       onStart(pomodoro, breakTime, stake);
@@ -230,7 +233,24 @@ const Setup = ({ onStart }) => {
               <span style={{ fontSize: "1.25rem" }}>Flow</span>
             </div>
             <div style={{ fontSize: "1.25rem" }}>
-              Balance: {balance.toFixed(2)} Flow
+              Balance: {balanceLoading ? "Loading..." : `${balance.toFixed(2)} Flow`}
+              <button
+                onClick={fetchBalance}
+                disabled={balanceLoading}
+                style={{
+                  background: "transparent",
+                  border: "none",
+                  cursor: balanceLoading ? "not-allowed" : "pointer",
+                  marginLeft: "8px",
+                  fontSize: "1rem",
+                  color: balanceLoading ? "#cccccc" : "#5c4435",
+                  fontFamily: "'VT323', monospace",
+                  opacity: balanceLoading ? 0.5 : 1,
+                }}
+                title="Refresh balance"
+              >
+                🔄
+              </button>
             </div>
           </div>
 

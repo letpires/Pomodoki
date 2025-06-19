@@ -7,7 +7,7 @@ import magic from "../src/services/Magic";
 const Success = ({ avatar = "bubbiberry", onRestart, onBackToHome }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [redeemed, setRedeemed] = useState(false);
-  const { balance } = useContext(CurrentUserContext);
+  const { fetchBalance } = useContext(CurrentUserContext);
   const AUTHORIZATION_FUNCTION = magic?.flow.authorization;
 
   const handleRedeem = async () => {
@@ -51,6 +51,8 @@ const Success = ({ avatar = "bubbiberry", onRestart, onBackToHome }) => {
       await fcl.tx(transactionId).onceSealed();
 
       setRedeemed(true);
+      // Refresh balance after successful redemption
+      await fetchBalance();
     } catch (error) {
       console.error("Error redeeming tokens:", error);
       alert("Failed to redeem tokens. Try a new session.");
