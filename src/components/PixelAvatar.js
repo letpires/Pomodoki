@@ -12,11 +12,9 @@ const PixelAvatar = ({ type }) => {
       src={avatarImages[type]}
       alt={type}
       style={{
-        width: '96px',
-        height: '96px',
-        objectFit: 'cover',
-        imageRendering: 'pixelated',
-        borderRadius: '6px'
+        width: "50px",
+        height: "50px",
+        borderRadius: "50%",
       }}
     />
   );

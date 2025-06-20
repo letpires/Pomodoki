@@ -75,7 +75,7 @@ export default function Home() {
   // Renderiza a página correta
   if (page === "welcome") return <Welcome onConnectWallet={handleConnectWallet} />;
   if (page === "avatar") return <AvatarSelection onConfirm={handleConfirmAvatar} />;
-  if (page === "setup") return <Setup onStart={handleSetup} />;
+  if (page === "setup") return <Setup onStart={handleSetup} selectedAvatar={selectedAvatar} />;
   if (page === "timer") {
     return (
       <PomodoroTimer

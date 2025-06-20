@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import * as fcl from "@onflow/fcl";
 import { CurrentUserContext } from "../src/context/currentUserProvider";
+import Navbar from "../src/components/Navbar";
 
 fcl.config({
   "flow.network": "testnet",
@@ -8,7 +9,7 @@ fcl.config({
   "discovery.wallet": `https://fcl-discovery.onflow.org/testnet/authn`,
 });
 
-const Setup = ({ onStart }) => {
+const Setup = ({ onStart, selectedAvatar = "tomash" }) => {
   const [selectedTime, setSelectedTime] = useState("25/5");
   const [stake, setStake] = useState(1.0);
   const [isLoading, setIsLoading] = useState(false);
@@ -104,6 +105,7 @@ const Setup = ({ onStart }) => {
 
   return (
     <>
+      <Navbar selectedAvatar={selectedAvatar} />
       <div className="popup-container" style={{ backgroundColor: "#ffedae" }}>
         <div
           className="w-full"
