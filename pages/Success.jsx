@@ -1,13 +1,12 @@
 import React, { useState, useContext } from "react";
 import PixelSuccess from "../src/components/PixelSuccess";
 import { CurrentUserContext } from "../src/context/currentUserProvider";
-import * as fcl from "@onflow/fcl";
-import magic from "../src/services/Magic";
+import * as fcl from "@onflow/fcl"; 
 
 const Success = ({ avatar = "bubbiberry", onRestart, onBackToHome }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [redeemed, setRedeemed] = useState(false);
-  const { fetchBalance } = useContext(CurrentUserContext);
+  const { fetchBalance, magic } = useContext(CurrentUserContext);
   const AUTHORIZATION_FUNCTION = magic?.flow.authorization;
 
   const handleRedeem = async () => {

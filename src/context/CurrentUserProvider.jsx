@@ -1,6 +1,7 @@
-import React, { useState, useEffect, createContext } from "react";
-import magic from "../services/Magic";
+import React, { useState, useEffect, createContext } from "react"; 
 import * as fcl from "@onflow/fcl";
+import { Magic } from "magic-sdk";
+import { FlowExtension } from "@magic-ext/flow";
 
 export const CurrentUserContext = createContext({});
 
@@ -9,6 +10,8 @@ const CurrentUserProvider = ({ children }) => {
   const [balance, setBalance] = useState(0);
   const [balanceLoading, setBalanceLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [magic, setMagic] = useState(null);
+  const [network, setNetwork] = useState("testnet");
 
   // Function to fetch Flow balance
   const fetchBalance = async () => {
@@ -87,6 +90,19 @@ const CurrentUserProvider = ({ children }) => {
     setBalance(0);
   };
 
+  useEffect(() => {
+    setMagic(
+      new Magic(process.env.NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY, {
+        extensions: [
+          new FlowExtension({
+            rpcUrl: `https://rest-${network}.onflow.org`,
+            network: network,
+          }),
+        ],
+      })
+    );
+  }, [network]);
+
   return (
     <CurrentUserContext.Provider
       value={{
@@ -96,6 +112,9 @@ const CurrentUserProvider = ({ children }) => {
         handleLogout,
         balance,
         balanceLoading,
+        network,
+        setNetwork,
+        magic,
         isLoggedIn,
         fetchBalance, // Expose fetchBalance function for manual refresh
       }}
