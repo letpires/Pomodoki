@@ -32,6 +32,8 @@ a {
   height: 8px;
   border-radius: 8px;
   background: transparent;
+  -webkit-appearance: none; 
+  background: #434343;
 }
 .custom-slider::-webkit-slider-runnable-track {
   height: 8px;
@@ -50,7 +52,7 @@ a {
   border-radius: 50%;
   background: #c5361b !important;
   cursor: pointer;
-  margin-top: -4px;
+  margin-top: -5px;
   border: none;
   box-shadow: 0 0 2px #5c4435;
   outline: none;
