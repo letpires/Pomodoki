@@ -43,7 +43,7 @@ const Welcome = ({ onConnectWallet }) => {
             <button
               onClick={onConnectWallet}
               style={{
-                marginTop: "20px",
+                marginTop: "24px",
                 backgroundColor: "#fed35c",
                 color: "#5c4435",
                 fontFamily: "'VT323', monospace",

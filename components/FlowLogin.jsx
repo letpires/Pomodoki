@@ -22,6 +22,7 @@ export default function FlowLogin() {
               cursor: "pointer",
               boxShadow: "4px 4px #5c4435",
               opacity: 1,
+              marginTop: "24px",
             }}
           >
             {"Connect Wallet"}
