@@ -1,11 +1,16 @@
-import React, { useState, useEffect } from 'react'; 
-import Timer from '../components/Timer'; 
+import React, { useState, useEffect } from "react";
+import Timer from "../components/Timer";
 
-const PomodoroTimer = ({ avatar, pomodoro, breakTime, stake, onComplete, onFail }) => {
+const PomodoroTimer = ({
+  avatar,
+  pomodoro, 
+  onComplete,
+  onFail,
+}) => {
   const [isBreak, setIsBreak] = useState(false);
 
   const handleComplete = () => {
-    chrome.runtime?.sendMessage({ action: 'stopTimer' });
+    chrome.runtime?.sendMessage({ action: "stopTimer" });
 
     if (!isBreak) {
       setIsBreak(true); // Vai para o break
@@ -15,12 +20,12 @@ const PomodoroTimer = ({ avatar, pomodoro, breakTime, stake, onComplete, onFail 
   };
 
   const handleCancel = () => {
-    chrome.runtime?.sendMessage({ action: 'stopTimer' });
+    chrome.runtime?.sendMessage({ action: "stopTimer" });
     if (onFail) onFail();
   };
 
   const handleLoseFocus = () => {
-    chrome.runtime?.sendMessage({ action: 'stopTimer' });
+    chrome.runtime?.sendMessage({ action: "stopTimer" });
     if (onFail) onFail();
   };
 
@@ -41,17 +46,24 @@ const PomodoroTimer = ({ avatar, pomodoro, breakTime, stake, onComplete, onFail 
   }, []);
 
   return (
-    <> 
+    <>
       <div className="popup-container">
         <Timer
-          duration={isBreak ? breakTime : pomodoro}
+          duration={pomodoro}
           avatar={avatar}
           onComplete={handleComplete}
           onCancel={handleCancel}
           onLoseFocus={handleLoseFocus}
         />
-        <div style={{ textAlign: 'center', marginTop: 12, fontFamily: "'Press Start 2P', cursive", color: '#5c4435' }}>
-          {isBreak ? 'Break Time!' : 'Focus!'}
+        <div
+          style={{
+            textAlign: "center",
+            marginTop: 12,
+            fontFamily: "'Press Start 2P', cursive",
+            color: "#5c4435",
+          }}
+        >
+          {"Focus!"}
         </div>
       </div>
     </>
