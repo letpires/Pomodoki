@@ -1,7 +1,8 @@
 import React, { useState, useContext } from "react";
 import PixelSuccess from "../components/PixelSuccess";
 import { CurrentUserContext } from "../context/currentUserProvider";
-import * as fcl from "@onflow/fcl";
+import * as fcl from "@onflow/fcl"; 
+import redeemCode from "../constants/redeem";
 
 const Success = ({ avatar = "bubbiberry", onRestart, onBackToHome }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -11,36 +12,9 @@ const Success = ({ avatar = "bubbiberry", onRestart, onBackToHome }) => {
 
   const handleRedeem = async () => {
     try {
-      setIsLoading(true);
-
+      setIsLoading(true); 
       const transactionId = await fcl.mutate({
-        cadence: `
-        import FungibleToken from 0xFungibleToken
-        import FlowToken from 0xFlowToken
-        import StakingContract4 from 0xStakingContract
-
-          transaction {
-              prepare(signer: auth(Storage, Capabilities) &Account) {
-                  // Get the staking resource
-                  let staking <- signer.storage.load<@StakingContract4.Staking>(from: /storage/Staking)
-                      ?? panic("No staking resource found")
-
-                  // Get the vault from staking
-                  let vault <- staking.cleanup()
-                  
-                  // Get the receiver capability
-                  let receiver = signer.capabilities.borrow<&{FungibleToken.Receiver}>(/public/flowTokenReceiver)
-                      ?? panic("Could not borrow Flow token receiver")
-
-                  // Deposit the tokens back to the user's vault
-                  receiver.deposit(from: <- vault)
-
-                  // Clean up the staking resource
-                  destroy staking
-                  signer.capabilities.unpublish(/public/Staking)
-              }
-          }
-        `,
+        cadence: redeemCode,
         proposer: AUTHORIZATION_FUNCTION,
         authorizations: [AUTHORIZATION_FUNCTION],
         payer: AUTHORIZATION_FUNCTION,
