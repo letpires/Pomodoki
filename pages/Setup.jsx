@@ -3,12 +3,6 @@ import * as fcl from "@onflow/fcl";
 import { CurrentUserContext } from "../src/context/currentUserProvider";
 import Navbar from "../src/components/Navbar";
 
-fcl.config({
-  "flow.network": "testnet",
-  "accessNode.api": "https://rest-testnet.onflow.org",
-  "discovery.wallet": `https://fcl-discovery.onflow.org/testnet/authn`,
-});
-
 const Setup = ({ onStart, selectedAvatar = "tomash" }) => {
   const [selectedTime, setSelectedTime] = useState("25/5");
   const [stake, setStake] = useState(1.0);
@@ -23,9 +17,9 @@ const Setup = ({ onStart, selectedAvatar = "tomash" }) => {
       const { pomodoro, breakTime } = getDurations();
       const transactionId = await fcl.mutate({
         cadence: `
-        import FungibleToken from 0x9a0766d93b6608b7
-        import FlowToken from 0x7e60df042a9c0868
-        import StakingContract4 from 0xacdf784e6e2a83f0
+        import FungibleToken from 0xFungibleToken
+        import FlowToken from 0xFlowToken
+        import StakingContract4 from 0xStakingContract
 
         transaction(amount: UFix64) {
             let stakingRef: &StakingContract4.Staking

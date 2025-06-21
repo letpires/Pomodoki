@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext } from "react"; 
+import React, { useState, useEffect, createContext } from "react";
 import * as fcl from "@onflow/fcl";
 import { Magic } from "magic-sdk";
 import { FlowExtension } from "@magic-ext/flow";
@@ -101,6 +101,28 @@ const CurrentUserProvider = ({ children }) => {
         ],
       })
     );
+
+    const stakingContractAddress =
+      network === "testnet"
+        ? process.env.NEXT_PUBLIC_TESTNET_STAKING_ADDRESS
+        : process.env.NEXT_PUBLIC_MAINNET_STAKING_ADDRESS;
+    const fungibleTokenAddress =
+      network === "testnet"
+        ? process.env.NEXT_PUBLIC_TESTNET_FUNGIBLETOKEN_ADDRESS
+        : process.env.NEXT_PUBLIC_MAINNET_FUNGIBLETOKEN_ADDRESS;
+    const flowTokenAddress =
+      network === "testnet"
+        ? process.env.NEXT_PUBLIC_TESTNET_FLOWTOKEN_ADDRESS
+        : process.env.NEXT_PUBLIC_MAINNET_FLOWTOKEN_ADDRESS;
+
+    fcl.config({
+      "flow.network": network,
+      "accessNode.api": `https://rest-${network}.onflow.org`,
+      "discovery.wallet": `https://fcl-discovery.onflow.org/${network}/authn`,
+      "0xStakingContract": stakingContractAddress,
+      "0xFungibleToken": fungibleTokenAddress,
+      "0xFlowToken": flowTokenAddress,
+    });
   }, [network]);
 
   return (

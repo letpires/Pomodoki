@@ -11,13 +11,13 @@ const Success = ({ avatar = "bubbiberry", onRestart, onBackToHome }) => {
 
   const handleRedeem = async () => {
     try {
-      setIsLoading(true);
+      setIsLoading(true); 
 
       const transactionId = await fcl.mutate({
         cadence: `
-          import FungibleToken from 0x9a0766d93b6608b7
-          import FlowToken from 0x7e60df042a9c0868
-          import StakingContract4 from 0xacdf784e6e2a83f0
+        import FungibleToken from 0xFungibleToken
+        import FlowToken from 0xFlowToken
+        import StakingContract4 from 0xStakingContract
 
           transaction {
               prepare(signer: auth(Storage, Capabilities) &Account) {
