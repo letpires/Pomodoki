@@ -68,24 +68,26 @@ const AvatarSelection = ({ onConfirm }) => {
         </div>
 
         {/* Botão Confirmar */}
-        <button
-          onClick={() => onConfirm(selectedAvatar)}
-          style={{
-            backgroundColor: "#5aad00",
-            color: "#ffedae",
-            fontFamily: "'VT323', monospace",
-            fontSize: "1.25rem",
-            padding: "10px 24px",
-            border: "2px solid #5c4435",
-            borderRadius: "4px",
-            cursor: "pointer",
-            boxShadow: "4px 4px #5c4435",
-            textTransform: "uppercase",
-            marginTop: "40px",
-          }}
-        >
-          ✓ Confirm Avatar
-        </button>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <button
+            onClick={() => onConfirm(selectedAvatar)}
+            style={{
+              backgroundColor: "#5aad00",
+              color: "#ffedae", 
+              fontFamily: "'VT323', monospace",
+              fontSize: "1.25rem",
+              padding: "10px 24px",
+              border: "2px solid #5c4435",
+              borderRadius: "4px",
+              cursor: "pointer",
+              boxShadow: "4px 4px #5c4435",
+              textTransform: "uppercase",
+              marginTop: "40px",
+            }}
+          >
+            ✓ Confirm Avatar
+          </button>
+        </div>
       </div>
     </div>
   );
