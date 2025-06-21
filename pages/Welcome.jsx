@@ -35,11 +35,11 @@ const Welcome = ({ onConnectWallet }) => {
 
           {/* Botão FlowLogin centralizado */}
           <div className="mt-4 flex justify-center">
-            <FlowLogin />
+            <FlowLogin handleConnectWallet={onConnectWallet} />
           </div>
 
           {/* Botão Continue aparece se já está conectado */}
-          {isLoggedIn && (
+          {/* {isLoggedIn && (
             <button
               onClick={onConnectWallet}
               style={{
@@ -60,7 +60,7 @@ const Welcome = ({ onConnectWallet }) => {
             >
               Continue
             </button>
-          )}
+          )} */}
         </div>
       </div>
     </>

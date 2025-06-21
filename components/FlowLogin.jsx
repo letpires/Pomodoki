@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { CurrentUserContext } from "../context/currentUserProvider";
 
-export default function FlowLogin() {
+export default function FlowLogin({ handleConnectWallet }) {
   const { isLoggedIn, handleLogin, handleLogout, currentUser } =
     useContext(CurrentUserContext);
 
@@ -10,7 +10,7 @@ export default function FlowLogin() {
       {!isLoggedIn ? (
         <div>
           <button
-            onClick={handleLogin}
+            onClick={handleConnectWallet}
             style={{
               backgroundColor: "#c5361b",
               color: "#ffedae",

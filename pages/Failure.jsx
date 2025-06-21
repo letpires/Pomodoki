@@ -1,7 +1,7 @@
 import React from "react";
 import PixelFailure from "../components/PixelFailure";
 
-const Failure = ({ avatar = "bubbiberry", onBackToHome, onTryAgain }) => {
+const Failure = ({ avatar = "bubbiberry", onTryAgain }) => {
   return (
     <>
       <div
@@ -71,30 +71,6 @@ const Failure = ({ avatar = "bubbiberry", onBackToHome, onTryAgain }) => {
           >
             <span style={{ fontSize: "1.3em", marginRight: "8px" }}>↻</span> TRY
             AGAIN
-          </button>
-          <button
-            onClick={() => {
-              localStorage.removeItem("pomodokiState");
-              chrome.storage.local.remove("pomodokiStatus");
-              if (onBackToHome) onBackToHome();
-            }}
-            style={{
-              backgroundColor: "transparent",
-              color: "#ffedae",
-              fontFamily: "'VT323', monospace",
-              fontSize: "1.25rem",
-              padding: "10px 24px",
-              border: "2px solid #5c4435",
-              borderRadius: "4px",
-              cursor: "pointer",
-              boxShadow: "4px 4px #5c4435",
-              marginTop: "12px",
-              display: "block",
-              marginLeft: "auto",
-              marginRight: "auto",
-            }}
-          >
-            ⬅ BACK TO HOME
           </button>
         </div>
       </div>

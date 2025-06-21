@@ -4,7 +4,7 @@ import { CurrentUserContext } from "../context/currentUserProvider";
 import * as fcl from "@onflow/fcl"; 
 import redeemCode from "../constants/redeem";
 
-const Success = ({ avatar = "bubbiberry", onRestart, onBackToHome }) => {
+const Success = ({ avatar = "bubbiberry", onRestart }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [redeemed, setRedeemed] = useState(false);
   const { fetchBalance, magic } = useContext(CurrentUserContext);

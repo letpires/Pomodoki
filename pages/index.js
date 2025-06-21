@@ -6,6 +6,7 @@ import PomodoroTimer from "./PomodoroTimer";
 import Success from "./Success";
 import Failure from "./Failure";
 import { CurrentUserContext } from "../context/currentUserProvider";
+import AllSet from "./Allset";
 
 export default function Home() {
   const [page, setPage] = useState("welcome");
@@ -14,14 +15,18 @@ export default function Home() {
   const [breakTime, setBreakTime] = useState(5);
   const [stake, setStake] = useState(1);
   const [publicAddress, setPublicAddress] = useState(null);
-  const { currentUser } = useContext(CurrentUserContext);
+  const { currentUser, handleLogin } = useContext(CurrentUserContext);
 
   // Carrega o estado salvo (persistência)
   useEffect(() => {
     const saved = localStorage.getItem("pomodokiState");
     if (saved) {
       const state = JSON.parse(saved);
-      if (state.page) setPage(state.page);
+      if (state.page === "allset") {
+        setPage("avatar");
+      } else if (state.page) {
+        setPage(state.page);
+      }
       if (state.selectedAvatar) setSelectedAvatar(state.selectedAvatar);
       if (state.pomodoro) setPomodoro(state.pomodoro);
       if (state.breakTime) setBreakTime(state.breakTime);
@@ -89,16 +94,20 @@ export default function Home() {
     setPage("timer");
   };
 
-  const handleConnectWallet = () => {
-    setPage("avatar");
+  const handleConnectWallet = async () => {
+    await handleLogin(); 
+    setPage("allset");
   };
   const handleTimerComplete = () => setPage("success");
   const handleTimerFail = () => setPage("failure");
   const handleBackToHome = () => setPage("welcome");
-
-  // Renderiza a página correta
+  
   if (page === "welcome")
     return <Welcome onConnectWallet={handleConnectWallet} />;
+
+  if (page === "allset")
+    return <AllSet />;
+
   if (page === "avatar")
     return <AvatarSelection onConfirm={handleConfirmAvatar} />;
   if (page === "setup")
