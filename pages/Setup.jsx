@@ -103,7 +103,7 @@ const Setup = ({ onStart, selectedAvatar = "tomash" }) => {
               type="range"
               min={1}
               max={180}
-              step={5}
+              step={1}
               value={selectedTime}
               onChange={e => setSelectedTime(Number(e.target.value))}
               className="custom-slider"
