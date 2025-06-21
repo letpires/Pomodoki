@@ -6,7 +6,7 @@ import { FlowExtension } from "@magic-ext/flow";
 export const CurrentUserContext = createContext({});
 
 const CurrentUserProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(false);
   const [balance, setBalance] = useState(0);
   const [balanceLoading, setBalanceLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -113,8 +113,7 @@ const CurrentUserProvider = ({ children }) => {
   useEffect(() => {
     if (!network) return; 
 
-    setLoadingWallet(true);
-    setCurrentUser(null);
+    setLoadingWallet(true); 
     setBalance(0)
     localStorage.setItem("pomodoki-network", network);
 

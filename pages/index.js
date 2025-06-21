@@ -37,7 +37,7 @@ export default function Home() {
         page === "welcome" &&
         !state.publicAddress &&
         window.innerWidth <= 400
-      ) { 
+      ) {
         const extensionUrl = `chrome-extension://${chrome.runtime?.id}/index.html`;
         window.open(extensionUrl);
       }
@@ -57,10 +57,21 @@ export default function Home() {
       pomodoro,
       breakTime,
       stake,
-      publicAddress: currentUser?.publicAddress || null,
+      publicAddress:
+        currentUser === false
+          ? publicAddress
+          : currentUser?.publicAddress || null,
     };
     localStorage.setItem("pomodokiState", JSON.stringify(state));
-  }, [page, selectedAvatar, pomodoro, breakTime, stake, currentUser]);
+  }, [
+    page,
+    selectedAvatar,
+    pomodoro,
+    breakTime,
+    stake,
+    currentUser,
+    publicAddress,
+  ]);
 
   useEffect(() => {
     const checkFailure = () => {
@@ -95,18 +106,17 @@ export default function Home() {
   };
 
   const handleConnectWallet = async () => {
-    await handleLogin(); 
+    await handleLogin();
     setPage("allset");
   };
   const handleTimerComplete = () => setPage("success");
   const handleTimerFail = () => setPage("failure");
   const handleBackToHome = () => setPage("welcome");
-  
+
   if (page === "welcome")
     return <Welcome onConnectWallet={handleConnectWallet} />;
 
-  if (page === "allset")
-    return <AllSet />;
+  if (page === "allset") return <AllSet />;
 
   if (page === "avatar")
     return <AvatarSelection onConfirm={handleConfirmAvatar} />;
