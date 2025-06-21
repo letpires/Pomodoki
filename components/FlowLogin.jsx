@@ -6,7 +6,7 @@ export default function FlowLogin() {
     useContext(CurrentUserContext);
 
   return (
-    <div className="flow-login text-center">
+    <div className="flow-login text-center w-full">
       {!isLoggedIn ? (
         <div>
           <button
@@ -15,13 +15,12 @@ export default function FlowLogin() {
               backgroundColor: "#c5361b",
               color: "#ffedae",
               fontFamily: "'VT323', monospace",
-              fontSize: "1.25rem",
-              padding: "10px 24px",
+              fontSize: "1rem",
+              padding: "8px 16px",
               border: "2px solid #5c4435",
               borderRadius: "4px",
               cursor: "pointer",
               boxShadow: "4px 4px #5c4435",
-              width: "100%",
               opacity: 1,
             }}
           >

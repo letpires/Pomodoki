@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Welcome from "./Welcome";
 import AvatarSelection from "./AvatarSelection";
 import Setup from "./Setup";
 import PomodoroTimer from "./PomodoroTimer";
 import Success from "./Success";
 import Failure from "./Failure";
+import { CurrentUserContext } from "../context/currentUserProvider";
 
 export default function Home() {
   const [page, setPage] = useState("welcome");
@@ -12,6 +13,8 @@ export default function Home() {
   const [pomodoro, setPomodoro] = useState(25);
   const [breakTime, setBreakTime] = useState(5);
   const [stake, setStake] = useState(1);
+  const [publicAddress, setPublicAddress] = useState(null);
+  const { currentUser } = useContext(CurrentUserContext);
 
   // Carrega o estado salvo (persistência)
   useEffect(() => {
@@ -23,14 +26,36 @@ export default function Home() {
       if (state.pomodoro) setPomodoro(state.pomodoro);
       if (state.breakTime) setBreakTime(state.breakTime);
       if (state.stake) setStake(state.stake);
+      if (state.publicAddress) setPublicAddress(state.publicAddress);
+
+      if (
+        page === "welcome" &&
+        !state.publicAddress &&
+        window.innerWidth <= 400
+      ) {
+        const extensionUrl = `chrome-extension://dfcclieoekhglbafdheijgmfkhoncbek/index.html`;
+        window.open(extensionUrl);
+      }
+    } else {
+      if (window.innerWidth <= 400) {
+        const extensionUrl = `chrome-extension://dfcclieoekhglbafdheijgmfkhoncbek/index.html`;
+        window.open(extensionUrl);
+      }
     }
   }, []);
 
   // Salva o estado sempre que mudar
   useEffect(() => {
-    const state = { page, selectedAvatar, pomodoro, breakTime, stake };
+    const state = {
+      page,
+      selectedAvatar,
+      pomodoro,
+      breakTime,
+      stake,
+      publicAddress: currentUser?.publicAddress || null,
+    };
     localStorage.setItem("pomodokiState", JSON.stringify(state));
-  }, [page, selectedAvatar, pomodoro, breakTime, stake]);
+  }, [page, selectedAvatar, pomodoro, breakTime, stake, currentUser]);
 
   useEffect(() => {
     const checkFailure = () => {
@@ -64,7 +89,9 @@ export default function Home() {
     setPage("timer");
   };
 
-  const handleConnectWallet = () => setPage("avatar");
+  const handleConnectWallet = () => {
+    setPage("avatar");
+  };
   const handleTimerComplete = () => setPage("success");
   const handleTimerFail = () => setPage("failure");
   const handleBackToHome = () => setPage("welcome");

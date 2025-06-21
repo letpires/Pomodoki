@@ -8,10 +8,10 @@ const Welcome = ({ onConnectWallet }) => {
   return (
     <>
       <div
-        className="popup-container min-h-screen flex items-center justify-center"
+        className="h-screen w-full flex items-center justify-center"
         style={{ backgroundColor: "#ffedae" }}
       >
-        <div className="text-center w-full max-w-md p-4">
+        <div className="popup-container text-center w-full max-w-md p-4">
           <h1
             className="mb-6"
             style={{
@@ -34,7 +34,7 @@ const Welcome = ({ onConnectWallet }) => {
           />
 
           {/* Botão FlowLogin centralizado */}
-          <div className="mt-6 flex justify-center">
+          <div className="mt-4 flex justify-center">
             <FlowLogin />
           </div>
 
