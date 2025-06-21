@@ -3,9 +3,17 @@ import * as fcl from "@onflow/fcl";
 import { CurrentUserContext } from "../context/currentUserProvider";
 import Navbar from "../components/Navbar"; 
 import stakeCode from "../constants/stake";
+import PixelPomo from '../components/PixelPomo';
+
+function formatDuration(minutes) {
+  if (minutes < 60) return `${minutes}m`;
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  return m === 0 ? `${h}h` : `${h}h${m.toString().padStart(2, '0')}`;
+}
 
 const Setup = ({ onStart, selectedAvatar = "tomash" }) => {
-  const [selectedTime, setSelectedTime] = useState("25/5");
+  const [selectedTime, setSelectedTime] = useState(25);
   const [stake, setStake] = useState(1.0);
   const [isLoading, setIsLoading] = useState(false);
   const { balance, balanceLoading, fetchBalance, currentUser, magic } =
@@ -32,7 +40,7 @@ const Setup = ({ onStart, selectedAvatar = "tomash" }) => {
       await fetchBalance();
 
       // Start the pomodoro session
-      onStart(pomodoro, breakTime, stake);
+      onStart(selectedTime, breakTime, stake);
     } catch (error) {
       console.error("Error staking tokens:", error);
       alert("Failed to stake tokens. Please try again.");
@@ -42,13 +50,7 @@ const Setup = ({ onStart, selectedAvatar = "tomash" }) => {
   };
 
   const getDurations = () => {
-    if (selectedTime === "50") {
-      return { pomodoro: 50, breakTime: 10 };
-    }
-    if (selectedTime === "1") {
-      return { pomodoro: 0.5, breakTime: 0.5 };
-    }
-    return { pomodoro: 25, breakTime: 5 };
+    return { pomodoro: selectedTime, breakTime: 5 };
   };
 
   const handleBuyFlow = () => {
@@ -59,6 +61,8 @@ const Setup = ({ onStart, selectedAvatar = "tomash" }) => {
     magic.wallet.showOnRamp();
   };
 
+  const percent = ((selectedTime - 1) / (180 - 1)) * 100;
+
   return (
     <>
       <Navbar selectedAvatar={selectedAvatar} />
@@ -66,94 +70,47 @@ const Setup = ({ onStart, selectedAvatar = "tomash" }) => {
         <div
           className="w-full"
           style={{
-            maxWidth: 320,
+            maxWidth: 370,
             margin: "0 auto",
-            padding: "24px 12px",
+            padding: "8px 12px 0 12px",
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
           }}
         >
-          <h1
-            style={{
-              fontFamily: "'Press Start 2P', cursive",
-              color: "#5c4435",
-              fontSize: "1.2rem",
-              textAlign: "center",
-              lineHeight: "1.8rem",
-            }}
-          >
-            Setup your
-            <br />
-            focus session
-          </h1>
-
+          <div style={{ margin: "32px 0 8px 0" }}>
+            <PixelPomo type={selectedAvatar} style={{ width: 160, height: 160 }} />
+          </div>
           <div
             style={{
               border: "2px solid #5c4435",
               borderRadius: "6px",
-              padding: "10px 10px 8px 10px",
+              padding: "10px 10px 18px 10px",
               marginBottom: "10px",
-              background: "#fffbe6",
+              background: "none",
+              width: 370,
+              maxWidth: "100%",
               fontFamily: "'VT323', monospace",
               fontSize: "1.3rem",
               color: "#5c4435",
             }}
           >
-            <div style={{ marginBottom: 12 }}>Pomodoro time</div>
-            <div style={{ display: "flex", gap: 12 }}>
-              <button
-                onClick={() => setSelectedTime("25")}
-                style={{
-                  background: selectedTime === "25" ? "#5aad00" : "transparent",
-                  color: selectedTime === "25" ? "#fffbe6" : "#5c4435",
-                  border: "2px solid #5c4435",
-                  borderRadius: 8,
-                  fontFamily: "'VT323', monospace",
-                  fontSize: "1.25rem",
-                  padding: "4px 24px",
-                  cursor: "pointer",
-                  fontWeight: "bold",
-                  boxShadow: selectedTime === "25" ? "2px 2px #5c4435" : "none",
-                  transition: "all 0.2s",
-                }}
-              >
-                25
-              </button>
-              <button
-                onClick={() => setSelectedTime("50")}
-                style={{
-                  background: selectedTime === "50" ? "#5aad00" : "transparent",
-                  color: selectedTime === "50" ? "#fffbe6" : "#5c4435",
-                  border: "2px solid #5c4435",
-                  borderRadius: 8,
-                  fontFamily: "'VT323', monospace",
-                  fontSize: "1.25rem",
-                  padding: "4px 24px",
-                  cursor: "pointer",
-                  fontWeight: "bold",
-                  boxShadow: selectedTime === "50" ? "2px 2px #5c4435" : "none",
-                  transition: "all 0.2s",
-                }}
-              >
-                50
-              </button>
-              <button
-                onClick={() => setSelectedTime("1")}
-                style={{
-                  background: selectedTime === "1" ? "#5aad00" : "transparent",
-                  color: selectedTime === "1" ? "#fffbe6" : "#5c4435",
-                  border: "2px solid #5c4435",
-                  borderRadius: 8,
-                  fontFamily: "'VT323', monospace",
-                  fontSize: "1.25rem",
-                  padding: "4px 24px",
-                  cursor: "pointer",
-                  fontWeight: "bold",
-                  boxShadow: selectedTime === "1" ? "2px 2px #5c4435" : "none",
-                  transition: "all 0.2s",
-                }}
-              >
-                1
-              </button>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+              <span>Duration</span>
+              <span>{formatDuration(selectedTime)}</span>
             </div>
+            <input
+              type="range"
+              min={1}
+              max={180}
+              step={5}
+              value={selectedTime}
+              onChange={e => setSelectedTime(Number(e.target.value))}
+              className="custom-slider"
+              style={{
+                '--percent': `${percent}%`
+              }}
+            />
           </div>
 
           <div
@@ -162,13 +119,14 @@ const Setup = ({ onStart, selectedAvatar = "tomash" }) => {
               borderRadius: "6px",
               padding: "10px 10px 8px 10px",
               marginBottom: "10px",
-              background: "#fffbe6",
+              background: "none",
+              width: 370,
+              maxWidth: "100%",
               fontFamily: "'VT323', monospace",
               fontSize: "1.3rem",
               color: "#5c4435",
             }}
           >
-            <div style={{ marginBottom: 12 }}>Stake</div>
             <div
               style={{
                 display: "flex",
@@ -221,22 +179,6 @@ const Setup = ({ onStart, selectedAvatar = "tomash" }) => {
             </div>
           </div>
 
-          <div
-            style={{
-              border: "2px solid #5c4435",
-              borderRadius: "6px",
-              padding: "10px 10px 8px 10px",
-              marginBottom: "10px",
-              background: "#fffbe6",
-              fontFamily: "'VT323', monospace",
-              fontSize: "1.25rem",
-              color: "#5c4435",
-              textAlign: "center",
-            }}
-          >
-            Stay focused! If you lose focus, your stake is gone.
-          </div>
-
           <button
             onClick={handleStart}
             disabled={isLoading}
@@ -244,12 +186,12 @@ const Setup = ({ onStart, selectedAvatar = "tomash" }) => {
               background: isLoading ? "#cccccc" : "#5aad00",
               color: "#fffbe6",
               fontFamily: "'VT323', monospace",
-              fontSize: "1.25rem",
+              fontSize: "1.5rem",
               border: "2px solid #5c4435",
               borderRadius: "4px",
               boxShadow: isLoading ? "2px 2px #5c4435" : "4px 4px #5c4435",
               padding: "10px 24px",
-              marginTop: "40px",
+              marginTop: "16px",
               cursor: isLoading ? "not-allowed" : "pointer",
               display: "block",
               marginLeft: "auto",
@@ -258,7 +200,7 @@ const Setup = ({ onStart, selectedAvatar = "tomash" }) => {
               transition: "all 0.2s ease",
             }}
           >
-            {isLoading ? "Loading..." : "Start pomodoro"}
+            {isLoading ? "Loading..." : "Focus"}
           </button>
         </div>
       </div>
