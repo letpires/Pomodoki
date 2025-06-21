@@ -3,10 +3,9 @@ import { CurrentUserContext } from "../context/currentUserProvider";
 import PixelAvatar from "./PixelAvatar";
 
 const Navbar = ({ selectedAvatar = "tomash" }) => {
-  const { currentUser, network, setNetwork } = useContext(CurrentUserContext);
+  const { currentUser, network, setNetwork, loadingWallet } = useContext(CurrentUserContext);
 
-  const formatAddress = (address) => {
-    if (!address) return "Not connected";
+  const formatAddress = (address) => { 
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
   };
 
@@ -71,7 +70,7 @@ const Navbar = ({ selectedAvatar = "tomash" }) => {
             fontWeight: "bold",
           }}
         >
-          {formatAddress(currentUser?.publicAddress)}
+          {currentUser?.publicAddress && !loadingWallet ? formatAddress(currentUser?.publicAddress) : "Loading..."}
         </div>
         {currentUser?.publicAddress && (
           <button

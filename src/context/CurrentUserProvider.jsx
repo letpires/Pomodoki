@@ -11,7 +11,21 @@ const CurrentUserProvider = ({ children }) => {
   const [balanceLoading, setBalanceLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [magic, setMagic] = useState(null);
-  const [network, setNetwork] = useState("testnet");
+  const [network, setNetwork] = useState(null);
+  const [loadingWallet, setLoadingWallet] = useState(true);
+
+  // Load network from localStorage on component mount
+  useEffect(() => { 
+    const savedNetwork = localStorage.getItem("pomodoki-network"); 
+    if (
+      savedNetwork &&
+      (savedNetwork === "testnet" || savedNetwork === "mainnet")
+    ) {
+      setNetwork(savedNetwork);
+    } else {
+      setNetwork("testnet");
+    }
+  }, []);
 
   // Function to fetch Flow balance
   const fetchBalance = async () => {
@@ -45,12 +59,18 @@ const CurrentUserProvider = ({ children }) => {
           const data = await magic.user.getInfo();
           console.log("data", data);
           setCurrentUser(data);
-          setIsLoggedIn(true);
+          setIsLoggedIn(true); 
         }
       }
     };
     checkUser();
   }, [magic]);
+
+  useEffect(() => {
+    if (currentUser) {
+      fetchBalance();
+    }
+  }, [currentUser]);
 
   // Periodically refresh balance when user is logged in
   useEffect(() => {
@@ -91,6 +111,13 @@ const CurrentUserProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    if (!network) return; 
+
+    setLoadingWallet(true);
+    setCurrentUser(null);
+    setBalance(0)
+    localStorage.setItem("pomodoki-network", network);
+
     setMagic(
       new Magic(process.env.NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY, {
         extensions: [
@@ -123,6 +150,7 @@ const CurrentUserProvider = ({ children }) => {
       "0xFungibleToken": fungibleTokenAddress,
       "0xFlowToken": flowTokenAddress,
     });
+    setLoadingWallet(false);
   }, [network]);
 
   return (
@@ -136,6 +164,7 @@ const CurrentUserProvider = ({ children }) => {
         balanceLoading,
         network,
         setNetwork,
+        loadingWallet,
         magic,
         isLoggedIn,
         fetchBalance, // Expose fetchBalance function for manual refresh
