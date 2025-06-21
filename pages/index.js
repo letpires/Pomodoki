@@ -32,13 +32,13 @@ export default function Home() {
         page === "welcome" &&
         !state.publicAddress &&
         window.innerWidth <= 400
-      ) {
-        const extensionUrl = `chrome-extension://dfcclieoekhglbafdheijgmfkhoncbek/index.html`;
+      ) { 
+        const extensionUrl = `chrome-extension://${chrome.runtime?.id}/index.html`;
         window.open(extensionUrl);
       }
     } else {
       if (window.innerWidth <= 400) {
-        const extensionUrl = `chrome-extension://dfcclieoekhglbafdheijgmfkhoncbek/index.html`;
+        const extensionUrl = `chrome-extension://${chrome.runtime?.id}/index.html`;
         window.open(extensionUrl);
       }
     }
