@@ -104,7 +104,7 @@ const CurrentUserProvider = ({ children }) => {
 
   // create a function to handle the logout
   const handleLogout = async () => {
-    await magic.auth.logout();
+    await magic.user.logout();
     setCurrentUser(null);
     setIsLoggedIn(false);
     setBalance(0);

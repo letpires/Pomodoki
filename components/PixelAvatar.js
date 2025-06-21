@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 
-const PixelAvatar = ({ type }) => {
+const PixelAvatar = ({ type, width, height, borderRadius }) => {
   const avatarImages = {
-    tomash: '/images/tomash.jpg',
-    bubbiberry: '/images/bubbiberry.jpg',
-    batatack: '/images/batatack.jpg'
+    tomash: "/images/tomash.jpg",
+    bubbiberry: "/images/bubbiberry.jpg",
+    batatack: "/images/batatack.jpg",
   };
 
   return (
@@ -12,9 +12,9 @@ const PixelAvatar = ({ type }) => {
       src={avatarImages[type]}
       alt={type}
       style={{
-        width: "50px",
-        height: "50px",
-        borderRadius: "50%",
+        width: width || "100px",
+        height: height || "100px",
+        borderRadius: borderRadius || "0%",
       }}
     />
   );
