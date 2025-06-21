@@ -1,9 +1,10 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { CurrentUserContext } from "../context/currentUserProvider";
-import PixelAvatar from "./PixelAvatar";
+import Profile from "./Profile";
 
 const Navbar = ({ selectedAvatar = "tomash" }) => {
   const { currentUser, network, setNetwork, loadingWallet } = useContext(CurrentUserContext);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const formatAddress = (address) => { 
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
@@ -21,12 +22,6 @@ const Navbar = ({ selectedAvatar = "tomash" }) => {
     }
   };
 
-  const toggleNetwork = () => {
-    const newNetwork = network === "testnet" ? "mainnet" : "testnet";
-    setNetwork(newNetwork);
-    console.log(`Switched to ${newNetwork}`);
-  };
-
   return (
     <div
       style={{
@@ -35,8 +30,7 @@ const Navbar = ({ selectedAvatar = "tomash" }) => {
         left: 0,
         right: 0,
         height: "60px",
-        backgroundColor: "#fffbe6",
-        borderBottom: "2px solid #5c4435",
+        backgroundColor: "#655f4d",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
@@ -48,26 +42,28 @@ const Navbar = ({ selectedAvatar = "tomash" }) => {
       }}
     >
       {/* Left: Avatar */}
-      <div style={{ display: "flex", alignItems: "center" }}>
+      <div style={{ position: "relative", zIndex: 2 }}>
         <div style={{ marginRight: "8px", width: "50px", height: "50px", borderRadius: "50%", overflow: "hidden" }}>
-          <PixelAvatar type={selectedAvatar} />
+          <Profile type={selectedAvatar} />
         </div>
       </div>
 
-      {/* Middle: Wallet Address with Copy Button */}
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: "8px",
-        }}
-      >
+      {/* Middle: Wallet Address with Copy Button - Centralizado */}
+      <div style={{
+        position: "absolute",
+        left: "50%",
+        top: "50%",
+        transform: "translate(-50%, -50%)",
+        display: "flex",
+        alignItems: "center",
+        gap: "8px",
+        color: "#ffedae"
+      }}>
         <div
           style={{
-            fontSize: "1.1rem",
+            fontSize: "1.05rem",
             fontWeight: "bold",
+            letterSpacing: "1px"
           }}
         >
           {currentUser?.publicAddress && !loadingWallet ? formatAddress(currentUser?.publicAddress) : "Loading..."}
@@ -77,57 +73,93 @@ const Navbar = ({ selectedAvatar = "tomash" }) => {
             onClick={copyToClipboard}
             style={{
               background: "none",
-              border: "2px solid #5c4435",
-              borderRadius: "4px",
-              padding: "4px 8px",
+              border: "none",
+              padding: "2px",
               cursor: "pointer",
-              fontFamily: "'VT323', monospace",
-              fontSize: "0.8rem",
-              color: "#5c4435",
-              backgroundColor: "#fffbe6",
-              transition: "all 0.2s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.backgroundColor = "#fed35c";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.backgroundColor = "#fffbe6";
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
             }}
             title="Copy wallet address"
           >
-            COPY
+            <img
+              src="/icons/copy.svg"
+              alt="Copiar"
+              style={{
+                width: "13px",
+                height: "13px",
+                display: "block",
+                background: "none"
+              }}
+            />
           </button>
         )}
       </div>
 
-      {/* Right: Network Toggle */}
-      <button
-        onClick={toggleNetwork}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          padding: "4px 8px",
-          backgroundColor: network === "testnet" ? "#fed35c" : "#5aad00",
-          border: "2px solid #5c4435",
-          borderRadius: "4px",
-          fontSize: "0.9rem",
-          fontWeight: "bold",
-          textTransform: "uppercase",
-          cursor: "pointer",
-          fontFamily: "'VT323', monospace",
-          color: "#5c4435",
-          transition: "all 0.2s ease",
-        }}
-        onMouseEnter={(e) => {
-          e.target.style.transform = "scale(1.05)";
-        }}
-        onMouseLeave={(e) => {
-          e.target.style.transform = "scale(1)";
-        }}
-        title={`Click to switch to ${network === "testnet" ? "mainnet" : "testnet"}`}
-      >
-        {network}
-      </button>
+      {/* Right: Network Dropdown Compacto com borda e texto amarelo */}
+      <div style={{
+        position: "relative",
+        zIndex: 2,
+        marginLeft: "auto"
+      }}>
+        <button
+          onClick={() => setDropdownOpen((open) => !open)}
+          style={{
+            border: "1.2px solid #ffedae",
+            background: "none",
+            color: "#ffedae",
+            fontFamily: "'VT323', monospace",
+            fontSize: "0.95rem",
+            borderRadius: "4px",
+            padding: "1px 7px",
+            cursor: "pointer",
+            minWidth: "0",
+            fontWeight: "bold",
+            letterSpacing: "1px",
+            boxShadow: "none",
+            outline: "none",
+            display: "inline-flex",
+            alignItems: "center"
+          }}
+        >
+          {network === "mainnet" ? "Mainnet" : "Testnet"} <span style={{ marginLeft: 3 }}>{dropdownOpen ? null : "▼"}</span>
+        </button>
+        {dropdownOpen && (
+          <div
+            style={{
+              position: "absolute",
+              right: 0,
+              top: "110%",
+              background: "#655f4d",
+              border: "1.2px solid #ffedae",
+              borderRadius: "4px",
+              zIndex: 10,
+              minWidth: "0",
+              padding: 0
+            }}
+          >
+            <button
+              onClick={() => {
+                setNetwork(network === "mainnet" ? "testnet" : "mainnet");
+                setDropdownOpen(false);
+              }}
+              style={{
+                width: "100%",
+                background: "none",
+                border: "none",
+                color: "#ffedae",
+                fontFamily: "'VT323', monospace",
+                fontSize: "0.95rem",
+                padding: "4px 10px",
+                cursor: "pointer",
+                textAlign: "center"
+              }}
+            >
+              {network === "mainnet" ? "Testnet" : "Mainnet"}
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
