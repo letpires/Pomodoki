@@ -20,8 +20,7 @@ import StakingContract4 from 0xStakingContract
             receiver.deposit(from: <- vault)
 
             // Clean up the staking resource
-            destroy staking
-            signer.capabilities.unpublish(/public/Staking)
+            destroy staking 
         }
     }
 `;

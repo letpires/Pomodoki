@@ -19,18 +19,16 @@ transaction(amount: UFix64) {
         // Check if storage path exists and remove if it does
         if signer.storage.check<@StakingContract4.Staking>(from: /storage/Staking) {
             let oldStaking <- signer.storage.load<@StakingContract4.Staking>(from: /storage/Staking)
-            destroy oldStaking
-            signer.capabilities.unpublish(/public/Staking)
+            destroy oldStaking 
         }
         
-        signer.storage.save(<- staking, to: /storage/Staking)
-        signer.capabilities.publish(
-            signer.capabilities.storage.issue<&StakingContract4.Staking>(/storage/Staking),
-            at: /public/Staking
-        )
+        signer.storage.save(<- staking, to: /storage/Staking)  
+        
+        
+        self.stakingRef = signer.storage.borrow<&StakingContract4.Staking>(
+            from: /storage/Staking
+        ) ?? panic("Could not borrow Staking reference")
 
-        self.stakingRef = signer.capabilities.borrow<&StakingContract4.Staking>(/public/Staking)
-            ?? panic("Could not borrow Staking reference")
     }
 
     execute {
