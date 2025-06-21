@@ -1,31 +1,46 @@
 {
-  "emulators": {
-      "default": {
-          "port": 3569,
-          "serviceAccount": "testnet-account"
-      }
-  },
-  "contracts": {
-      "StakingContract": "./cadence/contracts/StakingContract.cdc"
-  },
-  "networks": {
-      "testnet": "access.devnet.nodes.onflow.org:9000"
-  },
-  "accounts": {
-      "testnet-account": {
-          "address": "0xacdf784e6e2a83f0",
-          "key": {
-              "type": "hex",
-              "index": 0,
-              "signatureAlgorithm": "ECDSA_secp256k1",
-              "hashAlgorithm": "SHA2_256",
-              "privateKey": "$PRIVATE_KEY"
-          }
-      }
-  },
-  "deployments": {
-      "testnet": {
-          "testnet-account": ["StakingContract"]
-      }
-  }
-} 
+	"emulators": {
+		"default": {
+			"port": 3569,
+			"serviceAccount": "testnet-account"
+		}
+	},
+	"contracts": {
+		"StakingContract": "./cadence/contracts/StakingContract.cdc"
+	},
+	"networks": {
+		"mainnet": "access.mainnet.nodes.onflow.org:9000",
+		"testnet": "access.devnet.nodes.onflow.org:9000"
+	},
+	"accounts": {
+		"mainnet-account": {
+			"address": "2eed39e014db1d54",
+			"key": {
+				"type": "file",
+				"location": "mainnet.pkey"
+			}
+		},
+		"testnet-account": {
+			"address": "acdf784e6e2a83f0",
+			"key": {
+				"type": "file",
+				"location": "testnet.pkey",
+				"index": 0,
+				"signatureAlgorithm": "ECDSA_secp256k1",
+				"hashAlgorithm": "SHA2_256"
+			}
+		}
+	},
+	"deployments": {
+		"mainnet": {
+			"mainnet-account": [
+				"StakingContract"
+			]
+		},
+		"testnet": {
+			"testnet-account": [
+				"StakingContract"
+			]
+		}
+	}
+}
