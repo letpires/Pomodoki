@@ -41,13 +41,10 @@ export default function Home() {
         }
       });
     };
-  
+
     const interval = setInterval(checkFailure, 1000); // checa a cada 1s
     return () => clearInterval(interval); // limpa ao desmontar
   }, []);
-
-  // Funções de navegação do fluxo
-  const handleConnectWallet = () => setPage("avatar");
 
   const handleConfirmAvatar = (avatar) => {
     setSelectedAvatar(avatar);
@@ -67,15 +64,18 @@ export default function Home() {
     setPage("timer");
   };
 
+  const handleConnectWallet = () => setPage("avatar");
   const handleTimerComplete = () => setPage("success");
   const handleTimerFail = () => setPage("failure");
-
   const handleBackToHome = () => setPage("welcome");
 
   // Renderiza a página correta
-  if (page === "welcome") return <Welcome onConnectWallet={handleConnectWallet} />;
-  if (page === "avatar") return <AvatarSelection onConfirm={handleConfirmAvatar} />;
-  if (page === "setup") return <Setup onStart={handleSetup} selectedAvatar={selectedAvatar} />;
+  if (page === "welcome")
+    return <Welcome onConnectWallet={handleConnectWallet} />;
+  if (page === "avatar")
+    return <AvatarSelection onConfirm={handleConfirmAvatar} />;
+  if (page === "setup")
+    return <Setup onStart={handleSetup} selectedAvatar={selectedAvatar} />;
   if (page === "timer") {
     return (
       <PomodoroTimer
@@ -88,8 +88,22 @@ export default function Home() {
       />
     );
   }
-  if (page === "success") return <Success avatar={selectedAvatar} onRestart={() => setPage("setup")} onBackToHome={handleBackToHome} />;
-  if (page === "failure") return <Failure avatar={selectedAvatar} onBackToHome={handleBackToHome} onTryAgain={() => setPage("setup")} />;
+  if (page === "success")
+    return (
+      <Success
+        avatar={selectedAvatar}
+        onRestart={() => setPage("setup")}
+        onBackToHome={handleBackToHome}
+      />
+    );
+  if (page === "failure")
+    return (
+      <Failure
+        avatar={selectedAvatar}
+        onBackToHome={handleBackToHome}
+        onTryAgain={() => setPage("setup")}
+      />
+    );
 
   return null;
 }

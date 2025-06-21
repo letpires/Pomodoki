@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
-import PixelSuccess from "../src/components/PixelSuccess";
-import { CurrentUserContext } from "../src/context/currentUserProvider";
-import * as fcl from "@onflow/fcl"; 
+import PixelSuccess from "../components/PixelSuccess";
+import { CurrentUserContext } from "../context/currentUserProvider";
+import * as fcl from "@onflow/fcl";
 
 const Success = ({ avatar = "bubbiberry", onRestart, onBackToHome }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -11,7 +11,7 @@ const Success = ({ avatar = "bubbiberry", onRestart, onBackToHome }) => {
 
   const handleRedeem = async () => {
     try {
-      setIsLoading(true); 
+      setIsLoading(true);
 
       const transactionId = await fcl.mutate({
         cadence: `
@@ -40,7 +40,7 @@ const Success = ({ avatar = "bubbiberry", onRestart, onBackToHome }) => {
                   signer.capabilities.unpublish(/public/Staking)
               }
           }
-        `, 
+        `,
         proposer: AUTHORIZATION_FUNCTION,
         authorizations: [AUTHORIZATION_FUNCTION],
         payer: AUTHORIZATION_FUNCTION,
@@ -63,7 +63,7 @@ const Success = ({ avatar = "bubbiberry", onRestart, onBackToHome }) => {
   };
 
   return (
-    <> 
+    <>
       <div className="popup-container" style={{ position: "relative" }}>
         <h1
           style={{
@@ -86,33 +86,33 @@ const Success = ({ avatar = "bubbiberry", onRestart, onBackToHome }) => {
             marginBottom: "16px",
           }}
         >
-          Your Pomodoki levelep up! 
-        </div> 
+          Your Pomodoki levelep up!
+        </div>
         <PixelSuccess type={avatar} size="large" className="mx-auto my-6" />
 
-                {/* Botão Confirmar */}
-        
+        {/* Botão Confirmar */}
+
         <button
           onClick={handleRedeem}
           disabled={isLoading || redeemed}
           style={{
-            backgroundColor: isLoading ? '#ffe082' : '#fed35c',
-            color: '#5c4435',
+            backgroundColor: isLoading ? "#ffe082" : "#fed35c",
+            color: "#5c4435",
             fontFamily: "'VT323', monospace",
             fontSize: "1.25rem",
             padding: "10px 24px",
             border: "2px solid #5c4435",
             borderRadius: "4px",
-            cursor: isLoading ? 'not-allowed' : 'pointer',
+            cursor: isLoading ? "not-allowed" : "pointer",
             boxShadow: "4px 4px #5c4435",
             textTransform: "uppercase",
             marginTop: "40px",
             opacity: isLoading ? 0.7 : 1,
-            transition: 'background 0.2s, opacity 0.2s',
-            display: redeemed ? 'none' : 'block'
+            transition: "background 0.2s, opacity 0.2s",
+            display: redeemed ? "none" : "block",
           }}
         >
-          {isLoading ? 'Loading...' : 'Redeem'}
+          {isLoading ? "Loading..." : "Redeem"}
         </button>
 
         {redeemed && (
@@ -125,14 +125,15 @@ const Success = ({ avatar = "bubbiberry", onRestart, onBackToHome }) => {
                 textAlign: "center",
                 marginTop: "12px",
                 marginBottom: "12px",
-                marginLeft: '24px',
-                marginRight: '24px',
-                fontStyle: 'italic',
-                lineHeight: '1.4',
-                padding: '0 8px',
+                marginLeft: "24px",
+                marginRight: "24px",
+                fontStyle: "italic",
+                lineHeight: "1.4",
+                padding: "0 8px",
               }}
             >
-              Redeem successful!<br />
+              Redeem successful!
+              <br />
               Your FLOW is back in your wallet.
             </div>
             <button
@@ -148,33 +149,12 @@ const Success = ({ avatar = "bubbiberry", onRestart, onBackToHome }) => {
                 cursor: "pointer",
                 boxShadow: "4px 4px #5c4435",
                 marginTop: "12px",
-                display: 'block',
-                marginLeft: 'auto',
-                marginRight: 'auto'
+                display: "block",
+                marginLeft: "auto",
+                marginRight: "auto",
               }}
             >
               Start new session
-            </button>
-            <button
-              onClick={onBackToHome}
-              style={{
-                background: 'transparent',
-                color: '#5c4435',
-                fontFamily: "'VT323', monospace",
-                fontSize: '1.1rem',
-                border: '2px solid #5c4435',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                boxShadow: 'none',
-                marginTop: '12px',
-                display: 'block',
-                marginLeft: 'auto',
-                marginRight: 'auto',
-                padding: '6px 24px',
-                minWidth: '100px',
-              }}
-            >
-              Back to Home
             </button>
           </>
         )}

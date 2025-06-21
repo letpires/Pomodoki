@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'; 
-import Timer from '../src/components/Timer'; 
+import Timer from '../components/Timer'; 
 
 const PomodoroTimer = ({ avatar, pomodoro, breakTime, stake, onComplete, onFail }) => {
   const [isBreak, setIsBreak] = useState(false);

@@ -1,5 +1,5 @@
 import "../styles/globals.css";
-import CurrentUserProvider from "../src/context/currentUserProvider";
+import CurrentUserProvider from "../context/currentUserProvider";
 import Head from "next/head";
 
 function MyApp({ Component, pageProps }) {

@@ -1,5 +1,5 @@
 import React from "react";
-import PixelFailure from "../src/components/PixelFailure";
+import PixelFailure from "../components/PixelFailure";
 
 const Failure = ({ avatar = "bubbiberry", onBackToHome, onTryAgain }) => {
   return (

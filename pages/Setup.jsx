@@ -1,7 +1,7 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import * as fcl from "@onflow/fcl";
-import { CurrentUserContext } from "../src/context/currentUserProvider";
-import Navbar from "../src/components/Navbar";
+import { CurrentUserContext } from "../context/currentUserProvider";
+import Navbar from "../components/Navbar";
 
 const Setup = ({ onStart, selectedAvatar = "tomash" }) => {
   const [selectedTime, setSelectedTime] = useState("25/5");

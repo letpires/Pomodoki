@@ -1,5 +1,5 @@
 import React, { useState } from 'react'; 
-import PixelAvatar from '../src/components/PixelAvatar';
+import PixelAvatar from '../components/PixelAvatar';
 
 const AvatarSelection = ({ onConfirm }) => {
   const [selectedAvatar, setSelectedAvatar] = useState('tomash');

@@ -1,6 +1,6 @@
-import React, { useState , useContext} from "react"; 
-import FlowLogin from "../src/components/FlowLogin";
-import { CurrentUserContext } from "../src/context/currentUserProvider";
+import React, { useContext } from "react"; 
+import FlowLogin from "../components/FlowLogin";
+import { CurrentUserContext } from "../context/currentUserProvider";
 
 const Welcome = ({ onConnectWallet }) => {
   const { isLoggedIn } = useContext(CurrentUserContext);
