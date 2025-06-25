@@ -7,14 +7,16 @@ access(all) contract Battles {
 
     access(all) struct Battle {
         access(all) let id: UInt64
+        access(all) let owner: Address
         access(all) let options: [String]
         access(all) let startDate: UFix64
         access(all) let endDate: UFix64
         access(all) var users: {Address: UInt8} 
         access(all) var status: BattleStatus
 
-        init(id: UInt64, options: [String], startDate: UFix64, endDate: UFix64) {
+        init(id: UInt64, owner: Address, options: [String], startDate: UFix64, endDate: UFix64) {
             self.id = id
+            self.owner = owner
             self.options = options
             self.startDate = startDate
             self.endDate = endDate
@@ -31,28 +33,27 @@ access(all) contract Battles {
         self.nextBattleId = 1
     }
 
-    access(all) fun createBattle(options: [String], start: UFix64, end: UFix64): UInt64 {
+    access(all) fun createBattle(owner: Address, options: [String], end: UFix64): UInt64 {
         let id = self.nextBattleId
-        self.battles[id] = Battle(id: id, options: options, startDate: start, endDate: end)
+        let startDate = getCurrentBlock().timestamp
+        self.battles[id] = Battle(id: id, owner: owner, options: options, startDate: startDate, endDate: end)
         self.nextBattleId = self.nextBattleId + 1
         return id
     }
 
-    access(all) fun joinBattle(battleId: UInt64, optionIndex: UInt8, user: Address) {
-        let battle = self.battles[battleId]!
-        assert(optionIndex < UInt8(battle.options.length), message: "Invalid option")
-        battle.users[user] = optionIndex
-
-        // Mint participation NFT (you'd implement this in YourNFTContract)
-        // YourNFTContract.mintParticipationNFT(to: user, battleId: battleId, optionIndex: optionIndex)
+    access(all) fun joinBattle(battleId: UInt64, user: Address) {
+        let battle = self.battles[battleId]! 
+        battle.users[user] = 1 // TODO - Change this later, for now this options is useless
     }
 
     access(all) fun getBattle(id: UInt64): Battle? {
         return self.battles[id]
     }
 
-    access(all) fun updateStatus(id: UInt64, status: BattleStatus) {
+    // TODO - Chage the authAccount from the params, use something else
+    access(all) fun updateStatus(id: UInt64, status: BattleStatus, authAccount: AuthAccount) {
         let battle = self.battles[id]!
+        assert(battle.owner == authAccount.address, message: "Only the battle owner can update status")
         battle.status = status
     }
 }
