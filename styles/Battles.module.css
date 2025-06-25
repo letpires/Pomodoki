@@ -1,0 +1,184 @@
+.container {
+  background: #f8f3e3;
+  min-height: 100vh;
+  padding: 0 0 32px 0;
+  font-family: 'Press Start 2P', 'Courier New', Courier, monospace;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  background: #7c6a4d;
+  color: #fffbe6;
+  padding: 16px 24px;
+  border-bottom: 4px solid #e2c98f;
+}
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  margin-right: 16px;
+  border: 2px solid #e2c98f;
+  background: #fff;
+}
+.username {
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+.address {
+  font-size: 13px;
+  opacity: 0.8;
+  margin-top: 2px;
+}
+.network {
+  margin-left: auto;
+  font-size: 15px;
+  background: #bfa76a;
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-family: inherit;
+}
+.title {
+  text-align: center;
+  font-size: 32px;
+  margin: 32px 0 16px 0;
+  letter-spacing: 2px;
+  color: #5a4a2c;
+}
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.tabs button {
+  background: #e2c98f;
+  border: none;
+  border-radius: 16px;
+  padding: 8px 24px;
+  font-size: 16px;
+  font-family: inherit;
+  color: #5a4a2c;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.activeTab {
+  background: #bfa76a !important;
+  color: #fffbe6 !important;
+  font-weight: bold;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.newBattle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #bfa76a;
+  border-radius: 24px;
+  height: 240px;
+  font-size: 22px;
+  color: #bfa76a;
+  background: #fffbe6;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.newBattle:hover {
+  background: #f8e7b9;
+}
+.card {
+  background: #fffbe6;
+  border: 3px solid #bfa76a;
+  border-radius: 24px;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  height: 240px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 8px #e2c98f44;
+}
+.cardImage {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  border-bottom: 2px solid #e2c98f;
+}
+.cardContent {
+  padding: 12px 16px 0 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.entryFee {
+  font-size: 12px;
+  color: #bfa76a;
+  margin-bottom: 2px;
+}
+.title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #5a4a2c;
+}
+.pool, .players {
+  font-size: 14px;
+  color: #7c6a4d;
+}
+.active {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: #4caf50;
+  color: #fff;
+  font-size: 13px;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-family: inherit;
+}
+.cancelled {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: #e57373;
+  color: #fff;
+  font-size: 13px;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-family: inherit;
+}
+.footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #f8f3e3;
+  border-top: 2px solid #e2c98f;
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  padding: 16px 0 8px 0;
+  z-index: 10;
+}
+
+@media (max-width: 700px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 0 12px;
+  }
+  .header {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .footer {
+    gap: 24px;
+  }
+} 
