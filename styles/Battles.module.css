@@ -3,7 +3,7 @@
   min-height: 100vh;
   padding: 0 0 32px 0;
   font-family: 'Press Start 2P', 'Courier New', Courier, monospace;
-  max-width: 400px;
+  width: 400px;
   margin: 0 auto;
 }
 
@@ -137,7 +137,10 @@
   height: 250px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 4px 16px rgba(226, 201, 143, 0.3); 
+  box-shadow: 0 4px 16px rgba(226, 201, 143, 0.3);
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   box-sizing: border-box;
   transition: all 0.3s ease;
   cursor: pointer;

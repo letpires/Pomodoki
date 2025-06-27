@@ -1,7 +1,7 @@
 .container {
   background: #f8f3e3;
   min-height: 100vh;
-  max-width: 400px;
+  width: 400px;
   margin: 0 auto;
   font-family: 'Press Start 2P', 'Courier New', Courier, monospace;
   position: relative;
