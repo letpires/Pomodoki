@@ -1,20 +1,12 @@
 import React from "react";
-import Navbar from "../components/Navbar";
 import styles from "../styles/Leaderboard.module.css";
 
-const mockLeaderboard = [
-  { rank: 1, name: "XVMDOJFHE98374", focus: "3:30" },
-  { rank: 2, name: "XVMDOJFHE98374", focus: "3:30" },
-  { rank: 3, name: "XVMDOJFHE98374", focus: "3:30" },
-];
-
-export default function Leaderboard() {
+export default function Leaderboard({ leaderboard, onClose }) {
   return (
     <div className={styles.container}>
-      <Navbar />
       <h1 className={styles.title}>Leaderboard</h1>
       <div className={styles.list}>
-        {mockLeaderboard.map((user) => (
+        {leaderboard.map((user) => (
           <div className={styles.card} key={user.rank}>
             <span className={styles.rank}>#{user.rank}</span>
             <img
@@ -30,9 +22,7 @@ export default function Leaderboard() {
         ))}
       </div>
       <button className={styles.joinBtn}>I want to join</button>
-      <div className={styles.footer}>
-        {/* Ícones de navegação aqui */}
-      </div>
+      <button onClick={onClose} className={styles.closeBtn}>Fechar</button>
     </div>
   );
-}
+} 

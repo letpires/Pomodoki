@@ -4,10 +4,17 @@ import styles from "../styles/Battles.module.css";
 import Navbar from "../components/Navbar";
 import { Plus } from "lucide-react";
 import BottomNav from "../components/BottomNav";
+import Leaderboard from "../components/Leaderboard";
 
 // ------------------------------------------------------------
 // Mock data ---------------------------------------------------
 // ------------------------------------------------------------
+const mockLeaderboard = [
+  { rank: 1, name: "XVMDOJFHE98374", focus: "3:30" },
+  { rank: 2, name: "XVMDOJFHE98374", focus: "3:30" },
+  { rank: 3, name: "XVMDOJFHE98374", focus: "3:30" },
+];
+
 const mockBattles = [
   {
     id: 1,
@@ -17,6 +24,7 @@ const mockBattles = [
     status: "active",
     image: "/lovable-uploads/409d1706-dffe-4c5b-a77a-2f95d5577442.png",
     entryFee: false,
+    leaderboard: mockLeaderboard,
   },
   {
     id: 2,
@@ -26,6 +34,7 @@ const mockBattles = [
     status: "cancelled",
     image: "/lovable-uploads/409d1706-dffe-4c5b-a77a-2f95d5577442.png",
     entryFee: false,
+    leaderboard: mockLeaderboard,
   },
   {
     id: 3,
@@ -35,6 +44,7 @@ const mockBattles = [
     status: "active",
     image: "/lovable-uploads/409d1706-dffe-4c5b-a77a-2f95d5577442.png",
     entryFee: false,
+    leaderboard: mockLeaderboard,
   },
 ];
 
@@ -92,6 +102,7 @@ function NewBattleCard() {
 // ------------------------------------------------------------
 export default function Battles({onHandlePage}) {
   const [selectedTab, setSelectedTab] = useState("created");
+  const [selectedBattle, setSelectedBattle] = useState(null);
   const router = useRouter();
 
   // Functions to filter battles by tab -----------------------
@@ -133,11 +144,22 @@ export default function Battles({onHandlePage}) {
         {selectedTab !== "joined" && <NewBattleCard />}
 
         {battlesForTab(selectedTab).map((battle) => (
-          <BattleCard key={battle.id} battle={battle} />
+          <div key={battle.id} onClick={() => setSelectedBattle(battle)} style={{ cursor: 'pointer' }}>
+            <BattleCard battle={battle} />
+          </div>
         ))}
       </div>
 
-      {/* footer fixo — ícones etc. */}
+      {/* Leaderboard modal */}
+      {selectedBattle && (
+        <div className={styles.leaderboardOverlay}>
+          <Leaderboard
+            leaderboard={selectedBattle.leaderboard || mockLeaderboard}
+            onClose={() => setSelectedBattle(null)}
+          />
+        </div>
+      )}
+
       <BottomNav
         active="battles"
         onNavigate={(route) => {
