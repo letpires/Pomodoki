@@ -55,7 +55,7 @@ const tabs = ["all", "created", "joined"];
 // ------------------------------------------------------------
 function BattleCard({ battle }) {
   return (
-    <div className={`${styles.card} ${styles[battle.status]}`}>        
+    <div className={`${styles.card} ${styles[battle.status]}`}>
       <img
         className={styles.cardImage}
         src={battle.image}
@@ -69,7 +69,9 @@ function BattleCard({ battle }) {
       {/* Status badge */}
       <span
         className={`${styles.badge} ${
-          battle.status === "active" ? styles.badgeActive : styles.badgeCancelled
+          battle.status === "active"
+            ? styles.badgeActive
+            : styles.badgeCancelled
         }`}
       >
         {battle.status === "active" ? "Active" : "Cancelled"}
@@ -100,7 +102,7 @@ function NewBattleCard() {
 // ------------------------------------------------------------
 // Page component ---------------------------------------------
 // ------------------------------------------------------------
-export default function Battles({onHandlePage}) {
+export default function Battles({ onHandlePage }) {
   const [selectedTab, setSelectedTab] = useState("created");
   const [selectedBattle, setSelectedBattle] = useState(null);
   const router = useRouter();
@@ -118,25 +120,37 @@ export default function Battles({onHandlePage}) {
   };
 
   return (
-    <div className={styles.container}>
+    <div
+      className={styles.container}
+      style={{
+        backgroundColor: "#ffedae", 
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        height: "100vh",
+        paddingTop: "60px",
+      }}
+    >
       <Navbar />
 
       <h1 className={styles.pageTitle}>Battles</h1>
 
       {/* Tabs ------------------------------------------------*/}
-      <div className={styles.tabs}>
+      {/* <div className={styles.tabs}>
         {tabs.map((tab) => (
           <button
             key={tab}
             className={
-              selectedTab === tab ? `${styles.tab} ${styles.tabActive}` : styles.tab
+              selectedTab === tab
+                ? `${styles.tab} ${styles.tabActive}`
+                : styles.tab
             }
             onClick={() => setSelectedTab(tab)}
           >
             {tab.charAt(0).toUpperCase() + tab.slice(1)}
           </button>
         ))}
-      </div>
+      </div> */}
 
       {/* Grid ----------------------------------------------*/}
       <div className={styles.grid}>
@@ -144,7 +158,11 @@ export default function Battles({onHandlePage}) {
         {selectedTab !== "joined" && <NewBattleCard />}
 
         {battlesForTab(selectedTab).map((battle) => (
-          <div key={battle.id} onClick={() => setSelectedBattle(battle)} style={{ cursor: 'pointer' }}>
+          <div
+            key={battle.id}
+            onClick={() => setSelectedBattle(battle)}
+            style={{ cursor: "pointer" }}
+          >
             <BattleCard battle={battle} />
           </div>
         ))}

@@ -37,7 +37,15 @@ export default function Stats({onHandlePage}) {
   const router = useRouter();
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} 
+    style={{
+      backgroundColor: "#ffedae", 
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      minHeight: "100vh",
+      paddingTop: "50px",
+    }}>
       <Navbar />
 
       <div className={styles.buyTokens}>
@@ -78,7 +86,7 @@ export default function Stats({onHandlePage}) {
           <div className={styles.sectionTitle}>My Battles</div>
           {mockBattles.length === 0 ? (
             <div style={{ textAlign: "center", color: "#bfa76a", marginTop: 24 }}>
-              You haven't joined any battles yet.
+              You haven&apos;t joined any battles yet.
             </div>
           ) : (
             <div className={styles.myBattlesList}>

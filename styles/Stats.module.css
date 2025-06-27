@@ -1,77 +1,79 @@
 .container {
-    background: #f8f3e3;
-    min-height: 100vh;
-    max-width: 400px;
-    margin: 0 auto;
-    font-family: 'Press Start 2P', 'Courier New', Courier, monospace;
-    position: relative;
-  }
-  
-  .buyTokens {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 32px 0 24px 0;
-  }
-  
-  .arrow {
-    font-size: 64px;
-    color: #5a4a2c;
-    margin-bottom: 8px;
-  }
-  
-  .buyText {
-    font-size: 28px;
-    color: #5a4a2c;
-    font-family: inherit;
-  }
-  
-  .tabs {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-bottom: 24px;
-  }
-  
-  .tab {
-    background: #ede1c2;
-    border: none;
-    border-radius: 18px;
-    padding: 8px 28px;
-    font-size: 18px;
-    font-family: inherit;
-    color: #5a4a2c;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  
-  .tabActive {
-    background: #bfa76a;
-    color: #fffbe6;
-    font-weight: bold;
-  }
-  
-  .sectionTitle {
-    font-size: 22px;
-    color: #5a4a2c;
-    margin: 18px 0 10px 18px;
-    font-family: inherit;
-  }
-  
-  .overview {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 24px;
-    gap: 8px;
-  }
-  
-  .overviewCard {
-    background: #fffbe6;
-    border: 2px solid #bfa76a;
-    border-radius: 18px;
-    padding: 10px 16px;
-    min-width: 80px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+  background: #f8f3e3;
+  min-height: 100vh;
+  max-width: 400px;
+  margin: 0 auto;
+  font-family: 'Press Start 2P', 'Courier New', Courier, monospace;
+  position: relative;
+}
+
+.buyTokens {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 32px 0 24px 0;
+}
+
+.arrow {
+  font-size: 64px;
+  color: #5a4a2c;
+  margin-bottom: 8px;
+}
+
+.buyText {
+  font-size: 28px;
+  color: #5a4a2c;
+  font-family: inherit;
+}
+
+.tabs {
+  display: grid;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 24px 24px 24px;
+}
+
+.tab {
+  background: #ede1c2;
+  border: none;
+  border-radius: 18px;
+  padding: 8px 28px;
+  font-size: 18px;
+  font-family: inherit;
+  color: #5a4a2c;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.tabActive {
+  background: #bfa76a;
+  color: #fffbe6;
+  font-weight: bold;
+}
+
+.sectionTitle {
+  font-size: 22px;
+  color: #5a4a2c;
+  margin: 18px 0 10px 18px;
+  font-family: inherit;
+}
+
+.overview {
+  display: grid;
+  justify-content: space-around;
+  margin-bottom: 24px;
+  gap: 8px;
+}
+
+
+.overviewCard {
+  background: #fffbe6;
+  border: 2px solid #bfa76a;
+  border-radius: 18px;
+  padding: 10px 16px;
+  min-width: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
