@@ -1,26 +1,11 @@
-access(all) contract Battles { 
-
-    access(all)
-    enum BattleStatus: UInt8 {
-
-        access(all)
-        case pending
-
-        access(all)
-        case active
-        
-        access(all)
-        case done
-    }
-
+access(all) contract Battles {  
     access(all) struct Battle {
         access(all) let id: UInt64
         access(all) let owner: Address
         access(all) let options: [String]
         access(all) let startDate: UFix64
         access(all) let endDate: UFix64
-        access(all) var users: [Address]
-        access(all) var status: BattleStatus
+        access(all) var users: [Address] 
 
         init(id: UInt64, owner: Address, options: [String], startDate: UFix64, endDate: UFix64) {
             self.id = id
@@ -28,13 +13,8 @@ access(all) contract Battles {
             self.options = options
             self.startDate = startDate
             self.endDate = endDate
-            self.users = []
-            self.status = BattleStatus.pending
-        }
-
-        access(all) fun setStatus(newStatus: BattleStatus) {
-            self.status = newStatus
-        }
+            self.users = [] 
+        } 
     }
 
     access(self) var battles: {UInt64: Battle}
@@ -56,23 +36,12 @@ access(all) contract Battles {
     access(all) fun joinBattle(battleId: UInt64, user: Address) {
         pre {
             self.battles[battleId] != nil: "Battle does not exist"
-        }
-        
-        let battle = self.battles[battleId]!  
-        battle.users.append(user) 
+        } 
+
+        self.battles[battleId]!.users.append(user) 
     }
 
     access(all) fun getBattle(id: UInt64): Battle? {
         return self.battles[id]
-    }
-
-    access(all) fun updateStatus(id: UInt64, status: BattleStatus, account: &Account) {
-        let battle = self.battles[id]!
-        assert(battle.owner == account.address, message: "Only the battle owner can update status")
-        
-        // Use the setter function to update status
-        var updatedBattle = battle
-        updatedBattle.setStatus(newStatus: status)
-        self.battles[id] = updatedBattle
-    }
+    } 
 }

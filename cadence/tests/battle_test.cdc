@@ -1,10 +1,11 @@
 import Test
 import Battles from 0x0000000000000007
 
+
 access(all)
 fun setup() {
     let err = Test.deployContract(
-        name: "Battles",
+        name: "Battles", 
         path: "/Users/glaiconpeixer/devSea/Pomodoki/cadence/contracts/Battle.cdc",
         arguments: []
     )
@@ -13,7 +14,7 @@ fun setup() {
 
 access(all)
 fun testCreateBattle() {
-    let account = Test.createAccount()
+    let account  = Test.createAccount()
     let options = ["Option 1", "Option 2"]
     let endDate = 1000.0
     
@@ -36,9 +37,10 @@ fun testJoinBattle() {
     let battleId = Battles.createBattle(owner: owner.address, options: options, end: endDate)
     Battles.joinBattle(battleId: battleId, user: user.address)
     
-    let battle = Battles.getBattle(id: battleId)
-    log(battle)
+    let battle = Battles.getBattle(id: battleId)  
     Test.expect(battle != nil, Test.not(Test.beNil()))
-    Test.assertEqual(battle!.users.length, UInt64(1))
+    Test.assertEqual(battle!.users.length, 1)
     Test.assertEqual(battle!.users[0], user.address)
 }
+  
+ 
