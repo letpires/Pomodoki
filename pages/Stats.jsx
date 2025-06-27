@@ -12,7 +12,7 @@ const overview = [
 
 const tabs = ["Stats", "My battles", "NFTs"];
 
-export default function Stats() {
+export default function Stats({onHandlePage}) {
   const [selectedTab, setSelectedTab] = useState("Stats");
   const router = useRouter();
 
@@ -56,9 +56,9 @@ export default function Stats() {
       <BottomNav
         active="profile"
         onNavigate={(route) => {
-          if (route === "profile") router.push("/Stats");
-          if (route === "timer") router.push("/Setup");
-          if (route === "battles") router.push("/Battles");
+          if (route === "profile") onHandlePage("stats");
+          if (route === "timer") onHandlePage("setup");
+          if (route === "battles") onHandlePage("battles");
         }}
       />
     </div>

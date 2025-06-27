@@ -90,7 +90,7 @@ function NewBattleCard() {
 // ------------------------------------------------------------
 // Page component ---------------------------------------------
 // ------------------------------------------------------------
-export default function Battles() {
+export default function Battles({onHandlePage}) {
   const [selectedTab, setSelectedTab] = useState("created");
   const router = useRouter();
 
@@ -141,9 +141,9 @@ export default function Battles() {
       <BottomNav
         active="battles"
         onNavigate={(route) => {
-          if (route === "profile") router.push("/Stats");
-          if (route === "timer") router.push("/Setup");
-          if (route === "battles") router.push("/Battles");
+          if (route === "profile") onHandlePage("stats");
+          if (route === "timer") onHandlePage("setup");
+          if (route === "battles") onHandlePage("battles");
         }}
       />
     </div>

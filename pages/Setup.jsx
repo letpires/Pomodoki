@@ -14,7 +14,7 @@ function formatDuration(minutes) {
   return m === 0 ? `${h}h` : `${h}h${m.toString().padStart(2, '0')}`;
 }
 
-const Setup = ({ onStart, selectedAvatar = "tomash" }) => {
+const Setup = ({ onStart, selectedAvatar = "tomash", onHandlePage }) => {
   const [selectedTime, setSelectedTime] = useState(25);
   const [stake, setStake] = useState(1.0);
   const [isLoading, setIsLoading] = useState(false);
@@ -195,9 +195,9 @@ const Setup = ({ onStart, selectedAvatar = "tomash" }) => {
       <BottomNav
         active="timer"
         onNavigate={(route) => {
-          if (route === "profile") router.push("/Stats");
-          if (route === "timer") router.push("/Setup");
-          if (route === "battles") router.push("/Battles");
+          if (route === "profile") onHandlePage("stats");
+          if (route === "timer") onHandlePage("setup");
+          if (route === "battles") onHandlePage("battles");
         }}
       />
     </>
