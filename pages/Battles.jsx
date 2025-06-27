@@ -1,8 +1,13 @@
-// pages/Battles.jsx
 import React, { useState } from "react";
-import styles from "../styles/Battles.module.css"; // vamos criar esse CSS depois
+import { useRouter } from "next/router";
+import styles from "../styles/Battles.module.css";
 import Navbar from "../components/Navbar";
+import { Plus } from "lucide-react";
+import BottomNav from "../components/BottomNav";
 
+// ------------------------------------------------------------
+// Mock data ---------------------------------------------------
+// ------------------------------------------------------------
 const mockBattles = [
   {
     id: 1,
@@ -10,7 +15,7 @@ const mockBattles = [
     pool: 2.5,
     players: 3,
     status: "active",
-    image: "/images/batatack_session.png",
+    image: "/lovable-uploads/409d1706-dffe-4c5b-a77a-2f95d5577442.png",
     entryFee: false,
   },
   {
@@ -19,7 +24,7 @@ const mockBattles = [
     pool: 2.5,
     players: 3,
     status: "cancelled",
-    image: "/images/batatack_failure.png",
+    image: "/lovable-uploads/409d1706-dffe-4c5b-a77a-2f95d5577442.png",
     entryFee: false,
   },
   {
@@ -28,19 +33,39 @@ const mockBattles = [
     pool: 2.5,
     players: 3,
     status: "active",
-    image: "/images/tomash_session.png",
+    image: "/lovable-uploads/409d1706-dffe-4c5b-a77a-2f95d5577442.png",
     entryFee: false,
   },
 ];
 
-const tabs = ["All", "Created", "Joined"];
+const tabs = ["all", "created", "joined"];
 
+// ------------------------------------------------------------
+// Card components --------------------------------------------
+// ------------------------------------------------------------
 function BattleCard({ battle }) {
   return (
-    <div className={styles.card + " " + styles[battle.status]}>
-      <img src={battle.image} alt={battle.title} className={styles.cardImage} />
-      {battle.status === "active" && <span className={styles.active}>Active</span>}
-      {battle.status === "cancelled" && <span className={styles.cancelled}>Cancelled</span>}
+    <div className={`${styles.card} ${styles[battle.status]}`}>        
+      <img
+        className={styles.cardImage}
+        src={battle.image}
+        alt={battle.title}
+        onError={(e) => {
+          e.currentTarget.src =
+            "https://images.unsplash.com/photo-1518770660439-4636190af475?w=300&h=200&fit=crop";
+        }}
+      />
+
+      {/* Status badge */}
+      <span
+        className={`${styles.badge} ${
+          battle.status === "active" ? styles.badgeActive : styles.badgeCancelled
+        }`}
+      >
+        {battle.status === "active" ? "Active" : "Cancelled"}
+      </span>
+
+      {/* Card content */}
       <div className={styles.cardContent}>
         <div className={styles.entryFee}>
           {battle.entryFee ? `Entry fee: ${battle.entryFee}` : "No entry fee"}
@@ -53,36 +78,74 @@ function BattleCard({ battle }) {
   );
 }
 
+function NewBattleCard() {
+  return (
+    <div className={styles.newBattle}>
+      <Plus className={styles.plus} />
+      <span>New Battle</span>
+    </div>
+  );
+}
+
+// ------------------------------------------------------------
+// Page component ---------------------------------------------
+// ------------------------------------------------------------
 export default function Battles() {
-  const [selectedTab, setSelectedTab] = useState("All");
+  const [selectedTab, setSelectedTab] = useState("created");
+  const router = useRouter();
+
+  // Functions to filter battles by tab -----------------------
+  const battlesForTab = (tab) => {
+    switch (tab) {
+      case "created":
+        return mockBattles.filter((b) => b.status === "active");
+      case "joined":
+        return mockBattles.filter((b) => b.status === "cancelled");
+      default:
+        return mockBattles;
+    }
+  };
 
   return (
-    <div className={styles.container} style={{ maxWidth: 380, minWidth: 320, width: '100vw', maxHeight: 600, minHeight: 500, height: '100vh', margin: '0 auto', overflowY: 'auto', paddingTop: 60 }}>
+    <div className={styles.container}>
       <Navbar />
-      <h1 className={styles.title}>Battles</h1>
+
+      <h1 className={styles.pageTitle}>Battles</h1>
+
+      {/* Tabs ------------------------------------------------*/}
       <div className={styles.tabs}>
-        {tabs.map(tab => (
+        {tabs.map((tab) => (
           <button
             key={tab}
-            className={selectedTab === tab ? styles.activeTab : ""}
+            className={
+              selectedTab === tab ? `${styles.tab} ${styles.tabActive}` : styles.tab
+            }
             onClick={() => setSelectedTab(tab)}
           >
-            {tab}
+            {tab.charAt(0).toUpperCase() + tab.slice(1)}
           </button>
         ))}
       </div>
+
+      {/* Grid ----------------------------------------------*/}
       <div className={styles.grid}>
-        <div className={styles.newBattle}>
-          <span>＋</span>
-          <div>New Battle</div>
-        </div>
-        {mockBattles.map(battle => (
+        {/* New battle is shown on every tab except joined */}
+        {selectedTab !== "joined" && <NewBattleCard />}
+
+        {battlesForTab(selectedTab).map((battle) => (
           <BattleCard key={battle.id} battle={battle} />
         ))}
       </div>
-      <div className={styles.footer}>
-        {/* Ícones do menu inferior */}
-      </div>
+
+      {/* footer fixo — ícones etc. */}
+      <BottomNav
+        active="battles"
+        onNavigate={(route) => {
+          if (route === "profile") router.push("/Stats");
+          if (route === "timer") router.push("/Setup");
+          if (route === "battles") router.push("/Battles");
+        }}
+      />
     </div>
   );
 }
