@@ -4,6 +4,14 @@ import styles from "../styles/Leaderboard.module.css";
 export default function Leaderboard({ leaderboard, onClose }) {
   return (
     <div className={styles.container}>
+      <button
+        className={styles.closeX}
+        onClick={onClose}
+        aria-label="Close"
+        style={{ position: 'absolute', top: 12, right: 16, background: 'none', border: 'none', fontSize: 28, color: '#655f4d', cursor: 'pointer', zIndex: 10 }}
+      >
+        ×
+      </button>
       <h1 className={styles.title}>Leaderboard</h1>
       <div className={styles.list}>
         {leaderboard.map((user) => (
@@ -22,7 +30,6 @@ export default function Leaderboard({ leaderboard, onClose }) {
         ))}
       </div>
       <button className={styles.joinBtn}>I want to join</button>
-      <button onClick={onClose} className={styles.closeBtn}>Fechar</button>
     </div>
   );
 } 
