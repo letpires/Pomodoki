@@ -94,6 +94,7 @@ const tabs = ["all", "created", "joined"];
 // Card components --------------------------------------------
 // ------------------------------------------------------------
 function BattleCard({ battle }) {
+  const router = useRouter();
   return (
     <div className={`${styles.card} ${styles[battle.status]}`}>
       <img
@@ -125,6 +126,15 @@ function BattleCard({ battle }) {
         <div className={styles.title}>{battle.title}</div>
         <div className={styles.pool}>🪙 Pool: {battle.pool}</div>
         <div className={styles.players}>Battle {battle.players} players</div>
+        <button
+          className={styles.leaderboardBtn}
+          onClick={(e) => {
+            e.stopPropagation();
+            router.push(`/Leaderboard?id=${battle.id}`);
+          }}
+        >
+          Leaderboard
+        </button>
       </div>
     </div>
   );
@@ -203,7 +213,9 @@ export default function Battles({ onHandlePage }) {
             onClick={() => setSelectedBattle(battle)}
             style={{ cursor: "pointer" }}
           >
-            <BattleCard battle={battle} />
+            <BattleCard
+              battle={battle}
+            />
           </div>
         ))}
       </div>

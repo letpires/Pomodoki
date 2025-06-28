@@ -5,6 +5,9 @@
   font-family: 'Press Start 2P', 'Courier New', Courier, monospace;
   width: 400px;
   margin: 0 auto;
+  grid-template-columns: 1fr 1fr; /* Define duas colunas de igual largura */
+  display: grid;
+
 }
 
 .header {
@@ -72,13 +75,12 @@
 }
 .grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr)); /* 2 colunas fixas   */
+  gap: 24px;
+  max-width: 700px;
   width: 100%;
-  max-width: 100%;
   margin: 0 auto;
-  padding: 0 16px;
-  box-sizing: border-box;
+  padding: 0 8px;
 }
 .newBattle {
   display: flex;
@@ -88,16 +90,16 @@
   border: 3px dashed #bfa76a;
   border-radius: 28px;
   height: 140px;
+  /* width: 40%;    */
   font-size: 22px;
   color: #bfa76a;
   background: #fffbe6;
   cursor: pointer;
   transition: all 0.3s ease;
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
   box-sizing: border-box;
   box-shadow: 0 4px 16px rgba(226, 201, 143, 0.2);
+  max-width: 100%;
+  min-width: 0;
 }
 .newBattle:hover {
   background: #f8e7b9;
@@ -138,7 +140,7 @@
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 16px rgba(226, 201, 143, 0.3);
-  width: 100%;
+  /* width: 40%;    */
   max-width: 100%;
   min-width: 0;
   box-sizing: border-box;
@@ -152,10 +154,9 @@
 }
 .cardImage {
   width: 100%;
-  height: 110px;
+  height: 60px;
   object-fit: cover;
   border-bottom: 2px solid #e2c98f;
-  border-radius: 25px 25px 0 0;
 }
 .cardContent {
   padding: 12px 16px 0 16px;
@@ -222,18 +223,28 @@
   margin-bottom: 8px;
 }
 
-@media (max-width: 420px) {
-  .container {
-    max-width: 100vw;
-    padding: 0 2px 32px 2px;
-  }
+.leaderboardBtn {
+  margin-top: 8px;
+  background: #655f4d;
+  color: #fffbe6;
+  font-family: 'VT323', monospace;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  padding: 4px 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.leaderboardBtn:hover {
+  background: #bfa76a;
+}
+
+@media (max-width: 500px) {
   .grid {
     grid-template-columns: 1fr;
-    gap: 10px;
+    gap: 16px;
     padding: 0 8px;
-  }
- .newBattle {
-    height: 120px;
   }
 }
 
@@ -251,4 +262,17 @@
   .footer {
     gap: 24px;
   }
+}
+
+.leaderboardOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 } 
