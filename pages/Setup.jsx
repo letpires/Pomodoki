@@ -1,9 +1,11 @@
 import React, { useState, useContext } from "react";
 import * as fcl from "@onflow/fcl";
+import { useRouter } from "next/router";
 import { CurrentUserContext } from "../context/currentUserProvider";
 import Navbar from "../components/Navbar"; 
 import stakeCode from "../constants/stake";
 import PixelPomo from '../components/PixelPomo';
+import BottomNav from "../components/BottomNav";
 
 function formatDuration(minutes) {
   if (minutes < 60) return `${minutes}m`;
@@ -12,13 +14,14 @@ function formatDuration(minutes) {
   return m === 0 ? `${h}h` : `${h}h${m.toString().padStart(2, '0')}`;
 }
 
-const Setup = ({ onStart, selectedAvatar = "tomash" }) => {
+const Setup = ({ onStart, selectedAvatar = "tomash", onHandlePage }) => {
   const [selectedTime, setSelectedTime] = useState(25);
   const [stake, setStake] = useState(1.0);
   const [isLoading, setIsLoading] = useState(false);
   const { balance, balanceLoading, fetchBalance, currentUser, magic } =
     useContext(CurrentUserContext);
   const AUTHORIZATION_FUNCTION = magic?.flow.authorization;
+  const router = useRouter();
 
   const handleStart = async () => {
     try {
@@ -78,7 +81,7 @@ const Setup = ({ onStart, selectedAvatar = "tomash" }) => {
             alignItems: 'center',
           }}
         >
-          <div style={{ margin: "32px 0 8px 0" }}>
+          <div style={{ margin: "10px 0 8px 0" }}>
             <PixelPomo type={selectedAvatar} style={{ width: 160, height: 160 }} />
           </div>
           <div
@@ -86,7 +89,8 @@ const Setup = ({ onStart, selectedAvatar = "tomash" }) => {
               border: "2px solid #5c4435",
               borderRadius: "6px",
               padding: "10px 10px 18px 10px",
-              marginBottom: "10px",
+              marginBottom: "4px",
+              marginTop: "-3px",
               background: "none",
               width: 370,
               maxWidth: "100%",
@@ -111,27 +115,12 @@ const Setup = ({ onStart, selectedAvatar = "tomash" }) => {
                 '--percent': `${percent}%`
               }}
             />
-          </div>
-
-          <div
-            style={{
-              border: "2px solid #5c4435",
-              borderRadius: "6px",
-              padding: "10px 10px 8px 10px",
-              marginBottom: "10px",
-              background: "none",
-              width: 370,
-              maxWidth: "100%",
-              fontFamily: "'VT323', monospace",
-              fontSize: "1.3rem",
-              color: "#5c4435",
-            }}
-          >
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
                 gap: 12,
+                marginTop: 16,
                 marginBottom: 8,
               }}
             >
@@ -157,8 +146,7 @@ const Setup = ({ onStart, selectedAvatar = "tomash" }) => {
               <span style={{ fontSize: "1.25rem" }}>Flow</span>
             </div>
             <div style={{ fontSize: "1.25rem" }}>
-              Balance:{" "}
-              {balanceLoading ? "Loading..." : `${balance.toFixed(2)} Flow`}
+              Balance: {balanceLoading ? "Loading..." : `${balance.toFixed(2)} Flow`}
               <button
                 onClick={fetchBalance}
                 disabled={balanceLoading}
@@ -191,7 +179,7 @@ const Setup = ({ onStart, selectedAvatar = "tomash" }) => {
               borderRadius: "4px",
               boxShadow: isLoading ? "2px 2px #5c4435" : "4px 4px #5c4435",
               padding: "10px 24px",
-              marginTop: "16px",
+              marginTop: "0px",
               cursor: isLoading ? "not-allowed" : "pointer",
               display: "block",
               marginLeft: "auto",
@@ -200,10 +188,18 @@ const Setup = ({ onStart, selectedAvatar = "tomash" }) => {
               transition: "all 0.2s ease",
             }}
           >
-            {isLoading ? "Loading..." : "Focus"}
+            Focus
           </button>
         </div>
       </div>
+      <BottomNav
+        active="timer"
+        onNavigate={(route) => {
+          if (route === "profile") onHandlePage("stats");
+          if (route === "timer") onHandlePage("setup");
+          if (route === "battles") onHandlePage("battles");
+        }}
+      />
     </>
   );
 };

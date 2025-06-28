@@ -7,6 +7,8 @@ import Success from "./Success";
 import Failure from "./Failure";
 import { CurrentUserContext } from "../context/currentUserProvider";
 import AllSet from "./Allset";
+import Stats from "./Stats";
+import Battles from "./Battles";
 
 export default function Home() {
   const [page, setPage] = useState("welcome");
@@ -104,7 +106,7 @@ export default function Home() {
 
     setPage("timer");
   };
-
+ 
   const handleConnectWallet = async () => {
     await handleLogin();
     setPage("allset");
@@ -121,7 +123,7 @@ export default function Home() {
   if (page === "avatar")
     return <AvatarSelection onConfirm={handleConfirmAvatar} />;
   if (page === "setup")
-    return <Setup onStart={handleSetup} selectedAvatar={selectedAvatar} />;
+    return <Setup onStart={handleSetup} selectedAvatar={selectedAvatar} onHandlePage={setPage} />;
   if (page === "timer") {
     return (
       <PomodoroTimer
@@ -150,6 +152,8 @@ export default function Home() {
         onTryAgain={() => setPage("setup")}
       />
     );
+  if (page === "stats") return <Stats onHandlePage={setPage} />;
+  if (page === "battles") return <Battles onHandlePage={setPage} />;
 
   return null;
 }

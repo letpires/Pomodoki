@@ -1,0 +1,95 @@
+.container {
+  background: #f8f3e3;
+  min-height: 100vh;
+  max-width: 400px;
+  margin: 0 auto;
+  font-family: 'Press Start 2P', 'Courier New', Courier, monospace;
+  position: relative;
+}
+
+.title {
+  text-align: center;
+  font-size: 32px;
+  margin: 32px 0 16px 0;
+  color: #5a4a2c;
+  letter-spacing: 2px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 32px;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  background: #fffbe6;
+  border: 2px solid #bfa76a;
+  border-radius: 24px;
+  padding: 12px 20px;
+  box-shadow: 0 2px 8px #e2c98f44;
+}
+
+.rank {
+  font-size: 22px;
+  font-weight: bold;
+  margin-right: 12px;
+  color: #5a4a2c;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  margin-right: 16px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+}
+
+.name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #5a4a2c;
+}
+
+.focus {
+  font-size: 14px;
+  color: #7c6a4d;
+}
+
+.joinBtn {
+  display: block;
+  margin: 32px auto 0 auto;
+  background: #4caf50;
+  color: #fffbe6;
+  font-family: inherit;
+  font-size: 22px;
+  border: 3px solid #5a4a2c;
+  border-radius: 8px;
+  padding: 12px 32px;
+  cursor: pointer;
+  box-shadow: 3px 4px 0 #5a4a2c;
+  transition: background 0.2s;
+}
+
+.joinBtn:hover {
+  background: #388e3c;
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #f8f3e3;
+  border-top: 2px solid #e2c98f;
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  padding: 16px 0 8px 0;
+  z-index: 10;
+}
