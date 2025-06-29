@@ -4,6 +4,7 @@ import { Magic } from "magic-sdk";
 import { FlowExtension } from "@magic-ext/flow";
 import GET_USER_STATS_CADENCE from "../constants/getUserStats";
 import GET_BATTLES_CADENCE from "../constants/getBattle";
+import CREATE_BATTLE_CADENCE from "../constants/createBattle";
 
 export const CurrentUserContext = createContext({});
 
@@ -113,7 +114,7 @@ const CurrentUserProvider = ({ children }) => {
   };
 
   // get user stats
-  const getUserHistory22 = async () => {
+  const getUserHistory = async () => {
     if (!currentUser || !currentUser.publicAddress) {
       console.warn("No current user or public address available");
       return null;
@@ -134,11 +135,22 @@ const CurrentUserProvider = ({ children }) => {
   // get battles
   const getBattles = useCallback(async () => {
     if (!currentUser) return;
-    const battles = await fcl.query(GET_BATTLES_CADENCE, {
+    const battles = await fcl.query({
+      cadence: GET_BATTLES_CADENCE,
       args: (arg, t) => [],
     });
+    console.log("battles", battles);
     return battles;
   }, [currentUser]);
+
+  const createBattle = async (endDate) => {
+    console.log("createBattle", endDate);
+    const battle = await fcl.mutate({
+      cadence: CREATE_BATTLE_CADENCE,
+      args: (arg, t) => [arg(endDate, t.UFix64)],
+    });
+    return battle;
+  };
 
   useEffect(() => {
     if (!network) return; 
@@ -200,7 +212,8 @@ const CurrentUserProvider = ({ children }) => {
         setNetwork,
         loadingWallet,
         getBattles,
-        getUserHistory: getUserHistory22,
+        createBattle,
+        getUserHistory,
         magic,
         isLoggedIn,
         fetchBalance, // Expose fetchBalance function for manual refresh

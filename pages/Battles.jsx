@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import { useRouter } from "next/router";
+import React, { useState, useEffect, useContext } from "react";
 import styles from "../styles/Battles.module.css";
 import Navbar from "../components/Navbar";
 import { Plus } from "lucide-react";
 import BottomNav from "../components/BottomNav";
 import Leaderboard from "../components/Leaderboard";
+import { CurrentUserContext } from "../context/CurrentUserProvider";
+import CreateBattle from "../components/CreateBattle";
 
 // ------------------------------------------------------------
 // Mock data ---------------------------------------------------
@@ -90,13 +91,9 @@ const mockBattles = [
 
 const tabs = ["all", "created", "joined"];
 
-// ------------------------------------------------------------
-// Card components --------------------------------------------
-// ------------------------------------------------------------
 function BattleCard({ battle }) {
-  const router = useRouter();
   return (
-    <div className={`${styles.card} ${styles[battle.status]}`}>
+    <div className={`${styles.card} ${styles[battle.status]}`} key={battle.id}>
       <div className={styles.cardImageWrapper}>
         <img
           className={styles.cardImage}
@@ -129,22 +126,38 @@ function BattleCard({ battle }) {
   );
 }
 
-function NewBattleCard() {
+function NewBattleCard({ onOpenCreateBattle }) {
   return (
-    <div className={styles.newBattle}>
+    <div className={styles.newBattle} onClick={onOpenCreateBattle}>
       <Plus className={styles.plus} />
       <span className={styles.newBattleTitle}>New Battle</span>
     </div>
   );
 }
 
-// ------------------------------------------------------------
-// Page component ---------------------------------------------
-// ------------------------------------------------------------
 export default function Battles({ onHandlePage }) {
   const [selectedTab, setSelectedTab] = useState("created");
   const [selectedBattle, setSelectedBattle] = useState(null);
-  const router = useRouter();
+  const { currentUser, getBattles } = useContext(CurrentUserContext);
+  const [battles, setBattles] = useState(mockBattles);
+  const [isCreateBattleOpen, setIsCreateBattleOpen] = useState(false);
+
+  useEffect(() => {
+    if (!currentUser) return;
+    const fetchBattles = async () => {
+      const battles = await getBattles();
+      console.log("battles", battles);
+      const newBattles = battles.map((battle) => ({
+        ...battle,
+        title: battle.name,
+        deadline: battle.endDate,
+        image: "/images/hackathon.png",
+        status: "active",
+      }));
+      setBattles(newBattles);
+    };
+    fetchBattles();
+  }, [currentUser]);
 
   // Functions to filter battles by tab -----------------------
   const battlesForTab = (tab) => {
@@ -158,11 +171,16 @@ export default function Battles({ onHandlePage }) {
     }
   };
 
+  const handleOpenCreateBattle = () => {
+    console.log("handleOpenCreateBattle");
+    setIsCreateBattleOpen(true);
+  };
+
   return (
     <div
       className={styles.container}
       style={{
-        backgroundColor: "#ffedae", 
+        backgroundColor: "#ffedae",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -175,7 +193,7 @@ export default function Battles({ onHandlePage }) {
       <h1 className={styles.pageTitle}>Battles</h1>
 
       {/* Tabs ------------------------------------------------*/}
-      <div className={styles.tabs}>
+      {/* <div className={styles.tabs}>
         {tabs.map((tab) => (
           <button
             key={tab}
@@ -185,21 +203,19 @@ export default function Battles({ onHandlePage }) {
             {tab.charAt(0).toUpperCase() + tab.slice(1)}
           </button>
         ))}
-      </div>
+      </div> */}
 
       {/* Grid ----------------------------------------------*/}
       <div className={styles.grid}>
         {/* New battle é mostrado em todos os filtros, sempre como o primeiro card */}
-        <NewBattleCard />
-        {battlesForTab(selectedTab).map((battle) => (
+        <NewBattleCard onOpenCreateBattle={handleOpenCreateBattle} />
+        {battles.map((battle) => (
           <div
             key={battle.id}
             onClick={() => setSelectedBattle(battle)}
             style={{ cursor: "pointer" }}
           >
-            <BattleCard
-              battle={battle}
-            />
+            <BattleCard battle={battle} />
           </div>
         ))}
       </div>
@@ -211,6 +227,12 @@ export default function Battles({ onHandlePage }) {
             leaderboard={selectedBattle.leaderboard || mockLeaderboard}
             onClose={() => setSelectedBattle(null)}
           />
+        </div>
+      )}
+
+      {isCreateBattleOpen && (
+        <div className={styles.createBattleOverlay}>
+          <CreateBattle onClose={() => setIsCreateBattleOpen(false)} />
         </div>
       )}
 
