@@ -43,4 +43,8 @@ access(all) contract Battles {
     access(all) fun getBattle(id: UInt64): Battle? {
         return self.battles[id]
     }  
+    
+    access(all) fun getBattles( ): [Battle] {
+        return self.battles.values  
+    }  
 }

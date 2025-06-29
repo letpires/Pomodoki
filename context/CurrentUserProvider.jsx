@@ -140,12 +140,17 @@ const CurrentUserProvider = ({ children }) => {
       network === "testnet"
         ? process.env.NEXT_PUBLIC_TESTNET_FLOWTOKEN_ADDRESS
         : process.env.NEXT_PUBLIC_MAINNET_FLOWTOKEN_ADDRESS;
+    const battlesContractAddress =
+      network === "testnet"
+        ? process.env.NEXT_PUBLIC_TESTNET_BATTLES_ADDRESS
+        : process.env.NEXT_PUBLIC_MAINNET_BATTLES_ADDRESS;
 
     fcl.config({
       "flow.network": network,
       "accessNode.api": `https://rest-${network}.onflow.org`,
       "discovery.wallet": `https://fcl-discovery.onflow.org/${network}/authn`,
       "0xStakingContract": stakingContractAddress,
+      "0xBattles": battlesContractAddress,
       "0xFungibleToken": fungibleTokenAddress,
       "0xFlowToken": flowTokenAddress,
     });
