@@ -216,14 +216,72 @@ async function executeCreateBattle() {
   }
 }
 
-// get battle stats
-// join battle
+// execute get user stats
+async function executeGetBattleStats() {
+  try { 
+    const transactionCode = fs.readFileSync(
+      path.join(__dirname, "../scripts/getBattleStats.cdc"),
+      "utf8"
+    );
 
+    const result = await fcl.query({
+      cadence: transactionCode,
+      args: (arg, t) => [arg("1", t.UInt64)],
+    }) 
+    console.log("🔑 Result:", result);
+  } catch (error) {
+    console.error("❌ Error executing get battle stats transaction:", error);
+  }
+} 
+
+
+// execute get user stats
+async function executeJoinBattle() {
+  try { 
+    // Create authorization function for emulator
+    const authz = await authorizeMinter(
+      EMULATOR_ACCOUNT.address,
+      EMULATOR_ACCOUNT.keyIndex,
+      EMULATOR_ACCOUNT.privateKey
+    );
+    
+    const transactionCode = fs.readFileSync(
+      path.join(__dirname, "../transactions/joinBattle.cdc"),
+      "utf8"
+    );
+
+    const args = [ 
+      fcl.arg("1", fcl.t.UInt64), 
+    ];
+
+    console.log("🔑 Arguments:", args);
+
+    const transactionId = await fcl.send([
+      fcl.transaction(transactionCode),
+      fcl.args(args),
+      fcl.proposer(authz),
+      fcl.authorizations([authz]),
+      fcl.payer(authz),
+      fcl.limit(1000),
+    ]);
+    const transaction = await fcl.tx(transactionId).onceSealed();
+
+    if (transaction.status === 4) {
+      console.log("✅ Transaction successful!");
+    } else {
+      console.log("❌ Transaction failed:", transaction);
+    }
+  } catch (error) {
+    console.error("❌ Error executing get user stats transaction:", error);
+  }
+} 
 
 // Export functions for use in other files
 module.exports = {
   executeStakeFromFile,
   executeGetUserStats,
   executeCreateBattle,
+  executeGetBattleStats,
+  executeJoinBattle,
   EMULATOR_ACCOUNT,
 };
