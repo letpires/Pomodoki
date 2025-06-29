@@ -6,6 +6,7 @@ import GET_USER_STATS_CADENCE from "../constants/getUserStats";
 import GET_BATTLES_CADENCE from "../constants/getBattle";
 import CREATE_BATTLE_CADENCE from "../constants/createBattle";
 import JOIN_BATTLE_CADENCE from "../constants/joinBattle";
+import GET_BATTLE_STATS_CADENCE from "../constants/getBattleStats";
 
 export const CurrentUserContext = createContext({});
 
@@ -17,7 +18,7 @@ const CurrentUserProvider = ({ children }) => {
   const [magic, setMagic] = useState(null);
   const [network, setNetwork] = useState(null);
   const [loadingWallet, setLoadingWallet] = useState(true);
-  const AUTHORIZATION_FUNCTION = magic?.flow.authorization; 
+  const AUTHORIZATION_FUNCTION = magic?.flow.authorization;
 
   // Load network from localStorage on component mount
   useEffect(() => {
@@ -135,21 +136,35 @@ const CurrentUserProvider = ({ children }) => {
   };
 
   // get battles
-  const getBattles = useCallback(async () => {
-    if (!currentUser) return;
+  const getBattles = async () => { 
     const battles = await fcl.query({
       cadence: GET_BATTLES_CADENCE,
       args: (arg, t) => [],
     });
     console.log("battles", battles);
     return battles;
-  }, [currentUser]);
+  };
 
-  const createBattle = async (endDate, prize, title, image) => { 
-    const timestamp = Math.floor(new Date(endDate).getTime() / 1000); 
+  // get battle stats
+  const getBattleStats = async (battleId) => { 
+    const battle = await fcl.query({
+      cadence: GET_BATTLE_STATS_CADENCE,
+      args: (arg, t) => [arg(battleId, t.UInt64)],
+    });
+    console.log("battle", battle);
+    return battle;
+  };
+
+  const createBattle = async (endDate, prize, title, image) => {
+    const timestamp = Math.floor(new Date(endDate).getTime() / 1000);
     const battle = await fcl.mutate({
       cadence: CREATE_BATTLE_CADENCE,
-      args: (arg, t) => [arg(timestamp, t.UInt64), arg(prize, t.String), arg(title, t.String), arg(image, t.String)],
+      args: (arg, t) => [
+        arg(timestamp, t.UInt64),
+        arg(prize, t.String),
+        arg(title, t.String),
+        arg(image, t.String),
+      ],
       proposer: AUTHORIZATION_FUNCTION,
       authorizations: [AUTHORIZATION_FUNCTION],
       payer: AUTHORIZATION_FUNCTION,
@@ -158,7 +173,7 @@ const CurrentUserProvider = ({ children }) => {
     return battle;
   };
 
-  const joinBattle = async (battleId) => { 
+  const joinBattle = async (battleId) => {
     const battle = await fcl.mutate({
       cadence: JOIN_BATTLE_CADENCE,
       args: (arg, t) => [arg(battleId, t.UInt64)],
@@ -232,6 +247,7 @@ const CurrentUserProvider = ({ children }) => {
         getBattles,
         createBattle,
         joinBattle,
+        getBattleStats,
         getUserHistory,
         magic,
         isLoggedIn,

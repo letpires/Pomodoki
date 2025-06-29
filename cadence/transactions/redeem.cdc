@@ -5,11 +5,11 @@ import StakingContract_V2 from 0xStakingContract
     transaction {
         prepare(signer: auth(Storage, Capabilities) &Account) {
             // Get the staking resource
-            let staking <- signer.storage.load<@StakingContract_V2.Staking>(from: /storage/StakingV1)
+            let staking <- signer.storage.load<@StakingContract_V2.Staking>(from: /storage/StakingV2)
                 ?? panic("No staking resource found")
 
             // Get the vault from staking
-            let vault <- staking.cleanup()
+            let vault <- staking.cleanup(address: signer)
             
             // Get the receiver capability
             let receiver = signer.capabilities.borrow<&{FungibleToken.Receiver}>(/public/flowTokenReceiver)
@@ -20,6 +20,6 @@ import StakingContract_V2 from 0xStakingContract
 
             // Clean up the staking resource
             destroy staking
-            signer.capabilities.unpublish(/public/StakingV1)
+            signer.capabilities.unpublish(/public/StakingV2)
         }
     }

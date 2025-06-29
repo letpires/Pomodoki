@@ -17,19 +17,19 @@ transaction(amount: UFix64, timeCommitted: UInt64) {
         let staking <- StakingContract_V2.createStaking(vault: <- flowVault)
         
         // Check if storage path exists and remove if it does
-        if signer.storage.check<@StakingContract_V2.Staking>(from: /storage/StakingV1) {
-            let oldStaking <- signer.storage.load<@StakingContract_V2.Staking>(from: /storage/StakingV1)
+        if signer.storage.check<@StakingContract_V2.Staking>(from: /storage/StakingV2) {
+            let oldStaking <- signer.storage.load<@StakingContract_V2.Staking>(from: /storage/StakingV2)
             destroy oldStaking
-            signer.capabilities.unpublish(/public/StakingV1)
+            signer.capabilities.unpublish(/public/StakingV2)
         }
         
-        signer.storage.save(<- staking, to: /storage/StakingV1)
+        signer.storage.save(<- staking, to: /storage/StakingV2)
         signer.capabilities.publish(
-            signer.capabilities.storage.issue<&StakingContract_V2.Staking>(/storage/StakingV1),
-            at: /public/StakingV1
+            signer.capabilities.storage.issue<&StakingContract_V2.Staking>(/storage/StakingV2),
+            at: /public/StakingV2
         )
 
-        self.stakingRef = signer.capabilities.borrow<&StakingContract_V2.Staking>(/public/StakingV1)
+        self.stakingRef = signer.capabilities.borrow<&StakingContract_V2.Staking>(/public/StakingV2)
             ?? panic("Could not borrow Staking reference")
         self.account = signer
     }

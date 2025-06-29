@@ -1,4 +1,4 @@
-const GET_BATTLE_CADENCE = `
+const GET_BATTLES_CADENCE = `
 import BattleContract_V2 from 0xBattleContract
 
 access(all) fun main(): [BattleContract_V2.Battle] { 
@@ -6,4 +6,4 @@ access(all) fun main(): [BattleContract_V2.Battle] {
 } 
 `;
 
-export default GET_BATTLE_CADENCE;
+export default GET_BATTLES_CADENCE;
