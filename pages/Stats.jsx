@@ -134,7 +134,7 @@ export default function Stats({ onHandlePage }) {
         }}
       >
         <div className={styles.buyCircle}>
-          <span className={styles.buyArrow}>$</span>
+          <span className={styles.buyArrow}>↙</span>
         </div>
         <div className={styles.buyText}>Buy tokens</div>
       </div>
