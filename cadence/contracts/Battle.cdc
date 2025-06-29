@@ -1,23 +1,21 @@
 access(all) contract Battles {  
     access(all) struct Battle {
         access(all) let id: UInt64
-        access(all) let owner: Address
-        access(all) let options: [String]
+        access(all) let owner: Address 
         access(all) let startDate: UFix64
         access(all) let endDate: UFix64
-        access(all) var users: [Address] 
+        access(all) var users: [Address]  
 
-        init(id: UInt64, owner: Address, options: [String], startDate: UFix64, endDate: UFix64) {
+        init(id: UInt64, owner: Address,  startDate: UFix64, endDate: UFix64) {
             self.id = id
-            self.owner = owner
-            self.options = options
+            self.owner = owner 
             self.startDate = startDate
             self.endDate = endDate
-            self.users = [] 
-        } 
+            self.users = []  
+        }  
     }
 
-    access(self) var battles: {UInt64: Battle}
+    access(self) var battles: {UInt64: Battle} 
     access(self) var nextBattleId: UInt64
 
     init() {
@@ -25,10 +23,11 @@ access(all) contract Battles {
         self.nextBattleId = 1
     }
 
-    access(all) fun createBattle(owner: Address, options: [String], end: UFix64): UInt64 {
-        let id = self.nextBattleId
-        let startDate = getCurrentBlock().timestamp
-        self.battles[id] = Battle(id: id, owner: owner, options: options, startDate: startDate, endDate: end)
+    // TODO - Create a stake mechanism for the battle, user needs to stake a certain amount of tokens to create a battle
+    access(all) fun createBattle(end: UFix64, owner: Address): UInt64 {
+        let id: UInt64 = self.nextBattleId
+        let startDate: UFix64 = getCurrentBlock().timestamp
+        self.battles[id] = Battle(id: id, owner: owner, startDate: startDate, endDate: end) 
         self.nextBattleId = self.nextBattleId + 1
         return id
     }
@@ -43,5 +42,5 @@ access(all) contract Battles {
 
     access(all) fun getBattle(id: UInt64): Battle? {
         return self.battles[id]
-    } 
+    }  
 }
