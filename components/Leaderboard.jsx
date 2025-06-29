@@ -13,14 +13,16 @@ export default function Leaderboard({ leaderboard, onClose }) {
         ×
       </button>
       <h1 className={styles.title}>Leaderboard</h1>
+      <div className={styles.subtitle}>🌟 PRIZE: TAMAGOTCHI 🌟</div>
       <div className={styles.list}>
         {leaderboard.map((user) => (
           <div className={styles.card} key={user.rank}>
             <span className={styles.rank}>#{user.rank}</span>
             <img
-              src="/images/allset.png"
-              alt="Tomato"
+              src="/images/tomash_profile.png"
+              alt="Tomash"
               className={styles.avatar}
+              style={{ width: 32, height: 32 }}
             />
             <div className={styles.info}>
               <div className={styles.name}>{user.name}</div>
