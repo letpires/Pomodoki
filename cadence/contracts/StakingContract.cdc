@@ -56,7 +56,7 @@ access(all) contract StakingContract_V2 {
         } 
 
         access(all) fun end() {
-            self.endDate: UInt64 = UInt64(getCurrentBlock().timestamp) 
+            self.endDate = UInt64(getCurrentBlock().timestamp) 
             self.totalUnstaked = self.totalStaked
         }
     }
