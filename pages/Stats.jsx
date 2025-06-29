@@ -10,7 +10,7 @@ const overview_default = [
   { key: "sessions", icon: "🍅", label: "Sessions", value: 0 },
 ];
 
-const tabs = ["Stats", "My battles", "NFTs"];
+const tabs = ["Stats", "My battles"];
 
 // Helper function to format time display
 const formatTimeDisplay = (totalMinutes) => {
