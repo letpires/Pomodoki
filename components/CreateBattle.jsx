@@ -23,8 +23,10 @@ export default function CreateBattle({ onClose }) {
     console.log("Form data:", formData);
     const prize = "Tamagotchi";
     const title = "Test Battle";
-    const battle = await createBattle(formData.endDate, prize, title);
+    const image = "/images/hackathon.png";
+    const battle = await createBattle(formData.endDate, prize, title, image);
     console.log("battle", battle);
+    onClose();
   };
 
   return (

@@ -1,6 +1,6 @@
- import BattleContract from 0xBattleContract
+ import BattleContract_V2 from 0xBattleContract
 
-transaction(endDate: UInt64, prize: String, title: String) { 
+transaction(endDate: UInt64, prize: String, title: String, image: String) { 
     let account: &Account
 
     prepare(signer: auth(Storage, Capabilities) &Account) { 
@@ -8,6 +8,6 @@ transaction(endDate: UInt64, prize: String, title: String) {
     }
 
     execute { 
-        BattleContract.createBattle(end: endDate, owner: self.account.address, prize: prize, title: title)
+        BattleContract_V2.createBattle(end: endDate, owner: self.account.address, prize: prize, title: title, image: image)
     }
 }

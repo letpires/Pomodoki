@@ -148,23 +148,24 @@ export default function Battles({ onHandlePage }) {
     console.log("battleResponse", battleResponse);
   };
 
-  useEffect(() => {
+  const fetchBattles = async () => {
+    const battles = await getBattles();
+    console.log("battles", battles);
+    const newBattles = battles.map((battle) => ({
+      ...battle,
+      title: battle.name,
+      deadline: battle.endDate,
+      image: "/images/hackathon.png",
+      status: "active",
+    }));
+    setBattles(newBattles);
+  };
+
+  useEffect(() => { 
     if (!currentUser) return;
-    const fetchBattles = async () => {
-      const battles = await getBattles();
-      console.log("battles", battles);
-      const newBattles = battles.map((battle) => ({
-        ...battle,
-        title: battle.name,
-        deadline: battle.endDate,
-        image: "/images/hackathon.png",
-        status: "active",
-      }));
-      setBattles(newBattles);
-    };
     fetchBattles();
   }, [currentUser]);
-
+ 
   // Functions to filter battles by tab -----------------------
   const battlesForTab = (tab) => {
     switch (tab) {
@@ -176,12 +177,18 @@ export default function Battles({ onHandlePage }) {
         return mockBattles;
     }
   };
-
+ 
   const handleOpenCreateBattle = () => {
     console.log("handleOpenCreateBattle");
     setIsCreateBattleOpen(true);
   };
 
+  const handleCloseCreateBattle = async () => {
+    setIsCreateBattleOpen(false);
+    await fetchBattles();
+  };
+
+  
   return (
     <div
       className={styles.container}
@@ -239,7 +246,7 @@ export default function Battles({ onHandlePage }) {
 
       {isCreateBattleOpen && (
         <div className={styles.createBattleOverlay} style={{ position: "absolute", top: 100, left: 0, right: 0, bottom: 0, zIndex: 1000 }}>
-          <CreateBattle onClose={() => setIsCreateBattleOpen(false)} />
+          <CreateBattle onClose={handleCloseCreateBattle} />
         </div>
       )}
 
