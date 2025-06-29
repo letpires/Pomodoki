@@ -48,8 +48,10 @@ export default function Stats({onHandlePage}) {
     }}>
       <Navbar />
 
-      <div className={styles.buyTokens}>
-        <div className={styles.arrow}>↓</div>
+      <div className={styles.buyTokensBlock}>
+        <div className={styles.buyCircle}>
+          <span className={styles.buyArrow}>↓</span>
+        </div>
         <div className={styles.buyText}>Buy tokens</div>
       </div>
 
@@ -71,9 +73,11 @@ export default function Stats({onHandlePage}) {
           <div className={styles.overview}>
             {overview.map((item) => (
               <div className={styles.overviewCard} key={item.label}>
-                <div className={styles.icon}>{item.icon}</div>
-                <div className={styles.value}>{item.value}</div>
-                <div className={styles.label}>{item.label}</div>
+                <div className={styles.valueRow}>
+                  <span className={styles.icon}>{item.icon}</span>
+                  <span className={styles.value}>{item.value}</span>
+                </div>
+                <span className={styles.label}>{item.label}</span>
               </div>
             ))}
           </div>
