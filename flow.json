@@ -2,15 +2,24 @@
 	"emulators": {
 		"default": {
 			"port": 3569,
-			"serviceAccount": "testnet-account"
+			"serviceAccount": "emulator-account"
 		}
 	},
 	"contracts": {
-		"StakingContract": "./cadence/contracts/StakingContract.cdc"
+		"StakingContract": "./cadence/contracts/StakingContract.cdc",
+		"BattleContract": {
+			"source": "./cadence/contracts/Battle.cdc",
+			"aliases": { 
+				"testing": "0x0000000000000007",
+				"emulator": "0x0000000000000007"
+			}
+		}
 	},
 	"networks": {
 		"mainnet": "access.mainnet.nodes.onflow.org:9000",
-		"testnet": "access.devnet.nodes.onflow.org:9000"
+		"testnet": "access.devnet.nodes.onflow.org:9000",
+		"testing": "127.0.0.1:3569",
+		"emulator": "127.0.0.1:3569"
 	},
 	"accounts": {
 		"mainnet-account": {
@@ -29,6 +38,16 @@
 				"signatureAlgorithm": "ECDSA_secp256k1",
 				"hashAlgorithm": "SHA2_256"
 			}
+		},
+		"emulator-account": {
+			"address": "f8d6e0586b0a20c7",
+			"key": {
+				"type": "hex",
+				"index": 0,
+				"signatureAlgorithm": "ECDSA_secp256k1",
+				"hashAlgorithm": "SHA2_256",
+				"privateKey": "39dbc807732235567e28598c64a402af177c0136031caf54f31c7fabd502b04b"
+			}
 		}
 	},
 	"deployments": {
@@ -40,6 +59,18 @@
 		"testnet": {
 			"testnet-account": [
 				"StakingContract"
+			]
+		},
+		"testing": {
+			"emulator-account": [
+				"StakingContract",
+				"BattleContract"
+			]
+		},
+		"emulator": {
+			"emulator-account": [
+				"StakingContract",
+				"BattleContract"
 			]
 		}
 	}

@@ -20,16 +20,15 @@ const Setup = ({ onStart, selectedAvatar = "tomash", onHandlePage }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { balance, balanceLoading, fetchBalance, currentUser, magic } =
     useContext(CurrentUserContext);
-  const AUTHORIZATION_FUNCTION = magic?.flow.authorization;
-  const router = useRouter();
+  const AUTHORIZATION_FUNCTION = magic?.flow.authorization; 
 
   const handleStart = async () => {
     try {
       setIsLoading(true);
-      const { pomodoro, breakTime } = getDurations(); 
+      const { breakTime } = getDurations(); 
       const transactionId = await fcl.mutate({
         cadence: stakeCode,
-        args: (arg, t) => [arg(stake.toFixed(3), t.UFix64)],
+        args: (arg, t) => [arg(stake.toFixed(3), t.UFix64), arg(selectedTime, t.UFix64)],
         proposer: AUTHORIZATION_FUNCTION,
         authorizations: [AUTHORIZATION_FUNCTION],
         payer: AUTHORIZATION_FUNCTION,

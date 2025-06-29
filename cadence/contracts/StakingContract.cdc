@@ -2,7 +2,8 @@ import FungibleToken from 0xFungibleToken
 import FlowToken from 0xFlowToken
 
 access(all) contract StakingContract4 {  
-    // Resource that represents a user's staking position
+    access(self) var historyStats: {Address: [HistoryStats]}
+ 
     access(all) resource Staking {
         access(all) var stakedAmount: UFix64
         access(all) var releasedAmount: UFix64
@@ -15,30 +16,60 @@ access(all) contract StakingContract4 {
             self.vault <- vault 
             self.flowVault <- FlowToken.createEmptyVault(vaultType: Type<@FlowToken.Vault>())
         }
-
-        // Function to stake tokens
-        access(all) fun stake(amount: UFix64) {
+ 
+        access(all) fun stake(address: &Account, amount: UFix64, timeCommitted: UFix64) {
             self.flowVault.deposit(from: <- self.vault.withdraw(amount: amount))
-            self.stakedAmount = amount 
-        }
+            self.stakedAmount = amount   
+            if StakingContract4.historyStats[address.address] == nil {
+                StakingContract4.historyStats[address.address] = []
+            }
+            StakingContract4.historyStats[address.address]!.append(HistoryStats(totalStaked: amount, timeCommitted: timeCommitted))
+        } 
+ 
+        access(all) fun cleanup(address: &Account): @{FungibleToken.Vault} {
+            let remainingAmount: UFix64 = self.stakedAmount
+            self.stakedAmount = 0.0  
+            let historyStats: [HistoryStats]? = StakingContract4.historyStats[address.address]
+            if historyStats != nil {
+                if historyStats!.length > 0 {
+                    historyStats![historyStats!.length - 1].end()
+                }
+            }
 
-        // Function to release tokens (can only be called by admin)
-        access(all) fun releaseTokens(amount: UFix64) {
-            assert(amount <= self.stakedAmount, message: "Cannot release more than staked amount")
-            self.releasedAmount = self.releasedAmount + amount
-            self.stakedAmount = self.stakedAmount - amount
+            return <- self.flowVault.withdraw(amount: remainingAmount)
+        } 
+    }     
+
+    access(all) struct HistoryStats {
+        access(self) let startDate: UFix64
+        access(self) var endDate: UFix64
+        access(self) let totalStaked: UFix64
+        access(self) var totalUnstaked: UFix64
+        access(self) let timeCommitted: UFix64
+
+        init(totalStaked: UFix64, timeCommitted: UFix64) {
+            self.startDate = getCurrentBlock().timestamp
+            self.totalStaked = totalStaked 
+            self.timeCommitted = timeCommitted
+            self.endDate = 0.0
+            self.totalUnstaked = 0.0
         } 
 
-        // Function to cleanup and withdraw remaining tokens
-        access(all) fun cleanup(): @{FungibleToken.Vault} {
-            let remainingAmount = self.stakedAmount
-            self.stakedAmount = 0.0
-            return <- self.flowVault.withdraw(amount: remainingAmount)
+        access(all) fun end() {
+            self.endDate = getCurrentBlock().timestamp
+            self.totalUnstaked = self.totalStaked
         }
     }
 
-    // Function to create a new staking position
+    init() {
+        self.historyStats = {}
+    }
+ 
     access(all) fun createStaking(vault: @{FungibleToken.Vault}): @Staking {
         return <- create Staking(vault: <- vault)
-    } 
+    }  
+
+    access(all) fun getStats(address: Address): [HistoryStats]? {
+        return self.historyStats[address]
+    }
 } 
