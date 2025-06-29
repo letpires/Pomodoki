@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "../styles/Leaderboard.module.css";
 
-export default function Leaderboard({ leaderboard, onClose }) {
+export default function Leaderboard({ leaderboard, onClose, onJoinBattle }) {
   return (
     <div className={styles.container}>
       <button
@@ -29,7 +29,7 @@ export default function Leaderboard({ leaderboard, onClose }) {
           </div>
         ))}
       </div>
-      <button className={styles.joinBtn}>I want to join</button>
+      <button className={styles.joinBtn} onClick={onJoinBattle}>I want to join</button>
     </div>
   );
 } 

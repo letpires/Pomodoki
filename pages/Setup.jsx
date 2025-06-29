@@ -1,6 +1,5 @@
 import React, { useState, useContext } from "react";
-import * as fcl from "@onflow/fcl";
-import { useRouter } from "next/router";
+import * as fcl from "@onflow/fcl"; 
 import { CurrentUserContext } from "../context/CurrentUserProvider";
 import Navbar from "../components/Navbar"; 
 import stakeCode from "../constants/stake";

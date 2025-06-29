@@ -138,9 +138,15 @@ function NewBattleCard({ onOpenCreateBattle }) {
 export default function Battles({ onHandlePage }) {
   const [selectedTab, setSelectedTab] = useState("created");
   const [selectedBattle, setSelectedBattle] = useState(null);
-  const { currentUser, getBattles } = useContext(CurrentUserContext);
+  const { currentUser, getBattles, joinBattle } = useContext(CurrentUserContext);
   const [battles, setBattles] = useState(mockBattles);
   const [isCreateBattleOpen, setIsCreateBattleOpen] = useState(false);
+ 
+  const handleJoinBattle = async (battle) => {
+    const battleId = parseInt(battle.id);
+    const battleResponse = await joinBattle(battleId);
+    console.log("battleResponse", battleResponse);
+  };
 
   useEffect(() => {
     if (!currentUser) return;
@@ -226,12 +232,13 @@ export default function Battles({ onHandlePage }) {
           <Leaderboard
             leaderboard={selectedBattle.leaderboard || mockLeaderboard}
             onClose={() => setSelectedBattle(null)}
+            onJoinBattle={() => handleJoinBattle(selectedBattle)}
           />
         </div>
       )}
 
       {isCreateBattleOpen && (
-        <div className={styles.createBattleOverlay}>
+        <div className={styles.createBattleOverlay} style={{ position: "absolute", top: 100, left: 0, right: 0, bottom: 0, zIndex: 1000 }}>
           <CreateBattle onClose={() => setIsCreateBattleOpen(false)} />
         </div>
       )}

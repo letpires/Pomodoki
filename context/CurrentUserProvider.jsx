@@ -5,6 +5,7 @@ import { FlowExtension } from "@magic-ext/flow";
 import GET_USER_STATS_CADENCE from "../constants/getUserStats";
 import GET_BATTLES_CADENCE from "../constants/getBattle";
 import CREATE_BATTLE_CADENCE from "../constants/createBattle";
+import JOIN_BATTLE_CADENCE from "../constants/joinBattle";
 
 export const CurrentUserContext = createContext({});
 
@@ -16,10 +17,11 @@ const CurrentUserProvider = ({ children }) => {
   const [magic, setMagic] = useState(null);
   const [network, setNetwork] = useState(null);
   const [loadingWallet, setLoadingWallet] = useState(true);
+  const AUTHORIZATION_FUNCTION = magic?.flow.authorization; 
 
   // Load network from localStorage on component mount
-  useEffect(() => { 
-    const savedNetwork = localStorage.getItem("pomodoki-network"); 
+  useEffect(() => {
+    const savedNetwork = localStorage.getItem("pomodoki-network");
     if (
       savedNetwork &&
       (savedNetwork === "testnet" || savedNetwork === "mainnet")
@@ -62,7 +64,7 @@ const CurrentUserProvider = ({ children }) => {
           const data = await magic.user.getInfo();
           console.log("data", data);
           setCurrentUser(data);
-          setIsLoggedIn(true); 
+          setIsLoggedIn(true);
         }
       }
     };
@@ -118,8 +120,8 @@ const CurrentUserProvider = ({ children }) => {
     if (!currentUser || !currentUser.publicAddress) {
       console.warn("No current user or public address available");
       return null;
-    } 
-     
+    }
+
     try {
       const stats = await fcl.query({
         cadence: GET_USER_STATS_CADENCE,
@@ -143,20 +145,36 @@ const CurrentUserProvider = ({ children }) => {
     return battles;
   }, [currentUser]);
 
-  const createBattle = async (endDate) => {
-    console.log("createBattle", endDate);
+  const createBattle = async (endDate) => { 
+    const timestamp = Math.floor(new Date(endDate).getTime() / 1000); 
     const battle = await fcl.mutate({
       cadence: CREATE_BATTLE_CADENCE,
-      args: (arg, t) => [arg(endDate, t.UFix64)],
+      args: (arg, t) => [arg(timestamp.toFixed(1), t.UFix64)],
+      proposer: AUTHORIZATION_FUNCTION,
+      authorizations: [AUTHORIZATION_FUNCTION],
+      payer: AUTHORIZATION_FUNCTION,
+      limit: 9999,
+    });
+    return battle;
+  };
+
+  const joinBattle = async (battleId) => { 
+    const battle = await fcl.mutate({
+      cadence: JOIN_BATTLE_CADENCE,
+      args: (arg, t) => [arg(battleId, t.UInt64)],
+      proposer: AUTHORIZATION_FUNCTION,
+      authorizations: [AUTHORIZATION_FUNCTION],
+      payer: AUTHORIZATION_FUNCTION,
+      limit: 9999,
     });
     return battle;
   };
 
   useEffect(() => {
-    if (!network) return; 
+    if (!network) return;
 
-    setLoadingWallet(true); 
-    setBalance(0)
+    setLoadingWallet(true);
+    setBalance(0);
     localStorage.setItem("pomodoki-network", network);
 
     setMagic(
@@ -213,6 +231,7 @@ const CurrentUserProvider = ({ children }) => {
         loadingWallet,
         getBattles,
         createBattle,
+        joinBattle,
         getUserHistory,
         magic,
         isLoggedIn,
