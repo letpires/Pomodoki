@@ -14,80 +14,7 @@ const mockLeaderboard = [
   { rank: 1, name: "XVMDOJFHE98374", focus: "3:30" },
   { rank: 2, name: "XVMDOJFHE98374", focus: "3:30" },
   { rank: 3, name: "XVMDOJFHE98374", focus: "3:30" },
-];
-
-const mockBattles = [
-  {
-    id: 1,
-    title: "Hackathon Cannes",
-    pool: 2.5,
-    players: 3,
-    status: "active",
-    image: "/images/hackathon.png",
-    entryFee: false,
-    leaderboard: mockLeaderboard,
-  },
-  {
-    id: 2,
-    title: "Hackathon Cannes",
-    pool: 2.5,
-    players: 3,
-    status: "cancelled",
-    image: "/images/hackathon.png",
-    entryFee: false,
-    leaderboard: mockLeaderboard,
-  },
-  {
-    id: 3,
-    title: "GCP Certification",
-    pool: 2.5,
-    players: 3,
-    status: "active",
-    image: "/images/hackathon.png",
-    entryFee: false,
-    leaderboard: mockLeaderboard,
-  },
-  {
-    id: 3,
-    title: "GCP Certification",
-    pool: 2.5,
-    players: 3,
-    status: "active",
-    image: "/images/hackathon.png",
-    entryFee: false,
-    leaderboard: mockLeaderboard,
-  },
-  {
-    id: 3,
-    title: "GCP Certification",
-    pool: 2.5,
-    players: 3,
-    status: "active",
-    image: "/images/hackathon.png",
-    entryFee: false,
-    leaderboard: mockLeaderboard,
-  },
-  {
-    id: 4,
-    title: "GCP Certification",
-    pool: 2.5,
-    players: 3,
-    status: "active",
-    image: "/images/hackathon.png",
-    entryFee: false,
-    leaderboard: mockLeaderboard,
-  },
-  {
-    id: 5,
-    title: "GCP Certification",
-    pool: 2.5,
-    players: 3,
-    status: "active",
-    image: "/images/hackathon.png",
-    entryFee: false,
-    leaderboard: mockLeaderboard,
-  },
-];
+]; 
 
 const tabs = ["all", "created", "joined"];
 
@@ -112,14 +39,14 @@ function BattleCard({ battle }) {
               : styles.badgeCancelled
           }`}
         >
-          {battle.status === "active" ? "Active" : "Cancelled"}
+          {battle.status === "active" ? "Active" : "Finished"}
         </span>
       </div>
 
       {/* Card content */}
       <div className={styles.cardContent}>
         <div className={styles.title}>{battle.title}</div>
-        <div className={styles.deadline}>Deadline: 12/12/2024</div>
+        <div className={styles.deadline}>Deadline: {new Date(battle.deadline * 1000).toLocaleDateString()}</div>
         <div className={styles.players}>Battle {battle.players} players</div>
       </div>
     </div>
@@ -139,7 +66,7 @@ export default function Battles({ onHandlePage }) {
   const [selectedTab, setSelectedTab] = useState("created");
   const [selectedBattle, setSelectedBattle] = useState(null);
   const { currentUser, getBattles, joinBattle } = useContext(CurrentUserContext);
-  const [battles, setBattles] = useState(mockBattles);
+  const [battles, setBattles] = useState([]);
   const [isCreateBattleOpen, setIsCreateBattleOpen] = useState(false);
  
   const handleJoinBattle = async (battle) => {
@@ -155,8 +82,9 @@ export default function Battles({ onHandlePage }) {
       ...battle,
       title: battle.name,
       deadline: battle.endDate,
-      image: "/images/hackathon.png",
-      status: "active",
+      image: battle.image,
+      players: battle.users.length,
+      status: new Date(battle.endDate * 1000) > Date.now() ? "active" : "finished",
     }));
     setBattles(newBattles);
   };
