@@ -1,7 +1,20 @@
-import React from "react";
-import styles from "../styles/Leaderboard.module.css";
+import React, { useEffect, useState, useContext } from "react";
+import styles from "../styles/Leaderboard.module.css"; 
+import { CurrentUserContext } from "../context/CurrentUserProvider";
 
-export default function Leaderboard({ leaderboard, onClose, onJoinBattle }) {
+export default function Leaderboard({ leaderboard, onClose, onJoinBattle, battle }) { 
+
+  // get battle users and their historical focus time
+  const { currentUser, getBattleStats } = useContext(CurrentUserContext);  
+
+  useEffect(() => {
+    const fetchBattleStats = async () => {
+      const battleStats = await getBattleStats(battle.id);
+      console.log("battleStats", battleStats);
+    };
+    fetchBattleStats();
+  }, [battle]); 
+
   return (
     <div className={styles.container}>
       <button

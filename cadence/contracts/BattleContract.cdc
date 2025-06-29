@@ -1,3 +1,5 @@
+import StakingContract_V2 from 0xStakingContract
+
 access(all) contract BattleContract_V2 {  
     access(all) struct Battle {
         access(all) let id: UInt64
@@ -18,6 +20,29 @@ access(all) contract BattleContract_V2 {
             self.title = title
             self.image = image
             self.users = []  
+        }  
+    }
+    access(all) struct BattleResponse {
+        access(all) let id: UInt64
+        access(all) let owner: Address 
+        access(all) let startDate: UInt64
+        access(all) let endDate: UInt64
+        access(all) let prize: String
+        access(all) let title: String
+        access(all) let image: String
+        access(all) var users: [Address]  
+        access(all) var usersWithHistory: {Address: [StakingContract_V2.HistoryStats]}
+
+        init(battle: Battle, usersWithHistory: {Address: [StakingContract_V2.HistoryStats]}) {
+            self.id = battle.id
+            self.owner = battle.owner 
+            self.startDate = battle.startDate
+            self.endDate = battle.endDate
+            self.prize = battle.prize
+            self.title = battle.title
+            self.image = battle.image
+            self.users = battle.users
+            self.usersWithHistory = usersWithHistory
         }  
     }
 
@@ -51,11 +76,27 @@ access(all) contract BattleContract_V2 {
         } else {
             self.battlesByUser[user]!.append(battleId)
         }
-    }
+    } 
 
-    access(all) fun getBattle(id: UInt64): Battle? {
-        return self.battles[id]
-    }  
+    access(all) fun getBattle(id: UInt64): BattleContract_V2.BattleResponse? {
+        let battle: BattleContract_V2.Battle? = self.battles[id]
+        if battle == nil {
+            return nil
+        }
+ 
+        let users: [Address] = battle!.users
+        let usersWithHistory: {Address: [StakingContract_V2.HistoryStats]} = {}
+        
+        for user in users {
+            let history: [StakingContract_V2.HistoryStats]? = StakingContract_V2.getStats(address: user)
+            if history != nil {
+                usersWithHistory[user] = history!
+            }
+        }
+
+        let battleResponse: BattleContract_V2.BattleResponse = BattleResponse(battle: battle!, usersWithHistory: usersWithHistory)
+        return battleResponse
+    }
     
     access(all) fun getBattles( ): [Battle] {
         return self.battles.values  

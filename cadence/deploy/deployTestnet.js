@@ -21,6 +21,17 @@ fs.writeFileSync(
   path.join(__dirname, "../contracts/StakingContract.cdc"),
   contractCode
 );
+ 
+let contractCodeBattle = fs.readFileSync(
+  path.join(__dirname, "../contracts/BattleContract.cdc"),
+  "utf8"
+);
+contractCodeBattle = contractCodeBattle.replace("0xStakingContract", "0xacdf784e6e2a83f0");
+
+fs.writeFileSync(
+  path.join(__dirname, "../contracts/BattleContract.cdc"),
+  contractCodeBattle
+);
 
 exec(
   "flow deploy --network testnet --update",

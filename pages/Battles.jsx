@@ -165,6 +165,7 @@ export default function Battles({ onHandlePage }) {
       {selectedBattle && (
         <div className={styles.leaderboardOverlay}>
           <Leaderboard
+            battle={selectedBattle}
             leaderboard={selectedBattle.leaderboard || mockLeaderboard}
             onClose={() => setSelectedBattle(null)}
             onJoinBattle={() => handleJoinBattle(selectedBattle)}
