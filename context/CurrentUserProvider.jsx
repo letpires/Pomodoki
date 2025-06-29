@@ -145,11 +145,11 @@ const CurrentUserProvider = ({ children }) => {
     return battles;
   }, [currentUser]);
 
-  const createBattle = async (endDate) => { 
+  const createBattle = async (endDate, prize, title) => { 
     const timestamp = Math.floor(new Date(endDate).getTime() / 1000); 
     const battle = await fcl.mutate({
       cadence: CREATE_BATTLE_CADENCE,
-      args: (arg, t) => [arg(timestamp.toFixed(1), t.UFix64)],
+      args: (arg, t) => [arg(timestamp, t.UInt64), arg(prize, t.String), arg(title, t.String)],
       proposer: AUTHORIZATION_FUNCTION,
       authorizations: [AUTHORIZATION_FUNCTION],
       payer: AUTHORIZATION_FUNCTION,

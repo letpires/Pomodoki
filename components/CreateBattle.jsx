@@ -21,7 +21,9 @@ export default function CreateBattle({ onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Form data:", formData);
-    const battle = await createBattle(formData.endDate);
+    const prize = "Tamagotchi";
+    const title = "Test Battle";
+    const battle = await createBattle(formData.endDate, prize, title);
     console.log("battle", battle);
   };
 

@@ -17,7 +17,7 @@ access(all) contract StakingContract_V1 {
             self.flowVault <- FlowToken.createEmptyVault(vaultType: Type<@FlowToken.Vault>())
         }
  
-        access(all) fun stake(address: &Account, amount: UFix64, timeCommitted: UFix64) {
+        access(all) fun stake(address: &Account, amount: UFix64, timeCommitted: UInt64) {
             self.flowVault.deposit(from: <- self.vault.withdraw(amount: amount))
             self.stakedAmount = amount   
             if StakingContract_V1.historyStats[address.address] == nil {
@@ -41,14 +41,14 @@ access(all) contract StakingContract_V1 {
     }     
 
     access(all) struct HistoryStats {
-        access(self) let startDate: UFix64
-        access(self) var endDate: UFix64
+        access(self) let startDate: UInt64
+        access(self) var endDate: UInt64
         access(self) let totalStaked: UFix64
         access(self) var totalUnstaked: UFix64
-        access(self) let timeCommitted: UFix64
+        access(self) let timeCommitted: UInt64
 
-        init(totalStaked: UFix64, timeCommitted: UFix64) {
-            self.startDate = getCurrentBlock().timestamp
+        init(totalStaked: UFix64, timeCommitted: UInt64) {
+            self.startDate = getCurrentBlock().timestamp as! UInt64
             self.totalStaked = totalStaked 
             self.timeCommitted = timeCommitted
             self.endDate = 0.0

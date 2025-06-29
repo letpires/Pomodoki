@@ -2,7 +2,7 @@ import FungibleToken from 0xFungibleToken
 import FlowToken from 0xFlowToken
 import StakingContract_V1 from 0xStakingContract
 
-transaction(amount: UFix64, timeCommitted: UFix64) {
+transaction(amount: UFix64, timeCommitted: UInt64) {
     let stakingRef: &StakingContract_V1.Staking
     let account: &Account
 

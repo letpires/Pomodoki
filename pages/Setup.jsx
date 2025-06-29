@@ -27,7 +27,7 @@ const Setup = ({ onStart, selectedAvatar = "tomash", onHandlePage }) => {
       const { breakTime } = getDurations(); 
       const transactionId = await fcl.mutate({
         cadence: stakeCode,
-        args: (arg, t) => [arg(stake.toFixed(3), t.UFix64), arg(selectedTime.toFixed(3), t.UFix64)],
+        args: (arg, t) => [arg(stake.toFixed(2), t.UFix64), arg(selectedTime, t.UInt64)],
         proposer: AUTHORIZATION_FUNCTION,
         authorizations: [AUTHORIZATION_FUNCTION],
         payer: AUTHORIZATION_FUNCTION,
