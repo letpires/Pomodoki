@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import PixelSuccess from "../components/PixelSuccess";
-import { CurrentUserContext } from "../context/currentUserProvider";
+import { CurrentUserContext } from "../context/CurrentUserProvider";
 import * as fcl from "@onflow/fcl"; 
 import redeemCode from "../constants/redeem";
 

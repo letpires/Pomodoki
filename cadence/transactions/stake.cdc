@@ -1,9 +1,9 @@
 import FungibleToken from 0xFungibleToken
 import FlowToken from 0xFlowToken
-import StakingContract4 from 0xStakingContract
+import StakingContract_V1 from 0xStakingContract
 
 transaction(amount: UFix64, timeCommitted: UFix64) {
-    let stakingRef: &StakingContract4.Staking
+    let stakingRef: &StakingContract_V1.Staking
     let account: &Account
 
     prepare(signer: auth(Storage, Capabilities, FungibleToken.Withdraw) &Account) {
@@ -14,22 +14,22 @@ transaction(amount: UFix64, timeCommitted: UFix64) {
 
         let flowVault <- flowVaultRef.withdraw(amount: amount)
 
-        let staking <- StakingContract4.createStaking(vault: <- flowVault)
+        let staking <- StakingContract_V1.createStaking(vault: <- flowVault)
         
         // Check if storage path exists and remove if it does
-        if signer.storage.check<@StakingContract4.Staking>(from: /storage/Staking) {
-            let oldStaking <- signer.storage.load<@StakingContract4.Staking>(from: /storage/Staking)
+        if signer.storage.check<@StakingContract_V1.Staking>(from: /storage/StakingV1) {
+            let oldStaking <- signer.storage.load<@StakingContract_V1.Staking>(from: /storage/StakingV1)
             destroy oldStaking
-            signer.capabilities.unpublish(/public/Staking)
+            signer.capabilities.unpublish(/public/StakingV1)
         }
         
-        signer.storage.save(<- staking, to: /storage/Staking)
+        signer.storage.save(<- staking, to: /storage/StakingV1)
         signer.capabilities.publish(
-            signer.capabilities.storage.issue<&StakingContract4.Staking>(/storage/Staking),
-            at: /public/Staking
+            signer.capabilities.storage.issue<&StakingContract_V1.Staking>(/storage/StakingV1),
+            at: /public/StakingV1
         )
 
-        self.stakingRef = signer.capabilities.borrow<&StakingContract4.Staking>(/public/Staking)
+        self.stakingRef = signer.capabilities.borrow<&StakingContract_V1.Staking>(/public/StakingV1)
             ?? panic("Could not borrow Staking reference")
         self.account = signer
     }

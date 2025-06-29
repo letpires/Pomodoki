@@ -1,7 +1,7 @@
 import FungibleToken from 0xFungibleToken
 import FlowToken from 0xFlowToken
 
-access(all) contract StakingContract4 {  
+access(all) contract StakingContract_V1 {  
     access(self) var historyStats: {Address: [HistoryStats]}
  
     access(all) resource Staking {
@@ -20,16 +20,16 @@ access(all) contract StakingContract4 {
         access(all) fun stake(address: &Account, amount: UFix64, timeCommitted: UFix64) {
             self.flowVault.deposit(from: <- self.vault.withdraw(amount: amount))
             self.stakedAmount = amount   
-            if StakingContract4.historyStats[address.address] == nil {
-                StakingContract4.historyStats[address.address] = []
+            if StakingContract_V1.historyStats[address.address] == nil {
+                StakingContract_V1.historyStats[address.address] = []
             }
-            StakingContract4.historyStats[address.address]!.append(HistoryStats(totalStaked: amount, timeCommitted: timeCommitted))
+            StakingContract_V1.historyStats[address.address]!.append(HistoryStats(totalStaked: amount, timeCommitted: timeCommitted))
         } 
  
         access(all) fun cleanup(address: &Account): @{FungibleToken.Vault} {
             let remainingAmount: UFix64 = self.stakedAmount
             self.stakedAmount = 0.0  
-            let historyStats: [HistoryStats]? = StakingContract4.historyStats[address.address]
+            let historyStats: [HistoryStats]? = StakingContract_V1.historyStats[address.address]
             if historyStats != nil {
                 if historyStats!.length > 0 {
                     historyStats![historyStats!.length - 1].end()

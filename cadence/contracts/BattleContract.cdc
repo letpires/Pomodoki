@@ -16,10 +16,12 @@ access(all) contract BattleContract {
     }
 
     access(self) var battles: {UInt64: Battle} 
+    access(self) var battlesByUser: {Address: [UInt64]} 
     access(self) var nextBattleId: UInt64
 
     init() {
         self.battles = {}
+        self.battlesByUser = {}
         self.nextBattleId = 1
     }
 
@@ -38,6 +40,11 @@ access(all) contract BattleContract {
         } 
 
         self.battles[battleId]!.users.append(user) 
+        if self.battlesByUser[user] == nil {
+            self.battlesByUser[user] = [battleId]
+        } else {
+            self.battlesByUser[user]!.append(battleId)
+        }
     }
 
     access(all) fun getBattle(id: UInt64): Battle? {
@@ -47,4 +54,10 @@ access(all) contract BattleContract {
     access(all) fun getBattles( ): [Battle] {
         return self.battles.values  
     }  
+    
+    
+    access(all) fun getBattlesByUser(user: Address): [UInt64] {
+        return self.battlesByUser[user]!
+    }  
+    
 }

@@ -8,8 +8,8 @@
 	"contracts": {
 		"StakingContract": "./cadence/contracts/StakingContract.cdc",
 		"BattleContract": {
-			"source": "./cadence/contracts/Battle.cdc",
-			"aliases": { 
+			"source": "./cadence/contracts/BattleContract.cdc",
+			"aliases": {
 				"testing": "0x0000000000000007",
 				"emulator": "0x0000000000000007"
 			}
@@ -53,12 +53,14 @@
 	"deployments": {
 		"mainnet": {
 			"mainnet-account": [
-				"StakingContract"
+				"StakingContract",
+				"BattleContract"
 			]
 		},
 		"testnet": {
 			"testnet-account": [
-				"StakingContract"
+				"StakingContract",
+				"BattleContract"
 			]
 		},
 		"testing": {

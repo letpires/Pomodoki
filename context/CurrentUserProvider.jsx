@@ -1,7 +1,9 @@
-import React, { useState, useEffect, createContext } from "react";
+import React, { useState, useEffect, createContext, useCallback } from "react";
 import * as fcl from "@onflow/fcl";
 import { Magic } from "magic-sdk";
 import { FlowExtension } from "@magic-ext/flow";
+import GET_USER_STATS_CADENCE from "../constants/getUserStats";
+import GET_BATTLES_CADENCE from "../constants/getBattle";
 
 export const CurrentUserContext = createContext({});
 
@@ -110,6 +112,34 @@ const CurrentUserProvider = ({ children }) => {
     setBalance(0);
   };
 
+  // get user stats
+  const getUserHistory22 = async () => {
+    if (!currentUser || !currentUser.publicAddress) {
+      console.warn("No current user or public address available");
+      return null;
+    } 
+     
+    try {
+      const stats = await fcl.query({
+        cadence: GET_USER_STATS_CADENCE,
+        args: (arg, t) => [arg(currentUser.publicAddress, t.Address)],
+      });
+      return stats;
+    } catch (error) {
+      console.error("Error fetching user stats:", error);
+      return null;
+    }
+  };
+
+  // get battles
+  const getBattles = useCallback(async () => {
+    if (!currentUser) return;
+    const battles = await fcl.query(GET_BATTLES_CADENCE, {
+      args: (arg, t) => [],
+    });
+    return battles;
+  }, [currentUser]);
+
   useEffect(() => {
     if (!network) return; 
 
@@ -142,8 +172,8 @@ const CurrentUserProvider = ({ children }) => {
         : process.env.NEXT_PUBLIC_MAINNET_FLOWTOKEN_ADDRESS;
     const battlesContractAddress =
       network === "testnet"
-        ? process.env.NEXT_PUBLIC_TESTNET_BATTLES_ADDRESS
-        : process.env.NEXT_PUBLIC_MAINNET_BATTLES_ADDRESS;
+        ? process.env.NEXT_PUBLIC_TESTNET_BATTLE_ADDRESS
+        : process.env.NEXT_PUBLIC_MAINNET_BATTLE_ADDRESS;
 
     fcl.config({
       "flow.network": network,
@@ -169,6 +199,8 @@ const CurrentUserProvider = ({ children }) => {
         network,
         setNetwork,
         loadingWallet,
+        getBattles,
+        getUserHistory: getUserHistory22,
         magic,
         isLoggedIn,
         fetchBalance, // Expose fetchBalance function for manual refresh

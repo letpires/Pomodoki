@@ -1,8 +1,8 @@
 const GET_USER_STATS_CADENCE = `
-import StakingContract4 from 0xStakingContract
+import StakingContract_V1 from 0xStakingContract
 
-access(all) fun main(address: Address): [StakingContract4.HistoryStats] { 
-    return StakingContract4.getStats(address: address)
+access(all) fun main(address: Address): [StakingContract_V1.HistoryStats]? { 
+    return StakingContract_V1.getStats(address: address)
 }  
 `;
 

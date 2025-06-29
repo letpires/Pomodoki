@@ -50,7 +50,7 @@ fun testJoinBattle() {
 //     let battleId = BattleContract.createBattle(end: endDate, owner: owner.address)
 //     BattleContract.joinBattle(battleId: battleId, user: user.address)
 
-//     let staking <- StakingContract4.createStaking(vault: <- flowVault)
+//     let staking <- StakingContract_V1.createStaking(vault: <- flowVault)
     
 //     let battle = BattleContract.getBattle(id: battleId)  
 //     Test.expect(battle != nil, Test.not(Test.beNil()))

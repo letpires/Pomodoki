@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { useRouter } from "next/router";
+import React, { useState, useEffect, useContext, useMemo } from "react";
 import Navbar from "../components/Navbar";
 import styles from "../styles/Stats.module.css";
 import BottomNav from "../components/BottomNav";
+import { CurrentUserContext } from "../context/CurrentUserProvider";
 
-const overview = [
-  { icon: "🔥", label: "Streak", value: 0 },
-  { icon: "⏳", label: "Focus time", value: "1h" },
-  { icon: "🍅", label: "Sessions", value: 2 },
+const overview_default = [
+  { key: "streak", icon: "🔥", label: "Streak", value: 0 },
+  { key: "focusTime", icon: "⏳", label: "Focus time", value: "0h" },
+  { key: "sessions", icon: "🍅", label: "Sessions", value: 0 },
 ];
 
 const tabs = ["Stats", "My battles", "NFTs"];
@@ -32,20 +32,80 @@ const mockBattles = [
   },
 ];
 
-export default function Stats({onHandlePage}) {
+export default function Stats({ onHandlePage }) {
   const [selectedTab, setSelectedTab] = useState("Stats");
-  const router = useRouter();
+  const { currentUser, getUserHistory, balance } =
+    useContext(CurrentUserContext);
+  const [overview, setOverview] = useState(overview_default);
+  
+  useEffect(() => {
+    if (!currentUser) return;
+    const fetchUserHistory = async () => {
+      const stats = await getUserHistory(); 
+      if (stats && stats.length > 0) {
+        const totalTimeCommitted = stats.reduce(
+          (acc, stat) => acc + stat.timeCommitted,
+          0
+        );
+        const totalStakes = stats.reduce((acc, stat, index) => {
+          if (index === 0) return 0;
+          const prevStat = stats[index - 1];
+          const prevDate = new Date(prevStat.timestamp);
+          const currDate = new Date(stat.timestamp);
+          const diffDays = Math.floor(
+            (currDate - prevDate) / (1000 * 60 * 60 * 24)
+          );
+          return diffDays === 1 ? acc + 1 : 1;
+        }, 0);
+        const totalTimeCommittedInHours = totalTimeCommitted / 60;
+
+        const newOverview = overview.map((item) => {
+          if (item.key === "focusTime") {
+            item.value = totalTimeCommittedInHours.toFixed(2) + "h";
+          }
+          if (item.key === "streak") {
+            item.value = totalStakes;
+          }
+          if (item.key === "sessions") {
+            item.value = stats.length;
+          }
+          return item;
+        }); 
+        setOverview(newOverview);
+      }
+    };
+    fetchUserHistory();
+  }, [currentUser]);
+ 
+  const overviewMemo = useMemo(
+    () => (
+      <>  
+        {overview.map((item) => (
+          <div className={styles.overviewCard} key={item.label}>
+            <div className={styles.valueRow}>
+              <span className={styles.icon}>{item.icon}</span>
+              <span className={styles.value}>{item.value}</span>
+            </div>
+            <span className={styles.label}>{item.label}</span>
+          </div>
+        ))}
+      </>
+    ),
+    [overview]
+  );
 
   return (
-    <div className={styles.container} 
-    style={{
-      backgroundColor: "#ffedae", 
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      minHeight: "100vh",
-      paddingTop: "50px",
-    }}>
+    <div
+      className={styles.container}
+      style={{
+        backgroundColor: "#ffedae",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        minHeight: "100vh",
+        paddingTop: "50px",
+      }}
+    >
       <Navbar />
 
       <div className={styles.buyTokensBlock}>
@@ -59,7 +119,9 @@ export default function Stats({onHandlePage}) {
         {tabs.map((tab) => (
           <button
             key={tab}
-            className={`${styles.tab} ${selectedTab === tab ? styles.tabActive : ""}`}
+            className={`${styles.tab} ${
+              selectedTab === tab ? styles.tabActive : ""
+            }`}
             onClick={() => setSelectedTab(tab)}
           >
             {tab}
@@ -70,18 +132,8 @@ export default function Stats({onHandlePage}) {
       {selectedTab === "Stats" && (
         <>
           <div className={styles.sectionTitle}>Overview</div>
-          <div className={styles.overview}>
-            {overview.map((item) => (
-              <div className={styles.overviewCard} key={item.label}>
-                <div className={styles.valueRow}>
-                  <span className={styles.icon}>{item.icon}</span>
-                  <span className={styles.value}>{item.value}</span>
-                </div>
-                <span className={styles.label}>{item.label}</span>
-              </div>
-            ))}
-          </div>
-          <div className={styles.balance}>Balance : XX tokens</div>
+          <div className={styles.overview}>{overviewMemo}</div>
+          <div className={styles.balance}>Balance : {balance}</div>
         </>
       )}
 
@@ -89,17 +141,32 @@ export default function Stats({onHandlePage}) {
         <div className={styles.myBattlesSection}>
           <div className={styles.sectionTitle}>My Battles</div>
           {mockBattles.length === 0 ? (
-            <div style={{ textAlign: "center", color: "#bfa76a", marginTop: 24 }}>
+            <div
+              style={{ textAlign: "center", color: "#bfa76a", marginTop: 24 }}
+            >
               You haven&apos;t joined any battles yet.
             </div>
           ) : (
             <div className={styles.myBattlesList}>
               {mockBattles.map((battle) => (
                 <div key={battle.id} className={styles.myBattleCard}>
-                  <img src={battle.image} alt={battle.title} style={{ width: 48, height: 48, borderRadius: 12, marginRight: 12 }} />
+                  <img
+                    src={battle.image}
+                    alt={battle.title}
+                    style={{
+                      width: 48,
+                      height: 48,
+                      borderRadius: 12,
+                      marginRight: 12,
+                    }}
+                  />
                   <div>
-                    <div style={{ fontWeight: "bold", color: "#5a4a2c" }}>{battle.title}</div>
-                    <div style={{ fontSize: 13, color: "#7c6a4d" }}>Pool: {battle.pool} | Players: {battle.players}</div>
+                    <div style={{ fontWeight: "bold", color: "#5a4a2c" }}>
+                      {battle.title}
+                    </div>
+                    <div style={{ fontSize: 13, color: "#7c6a4d" }}>
+                      Pool: {battle.pool} | Players: {battle.players}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -108,9 +175,7 @@ export default function Stats({onHandlePage}) {
         </div>
       )}
 
-      <div className={styles.footer}>
-        {/* Ícones de navegação aqui */}
-      </div>
+      <div className={styles.footer}>{/* Ícones de navegação aqui */}</div>
       <BottomNav
         active="profile"
         onNavigate={(route) => {
