@@ -53,47 +53,55 @@
 }
 .tabs {
   display: flex;
-  justify-content: center;
-  gap: 16px;
-  margin-bottom: 32px;
+  justify-content: flex-start;
+  align-items: center;
+  background: #ede1c2;
+  border-radius: 32px;
+  padding: 2px 8px;
+  margin: 24px 0 16px 0;
+  max-width: 320px;
+  gap: 0;
+  margin-left: 24px !important;
+  align-self: flex-start;
 }
-.tabs button {
-  background: #e2c98f;
+.tab {
+  background: transparent;
   border: none;
-  border-radius: 16px;
-  padding: 8px 24px;
-  font-size: 16px;
-  font-family: inherit;
+  border-radius: 24px;
+  padding: 4px 16px;
+  font-size: 15px;
+  font-family: 'VT323', monospace;
   color: #5a4a2c;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, color 0.2s;
+  font-weight: 400;
 }
-.activeTab {
-  background: #bfa76a !important;
-  color: #fffbe6 !important;
+.tabActive {
+  background: #655f4db2;
+  color: #fffbe6;
   font-weight: bold;
 }
 .grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr)); /* 2 colunas fixas   */
-  gap: 24px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
   max-width: 700px;
   width: 100%;
   margin: 0 auto;
-  padding: 0 8px;
+  padding: 0 20px;
 }
 .newBattle {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 3px dashed #bfa76a;
+  border: 3px dashed #655f4d;
   border-radius: 28px;
-  height: 140px;
+  height: 210px;
   /* width: 40%;    */
   font-size: 22px;
   color: #bfa76a;
-  background: #fffbe6;
+  background: #fef6bf;
   cursor: pointer;
   transition: all 0.3s ease;
   box-sizing: border-box;
@@ -130,13 +138,13 @@
   border-color: #a89b6a;
 }
 .card {
-  background: #fffbe6;
-  border: 3px solid #bfa76a;
+  background: #fef6bf;
+  border: 2px solid #655f4d;
   border-radius: 28px;
   padding: 0;
   position: relative;
   overflow: hidden;
-  height: 250px;
+  height: 210px;
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 16px rgba(226, 201, 143, 0.3);
@@ -152,18 +160,30 @@
   box-shadow: 0 8px 24px rgba(226, 201, 143, 0.4);
   border-color: #a89b6a;
 }
+.cardImageWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 4px;
+  position: relative;
+  background: transparent;
+  box-sizing: border-box;
+}
 .cardImage {
   width: 100%;
-  height: 60px;
+  height: 120px;
   object-fit: cover;
-  border-bottom: 2px solid #e2c98f;
+  border-radius: 20px;
+  background: #fffbe6;
+  box-shadow: none;
 }
 .cardContent {
-  padding: 12px 16px 0 16px;
+  padding: 2px 8px 0 8px;
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 0;
 }
 .entryFee {
   font-size: 12px;
@@ -172,15 +192,20 @@
   font-weight: 500;
 }
 .title {
-  font-size: 18px;
+  font-size: 15px;
   font-weight: bold;
   color: #5a4a2c;
   line-height: 1.2;
+  font-family: 'VT323', monospace;
+  margin-top: 2px;
+  text-align: left;
+  margin-bottom: 0;
 }
 .pool, .players {
   font-size: 14px;
   color: #7c6a4d;
   font-weight: 500;
+  font-family: 'VT323', monospace !important;
 }
 .badge {
   position: absolute;
@@ -189,17 +214,18 @@
   font-size: 12px;
   padding: 4px 12px;
   border-radius: 16px;
-  font-family: inherit;
+  font-family: 'VT323', monospace;
   font-weight: bold;
   z-index: 2;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  background: rgba(76, 175, 80, 0.85); /* default: verde translúcido */
 }
 .badgeActive {
-  background: #4caf50;
+  background: rgba(76, 175, 80, 0.85);
   color: #fff;
 }
 .badgeCancelled {
-  background: #e57373;
+  background: rgba(229, 115, 115, 0.85);
   color: #fff;
 }
 .footer {
@@ -241,19 +267,19 @@
 }
 
 @media (max-width: 500px) {
-  .grid {
+  /* .grid {
     grid-template-columns: 1fr;
     gap: 16px;
     padding: 0 8px;
-  }
+  } */
 }
 
 @media (max-width: 700px) {
-  .grid {
+  /* .grid {
     grid-template-columns: 1fr;
     gap: 16px;
     padding: 0 12px;
-  }
+  } */
   .header {
     flex-direction: column;
     gap: 8px;
@@ -275,4 +301,27 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
+}
+
+.newBattleTitle {
+  color: #5c4435;
+  font-family: 'VT323', monospace;
+  font-size: 22px;
+}
+
+.plus {
+  color: #655f4d;
+}
+
+.pageTitle {
+  color: #5c4435;
+}
+
+.deadline {
+  font-size: 14px;
+  color: #7c6a4d;
+  font-weight: 500;
+  font-family: 'VT323', monospace;
+  margin-bottom: 0;
+  margin-top: 0;
 } 
