@@ -22,7 +22,7 @@ export default function BottomNav({ active = "profile", onNavigate }) {
       <button
         className={`${styles.button} ${active === "battles" ? styles.active : ""}`}
         onClick={() => onNavigate && onNavigate("battles")}
-        aria-label="BattleContract"
+        aria-label="Battles"
       >
         <Swords />
       </button>
