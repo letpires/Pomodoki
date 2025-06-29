@@ -50,7 +50,7 @@ const mockBattles = [
 
 export default function Stats({ onHandlePage }) {
   const [selectedTab, setSelectedTab] = useState("Stats");
-  const { currentUser, getUserHistory, balance } =
+  const { currentUser, getUserHistory, balance, network } =
     useContext(CurrentUserContext);
   const [overview, setOverview] = useState(overview_default);
 
@@ -126,7 +126,11 @@ export default function Stats({ onHandlePage }) {
       <div
         className={styles.buyTokensBlock}
         onClick={() => {
-          window.open("https://www.moonpay.com/buy/flow", "_blank");
+          if (network === "testnet") {
+            window.open("https://faucet.flow.com/fund-account", "_blank");
+          } else {
+            window.open("https://www.moonpay.com/buy/flow", "_blank");
+          }
         }}
       >
         <div className={styles.buyCircle}>
@@ -176,39 +180,25 @@ export default function Stats({ onHandlePage }) {
 
       {selectedTab === "My battles" && (
         <div className={styles.myBattlesSection}>
-          <div className={styles.sectionTitle}>My Battles</div>
-          {mockBattles.length === 0 ? (
-            <div
-              style={{ textAlign: "center", color: "#bfa76a", marginTop: 24 }}
-            >
-              You haven&apos;t joined any battles yet.
-            </div>
-          ) : (
-            <div className={styles.myBattlesList}>
-              {mockBattles.map((battle) => (
-                <div key={battle.id} className={styles.myBattleCard}>
-                  <img
-                    src={battle.image}
-                    alt={battle.title}
-                    style={{
-                      width: 48,
-                      height: 48,
-                      borderRadius: 12,
-                      marginRight: 12,
-                    }}
-                  />
-                  <div>
-                    <div style={{ fontWeight: "bold", color: "#5a4a2c" }}>
-                      {battle.title}
-                    </div>
-                    <div style={{ fontSize: 13, color: "#7c6a4d" }}>
-                      Pool: {battle.pool} | Players: {battle.players}
-                    </div>
+          <div className={styles.overview}>
+            {mockBattles.length === 0 ? (
+              <div style={{ textAlign: "center", color: "#bfa76a", marginTop: 24 }}>
+                You haven&apos;t joined any battles yet.
+              </div>
+            ) : (
+              mockBattles.map((battle) => (
+                <div key={battle.id} className={styles.battleCardStats}>
+                  <div className={styles.battleCardStatsImageWrapper}>
+                    <img src={'/images/hackathon.png'} alt={battle.title} className={styles.battleCardStatsImage} />
+                  </div>
+                  <div className={styles.battleCardStatsContent}>
+                    <div className={styles.battleCardStatsTitle}>{battle.title}</div>
+                    <div className={styles.battleCardStatsPlayers}>Battle {battle.players} players</div>
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
+              ))
+            )}
+          </div>
         </div>
       )}
 
