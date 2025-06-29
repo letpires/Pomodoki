@@ -17,14 +17,14 @@ const formatTimeDisplay = (totalMinutes) => {
   if (totalMinutes < 60) {
     return `${totalMinutes}m`;
   }
-  
+
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
-  
+
   if (minutes === 0) {
     return `${hours}h`;
   }
-  
+
   return `${hours}h ${minutes}m`;
 };
 
@@ -53,17 +53,16 @@ export default function Stats({ onHandlePage }) {
   const { currentUser, getUserHistory, balance } =
     useContext(CurrentUserContext);
   const [overview, setOverview] = useState(overview_default);
-  
+
   useEffect(() => {
     if (!currentUser) return;
     const fetchUserHistory = async () => {
-      const stats = await getUserHistory(); 
+      const stats = await getUserHistory();
       console.log("stats", stats);
       if (stats && stats.length > 0) {
-        const totalTimeCommitted = stats.filter(stat => stat.totalUnstaked > 0).reduce(
-          (acc, stat) => acc + parseInt(stat.timeCommitted),
-          0 
-        ); 
+        const totalTimeCommitted = stats
+          .filter((stat) => stat.totalUnstaked > 0)
+          .reduce((acc, stat) => acc + parseInt(stat.timeCommitted), 0);
         const totalStakes = stats.reduce((acc, stat, index) => {
           if (index === 0) return 0;
           const prevStat = stats[index - 1];
@@ -86,16 +85,16 @@ export default function Stats({ onHandlePage }) {
             item.value = stats.length;
           }
           return item;
-        }); 
+        });
         setOverview(newOverview);
       }
     };
     fetchUserHistory();
   }, [currentUser]);
- 
+
   const overviewMemo = useMemo(
     () => (
-      <>  
+      <>
         {overview.map((item) => (
           <div className={styles.overviewCard} key={item.label}>
             <div className={styles.valueRow}>
@@ -124,9 +123,14 @@ export default function Stats({ onHandlePage }) {
     >
       <Navbar />
 
-      <div className={styles.buyTokensBlock}>
+      <div
+        className={styles.buyTokensBlock}
+        onClick={() => {
+          window.open("https://www.moonpay.com/buy/flow", "_blank");
+        }}
+      >
         <div className={styles.buyCircle}>
-          <span className={styles.buyArrow}>↓</span>
+          <span className={styles.buyArrow}>$</span>
         </div>
         <div className={styles.buyText}>Buy tokens</div>
       </div>
