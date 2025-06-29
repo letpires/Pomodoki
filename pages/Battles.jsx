@@ -22,7 +22,7 @@ const mockBattles = [
     pool: 2.5,
     players: 3,
     status: "active",
-    image: "/lovable-uploads/409d1706-dffe-4c5b-a77a-2f95d5577442.png",
+    image: "/images/hackathon.png",
     entryFee: false,
     leaderboard: mockLeaderboard,
   },
@@ -32,7 +32,7 @@ const mockBattles = [
     pool: 2.5,
     players: 3,
     status: "cancelled",
-    image: "/lovable-uploads/409d1706-dffe-4c5b-a77a-2f95d5577442.png",
+    image: "/images/hackathon.png",
     entryFee: false,
     leaderboard: mockLeaderboard,
   },
@@ -42,7 +42,7 @@ const mockBattles = [
     pool: 2.5,
     players: 3,
     status: "active",
-    image: "/lovable-uploads/409d1706-dffe-4c5b-a77a-2f95d5577442.png",
+    image: "/images/hackathon.png",
     entryFee: false,
     leaderboard: mockLeaderboard,
   },
@@ -52,7 +52,7 @@ const mockBattles = [
     pool: 2.5,
     players: 3,
     status: "active",
-    image: "/lovable-uploads/409d1706-dffe-4c5b-a77a-2f95d5577442.png",
+    image: "/images/hackathon.png",
     entryFee: false,
     leaderboard: mockLeaderboard,
   },
@@ -62,7 +62,7 @@ const mockBattles = [
     pool: 2.5,
     players: 3,
     status: "active",
-    image: "/lovable-uploads/409d1706-dffe-4c5b-a77a-2f95d5577442.png",
+    image: "/images/hackathon.png",
     entryFee: false,
     leaderboard: mockLeaderboard,
   },
@@ -72,7 +72,7 @@ const mockBattles = [
     pool: 2.5,
     players: 3,
     status: "active",
-    image: "/lovable-uploads/409d1706-dffe-4c5b-a77a-2f95d5577442.png",
+    image: "/images/hackathon.png",
     entryFee: false,
     leaderboard: mockLeaderboard,
   },
@@ -82,7 +82,7 @@ const mockBattles = [
     pool: 2.5,
     players: 3,
     status: "active",
-    image: "/lovable-uploads/409d1706-dffe-4c5b-a77a-2f95d5577442.png",
+    image: "/images/hackathon.png",
     entryFee: false,
     leaderboard: mockLeaderboard,
   },
@@ -97,44 +97,33 @@ function BattleCard({ battle }) {
   const router = useRouter();
   return (
     <div className={`${styles.card} ${styles[battle.status]}`}>
-      <img
-        className={styles.cardImage}
-        src={battle.image}
-        alt={battle.title}
-        onError={(e) => {
-          e.currentTarget.src =
-            "https://images.unsplash.com/photo-1518770660439-4636190af475?w=300&h=200&fit=crop";
-        }}
-      />
-
-      {/* Status badge */}
-      <span
-        className={`${styles.badge} ${
-          battle.status === "active"
-            ? styles.badgeActive
-            : styles.badgeCancelled
-        }`}
-      >
-        {battle.status === "active" ? "Active" : "Cancelled"}
-      </span>
+      <div className={styles.cardImageWrapper}>
+        <img
+          className={styles.cardImage}
+          src={battle.image}
+          alt={battle.title}
+          onError={(e) => {
+            e.currentTarget.src =
+              "https://images.unsplash.com/photo-1518770660439-4636190af475?w=300&h=200&fit=crop";
+          }}
+        />
+        {/* Status badge */}
+        <span
+          className={`${styles.badge} ${
+            battle.status === "active"
+              ? styles.badgeActive
+              : styles.badgeCancelled
+          }`}
+        >
+          {battle.status === "active" ? "Active" : "Cancelled"}
+        </span>
+      </div>
 
       {/* Card content */}
       <div className={styles.cardContent}>
-        <div className={styles.entryFee}>
-          {battle.entryFee ? `Entry fee: ${battle.entryFee}` : "No entry fee"}
-        </div>
         <div className={styles.title}>{battle.title}</div>
-        <div className={styles.pool}>🪙 Pool: {battle.pool}</div>
+        <div className={styles.deadline}>Deadline: 12/12/2024</div>
         <div className={styles.players}>Battle {battle.players} players</div>
-        <button
-          className={styles.leaderboardBtn}
-          onClick={(e) => {
-            e.stopPropagation();
-            router.push(`/Leaderboard?id=${battle.id}`);
-          }}
-        >
-          Leaderboard
-        </button>
       </div>
     </div>
   );
@@ -144,7 +133,7 @@ function NewBattleCard() {
   return (
     <div className={styles.newBattle}>
       <Plus className={styles.plus} />
-      <span>New Battle</span>
+      <span className={styles.newBattleTitle}>New Battle</span>
     </div>
   );
 }
@@ -186,27 +175,22 @@ export default function Battles({ onHandlePage }) {
       <h1 className={styles.pageTitle}>Battles</h1>
 
       {/* Tabs ------------------------------------------------*/}
-      {/* <div className={styles.tabs}>
+      <div className={styles.tabs}>
         {tabs.map((tab) => (
           <button
             key={tab}
-            className={
-              selectedTab === tab
-                ? `${styles.tab} ${styles.tabActive}`
-                : styles.tab
-            }
+            className={`${styles.tab} ${selectedTab === tab ? styles.tabActive : ""}`}
             onClick={() => setSelectedTab(tab)}
           >
             {tab.charAt(0).toUpperCase() + tab.slice(1)}
           </button>
         ))}
-      </div> */}
+      </div>
 
       {/* Grid ----------------------------------------------*/}
       <div className={styles.grid}>
-        {/* New battle is shown on every tab except joined */}
-        {selectedTab !== "joined" && <NewBattleCard />}
-
+        {/* New battle é mostrado em todos os filtros, sempre como o primeiro card */}
+        <NewBattleCard />
         {battlesForTab(selectedTab).map((battle) => (
           <div
             key={battle.id}
