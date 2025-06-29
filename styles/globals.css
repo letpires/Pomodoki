@@ -18,6 +18,7 @@ a {
 
 .popup-container {
   width: 400px;
+  min-height: 100vh;
   height: 600px;
   background: #ffedae;
   margin: 0 auto;

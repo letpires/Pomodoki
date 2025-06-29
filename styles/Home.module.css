@@ -1,6 +1,7 @@
 .container {
   padding: 0 1rem;
   background: #ffedae;
+  min-height: 100vh;
 }
 
 .main {
