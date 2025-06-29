@@ -30,140 +30,162 @@ export default function CreateBattle({ onClose }) {
   };
 
   return (
-    <div className={styles.container}>
-      <button
-        className={styles.closeX}
-        onClick={onClose}
-        aria-label="Close"
+    <div
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        background: 'rgba(0,0,0,0.3)',
+        zIndex: 1000,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <div
+        className={styles.container}
         style={{
-          position: "absolute",
-          top: 12,
-          right: 16,
-          background: "none",
-          border: "none",
-          fontSize: 28,
-          color: "#655f4d",
-          cursor: "pointer",
-          zIndex: 10,
+          borderRadius: 32,
+          boxShadow: '0 2px 16px #bfa76a44',
+          background: '#ffedae',
         }}
       >
-        ×
-      </button>
-      <h1 className={styles.title}>Create Battle</h1>
-      <form onSubmit={handleSubmit} className={styles.list}>
-        <div style={{ marginBottom: "16px", width: "100%" }}>
-          <label
-            style={{
-              display: "block",
-              marginBottom: "8px",
-              color: "#5a4a2c",
-              fontFamily: "VT323, monospace",
-              fontSize: "16px",
-              fontWeight: "bold",
-            }}
-          >
-            Battle Name
-          </label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            placeholder="Enter battle name..."
-            style={{
-              width: "100%",
-              padding: "12px 16px",
-              border: "2px solid #bfa76a",
-              borderRadius: "12px",
-              backgroundColor: "#fffbe6",
-              fontFamily: "VT323, monospace",
-              fontSize: "16px",
-              color: "#5a4a2c",
-              outline: "none",
-              boxShadow: "2px 3px 0 #5a4a2c",
-            }}
-            required
-          />
-        </div>
+        <button
+          className={styles.closeX}
+          onClick={onClose}
+          aria-label="Close"
+          style={{
+            position: "absolute",
+            top: 12,
+            right: 16,
+            background: "none",
+            border: "none",
+            fontSize: 28,
+            color: "#655f4d",
+            cursor: "pointer",
+            zIndex: 10,
+          }}
+        >
+          ×
+        </button>
+        <h1 className={styles.title}>Create Battle</h1>
+        <form onSubmit={handleSubmit} className={styles.list} style={{width: '100%', padding: 0, margin: 0}}>
+          <div style={{ marginBottom: "16px" }}>
+            <label
+              style={{
+                display: "block",
+                marginBottom: "8px",
+                color: "#5a4a2c",
+                fontFamily: "VT323, monospace",
+                fontSize: "16px",
+                fontWeight: "bold",
+              }}
+            >
+              Battle Name
+            </label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              placeholder="Enter battle name..."
+              style={{
+                width: "100%",
+                padding: "12px 16px",
+                border: "1.5px solid #655f4d",
+                borderRadius: "12px",
+                backgroundColor: "#fef6bf",
+                fontFamily: "VT323, monospace",
+                fontSize: "16px",
+                color: "#5a4a2c",
+                outline: "none",
+                boxShadow: "none",
+              }}
+              required
+            />
+          </div>
 
-        <div style={{ marginBottom: "16px", width: "100%" }}>
-          <label
-            style={{
-              display: "block",
-              marginBottom: "8px",
-              color: "#5a4a2c",
-              fontFamily: "VT323, monospace",
-              fontSize: "16px",
-              fontWeight: "bold",
-            }}
-          >
-            Description
-          </label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-            placeholder="Describe your battle..."
-            rows="3"
-            style={{
-              width: "100%",
-              padding: "12px 16px",
-              border: "2px solid #bfa76a",
-              borderRadius: "12px",
-              backgroundColor: "#fffbe6",
-              fontFamily: "VT323, monospace",
-              fontSize: "16px",
-              color: "#5a4a2c",
-              outline: "none",
-              boxShadow: "2px 3px 0 #5a4a2c",
-              resize: "vertical",
-              minHeight: "80px",
-            }}
-            required
-          />
-        </div>
+          <div style={{ marginBottom: "16px" }}>
+            <label
+              style={{
+                display: "block",
+                marginBottom: "8px",
+                color: "#5a4a2c",
+                fontFamily: "VT323, monospace",
+                fontSize: "16px",
+                fontWeight: "bold",
+              }}
+            >
+              Prize Description
+            </label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              placeholder="Describe prize..."
+              rows="3"
+              style={{
+                width: "100%",
+                padding: "12px 16px",
+                border: "1.5px solid #655f4d",
+                borderRadius: "12px",
+                backgroundColor: "#fef6bf",
+                fontFamily: "VT323, monospace",
+                fontSize: "16px",
+                color: "#5a4a2c",
+                outline: "none",
+                boxShadow: "none",
+                resize: "vertical",
+                minHeight: "80px",
+              }}
+              required
+            />
+          </div>
 
-        <div style={{ marginBottom: "16px", width: "100%" }}>
-          <label
-            style={{
-              display: "block",
-              marginBottom: "8px",
-              color: "#5a4a2c",
-              fontFamily: "VT323, monospace",
-              fontSize: "16px",
-              fontWeight: "bold",
-            }}
-          >
-            End Date
-          </label>
-          <input
-            type="datetime-local"
-            name="endDate"
-            value={formData.endDate}
-            onChange={handleInputChange}
-            style={{
-              width: "100%",
-              padding: "12px 16px",
-              border: "2px solid #bfa76a",
-              borderRadius: "12px",
-              backgroundColor: "#fffbe6",
-              fontFamily: "VT323, monospace",
-              fontSize: "16px",
-              color: "#5a4a2c",
-              outline: "none",
-              boxShadow: "2px 3px 0 #5a4a2c",
-            }}
-            required
-          />
-        </div>
-      </form>
-      <button
-        className={styles.joinBtn}
-        onClick={handleSubmit}
-        style={{ marginTop: "8px" }}
-      >
-        Create Battle
-      </button>
+          <div style={{ marginBottom: "16px" }}>
+            <label
+              style={{
+                display: "block",
+                marginBottom: "8px",
+                color: "#5a4a2c",
+                fontFamily: "VT323, monospace",
+                fontSize: "16px",
+                fontWeight: "bold",
+              }}
+            >
+              End Date
+            </label>
+            <input
+              type="datetime-local"
+              name="endDate"
+              value={formData.endDate}
+              onChange={handleInputChange}
+              style={{
+                width: "100%",
+                padding: "12px 16px",
+                border: "1.5px solid #655f4d",
+                borderRadius: "12px",
+                backgroundColor: "#fef6bf",
+                fontFamily: "VT323, monospace",
+                fontSize: "16px",
+                color: "#5a4a2c",
+                outline: "none",
+                boxShadow: "none",
+              }}
+              required
+            />
+          </div>
+        </form>
+        <button
+          className={styles.joinBtn}
+          onClick={handleSubmit}
+          style={{ marginTop: "8px" }}
+        >
+          Create Battle
+        </button>
+      </div>
     </div>
   );
 }
