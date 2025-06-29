@@ -98,11 +98,11 @@ export default function Stats({ onHandlePage }) {
       <>  
         {overview.map((item) => (
           <div className={styles.overviewCard} key={item.label}>
-            <div className={styles.valueRow}>
+            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, marginBottom: 2}}>
               <span className={styles.icon}>{item.icon}</span>
-              <span className={styles.value}>{item.value}</span>
+              <span className={styles.label}>{item.label}</span>
             </div>
-            <span className={styles.label}>{item.label}</span>
+            <span className={styles.value}>{item.value}</span>
           </div>
         ))}
       </>
@@ -148,8 +148,25 @@ export default function Stats({ onHandlePage }) {
       {selectedTab === "Stats" && (
         <>
           <div className={styles.sectionTitle}>Overview</div>
-          <div className={styles.overview}>{overviewMemo}</div>
-          <div className={styles.balance}>Balance : {balance}</div>
+          <div className={styles.overview}>
+            {overview.map((item) => (
+              <div className={styles.overviewCard} key={item.label}>
+                <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, marginBottom: 2}}>
+                  <span className={styles.icon}>{item.icon}</span>
+                  <span className={styles.label}>{item.label}</span>
+                </div>
+                <span className={styles.value}>{item.value}</span>
+              </div>
+            ))}
+          </div>
+          <div className={styles.balanceOverview}>
+            <div className={styles.overviewCard + ' ' + styles.balanceCard}>
+              <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, marginBottom: 2}}>
+                <span className={styles.label}>Balance</span>
+              </div>
+              <span className={styles.value}>{balance}</span>
+            </div>
+          </div>
         </>
       )}
 
