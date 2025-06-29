@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { CurrentUserContext } from "../context/currentUserProvider";
+import { CurrentUserContext } from "../context/CurrentUserProvider";
 
 export default function FlowLogin({ handleConnectWallet }) {
   const { isLoggedIn, handleLogin, handleLogout, currentUser } =

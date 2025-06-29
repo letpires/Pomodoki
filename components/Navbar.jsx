@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { CurrentUserContext } from "../context/currentUserProvider";
+import { CurrentUserContext } from "../context/CurrentUserProvider";
 import Profile from "./Profile";
 
 const Navbar = ({ selectedAvatar = "tomash" }) => {

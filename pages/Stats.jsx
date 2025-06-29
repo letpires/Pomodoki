@@ -6,11 +6,27 @@ import { CurrentUserContext } from "../context/CurrentUserProvider";
 
 const overview_default = [
   { key: "streak", icon: "🔥", label: "Streak", value: 0 },
-  { key: "focusTime", icon: "⏳", label: "Focus time", value: "0h" },
+  { key: "focusTime", icon: "⏳", label: "Focus time", value: "0m" },
   { key: "sessions", icon: "🍅", label: "Sessions", value: 0 },
 ];
 
 const tabs = ["Stats", "My battles", "NFTs"];
+
+// Helper function to format time display
+const formatTimeDisplay = (totalMinutes) => {
+  if (totalMinutes < 60) {
+    return `${totalMinutes}m`;
+  }
+  
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  
+  if (minutes === 0) {
+    return `${hours}h`;
+  }
+  
+  return `${hours}h ${minutes}m`;
+};
 
 // Mock battles (pode importar de outro arquivo se quiser)
 const mockBattles = [
@@ -42,11 +58,12 @@ export default function Stats({ onHandlePage }) {
     if (!currentUser) return;
     const fetchUserHistory = async () => {
       const stats = await getUserHistory(); 
+      console.log("stats", stats);
       if (stats && stats.length > 0) {
-        const totalTimeCommitted = stats.reduce(
-          (acc, stat) => acc + stat.timeCommitted,
-          0
-        );
+        const totalTimeCommitted = stats.filter(stat => stat.totalUnstaked > 0).reduce(
+          (acc, stat) => acc + parseInt(stat.timeCommitted),
+          0 
+        ); 
         const totalStakes = stats.reduce((acc, stat, index) => {
           if (index === 0) return 0;
           const prevStat = stats[index - 1];
@@ -57,11 +74,10 @@ export default function Stats({ onHandlePage }) {
           );
           return diffDays === 1 ? acc + 1 : 1;
         }, 0);
-        const totalTimeCommittedInHours = totalTimeCommitted / 60;
 
         const newOverview = overview.map((item) => {
           if (item.key === "focusTime") {
-            item.value = totalTimeCommittedInHours.toFixed(2) + "h";
+            item.value = formatTimeDisplay(totalTimeCommitted);
           }
           if (item.key === "streak") {
             item.value = totalStakes;

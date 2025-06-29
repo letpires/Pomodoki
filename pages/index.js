@@ -5,7 +5,7 @@ import Setup from "./Setup";
 import PomodoroTimer from "./PomodoroTimer";
 import Success from "./Success";
 import Failure from "./Failure";
-import { CurrentUserContext } from "../context/currentUserProvider";
+import { CurrentUserContext } from "../context/CurrentUserProvider";
 import AllSet from "./Allset";
 import Stats from "./Stats";
 import Battles from "./Battles";
@@ -108,8 +108,8 @@ export default function Home() {
   };
  
   const handleConnectWallet = async () => {
-    await handleLogin();
-    setPage("allset");
+    // await handleLogin();
+    setPage("avatar");
   };
   const handleTimerComplete = () => setPage("success");
   const handleTimerFail = () => setPage("failure");
