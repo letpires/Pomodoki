@@ -2,7 +2,7 @@ import FungibleToken from 0xFungibleToken
 import FlowToken from 0xFlowToken
 import StakingContract4 from 0xStakingContract
 
-transaction(amount: UFix64) {
+transaction(amount: UFix64, timeCommitted: UFix64) {
     let stakingRef: &StakingContract4.Staking
 
     prepare(signer: auth(Storage, Capabilities, FungibleToken.Withdraw) &Account) {
@@ -33,6 +33,6 @@ transaction(amount: UFix64) {
     }
 
     execute {
-        self.stakingRef.stake(amount: amount)
+        self.stakingRef.stake(amount: amount, timeCommitted: timeCommitted)
     }
 }
