@@ -23,7 +23,7 @@ fs.writeFileSync(
 );
 
 exec(
-  "flow project deploy cadence/contracts/StakingContract.cdc --network testnet",
+  "flow deploy --network testnet --update",
   (error, stdout, stderr) => {
     if (error) {
       console.error(`Error executing command: ${error}`);

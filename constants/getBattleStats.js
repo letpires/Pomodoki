@@ -1,8 +1,8 @@
 const GET_BATTLE_STATS_CADENCE = `
-import BattleContract from 0xBattleContract
+import BattleContract_V2 from 0xBattleContract
 
-access(all) fun main(battleId: UInt64): BattleContract.Battle? { 
-    return BattleContract.getBattle(id: battleId)
+access(all) fun main(battleId: UInt64): BattleContract_V2.Battle? { 
+    return BattleContract_V2.getBattle(id: battleId)
 } 
 `;
 

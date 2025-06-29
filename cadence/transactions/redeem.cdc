@@ -1,11 +1,11 @@
 import FungibleToken from 0xFungibleToken
 import FlowToken from 0xFlowToken
-import StakingContract_V1 from 0xStakingContract
+import StakingContract_V2 from 0xStakingContract
 
     transaction {
         prepare(signer: auth(Storage, Capabilities) &Account) {
             // Get the staking resource
-            let staking <- signer.storage.load<@StakingContract_V1.Staking>(from: /storage/StakingV1)
+            let staking <- signer.storage.load<@StakingContract_V2.Staking>(from: /storage/StakingV1)
                 ?? panic("No staking resource found")
 
             // Get the vault from staking
