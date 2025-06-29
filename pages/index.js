@@ -108,8 +108,8 @@ export default function Home() {
   };
  
   const handleConnectWallet = async () => {
-    // await handleLogin();
-    setPage("avatar");
+    await handleLogin();
+    setPage("allset");
   };
   const handleTimerComplete = () => setPage("success");
   const handleTimerFail = () => setPage("failure");
