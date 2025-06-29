@@ -1,11 +1,11 @@
 import Test 
-import Battles from 0x0000000000000007
+import BattleContract from 0x0000000000000007
 
 access(all)
 fun setup() {
     let err: Test.Error? = Test.deployContract(
-        name: "Battles", 
-        path: "/Users/glaiconpeixer/devSea/Pomodoki/cadence/contracts/Battle.cdc",
+        name: "BattleContract", 
+        path: "/Users/glaiconpeixer/devSea/Pomodoki/cadence/contracts/BattleContract.cdc",
         arguments: []
     )
     Test.expect(err, Test.beNil())
@@ -17,10 +17,10 @@ fun testCreateBattle() {
     let options: [String] = ["Option 1", "Option 2"]
     let endDate: UFix64 = 1000.0
 
-    let battleId = Battles.createBattle(end: endDate, owner: account.address)
+    let battleId = BattleContract.createBattle(end: endDate, owner: account.address)
     Test.assertEqual(battleId, UInt64(1))
     
-    let battle = Battles.getBattle(id: battleId)
+    let battle = BattleContract.getBattle(id: battleId)
     Test.expect(battle != nil, Test.not(Test.beNil()))
     Test.assertEqual(battle!.owner, account.address) 
 }
@@ -31,10 +31,10 @@ fun testJoinBattle() {
     let user: Test.TestAccount = Test.createAccount()     
     let endDate: UFix64 = getCurrentBlock().timestamp + 1000.0
     
-    let battleId = Battles.createBattle(end: endDate, owner: owner.address)
-    Battles.joinBattle(battleId: battleId, user: user.address)
+    let battleId = BattleContract.createBattle(end: endDate, owner: owner.address)
+    BattleContract.joinBattle(battleId: battleId, user: user.address)
     
-    let battle = Battles.getBattle(id: battleId)  
+    let battle = BattleContract.getBattle(id: battleId)  
     Test.expect(battle != nil, Test.not(Test.beNil()))
     Test.assertEqual(battle!.users.length, 1)
     Test.assertEqual(battle!.users[0], user.address) 
@@ -47,12 +47,12 @@ fun testJoinBattle() {
 //     let user: Test.TestAccount = Test.createAccount()     
 //     let endDate: UFix64 = getCurrentBlock().timestamp + 1000.0
     
-//     let battleId = Battles.createBattle(end: endDate, owner: owner.address)
-//     Battles.joinBattle(battleId: battleId, user: user.address)
+//     let battleId = BattleContract.createBattle(end: endDate, owner: owner.address)
+//     BattleContract.joinBattle(battleId: battleId, user: user.address)
 
 //     let staking <- StakingContract4.createStaking(vault: <- flowVault)
     
-//     let battle = Battles.getBattle(id: battleId)  
+//     let battle = BattleContract.getBattle(id: battleId)  
 //     Test.expect(battle != nil, Test.not(Test.beNil()))
 //     Test.assertEqual(battle!.users.length, 1)
 //     Test.assertEqual(battle!.users[0], user.address) 

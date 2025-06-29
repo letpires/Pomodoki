@@ -7,7 +7,7 @@
 	},
 	"contracts": {
 		"StakingContract": "./cadence/contracts/StakingContract.cdc",
-		"Battles": {
+		"BattleContract": {
 			"source": "./cadence/contracts/Battle.cdc",
 			"aliases": { 
 				"testing": "0x0000000000000007",
@@ -64,13 +64,13 @@
 		"testing": {
 			"emulator-account": [
 				"StakingContract",
-				"Battles"
+				"BattleContract"
 			]
 		},
 		"emulator": {
 			"emulator-account": [
 				"StakingContract",
-				"Battles"
+				"BattleContract"
 			]
 		}
 	}

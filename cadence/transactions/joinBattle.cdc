@@ -1,4 +1,4 @@
- import Battles from 0xBattles
+ import BattleContract from 0xBattleContract
 
 transaction(battleId: UInt64) { 
     let account: &Account
@@ -8,6 +8,6 @@ transaction(battleId: UInt64) {
     }
 
     execute { 
-        Battles.joinBattle(battleId: battleId, user: self.account.address)
+        BattleContract.joinBattle(battleId: battleId, user: self.account.address)
     }
 }

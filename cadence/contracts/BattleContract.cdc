@@ -1,4 +1,4 @@
-access(all) contract Battles {  
+access(all) contract BattleContract {  
     access(all) struct Battle {
         access(all) let id: UInt64
         access(all) let owner: Address 

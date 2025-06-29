@@ -1,10 +1,10 @@
-const { executeStakeFromFile, executeGetUserStats, executeCreateBattle, executeGetBattleStats, executeJoinBattle } = require("./stake-test");
+const { executeStake, executeGetUserStats, executeCreateBattle, executeGetBattleStats, executeJoinBattle } = require("./stake-test");
 
 async function main() {
   console.log("🧪 Starting stake transaction test...");
 
   try { 
-    // await executeStakeFromFile();
+    // await executeStake();
     // await executeGetUserStats();
     // await executeCreateBattle();
     await executeGetBattleStats();

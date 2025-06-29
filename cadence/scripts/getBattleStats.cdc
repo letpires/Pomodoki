@@ -1,5 +1,5 @@
- import Battles from 0xBattles
+ import BattleContract from 0xBattleContract
 
-access(all) fun main(battleId: UInt64): Battles.Battle? { 
-    return Battles.getBattle(id: battleId)
+access(all) fun main(battleId: UInt64): BattleContract.Battle? { 
+    return BattleContract.getBattle(id: battleId)
 } 

@@ -1,4 +1,4 @@
- import Battles from 0xBattles
+ import BattleContract from 0xBattleContract
 
 transaction(endDate: UFix64) { 
     let account: &Account
@@ -8,6 +8,6 @@ transaction(endDate: UFix64) {
     }
 
     execute { 
-        Battles.createBattle(end: endDate, owner: self.account.address)
+        BattleContract.createBattle(end: endDate, owner: self.account.address)
     }
 }

@@ -150,7 +150,7 @@ const CurrentUserProvider = ({ children }) => {
       "accessNode.api": `https://rest-${network}.onflow.org`,
       "discovery.wallet": `https://fcl-discovery.onflow.org/${network}/authn`,
       "0xStakingContract": stakingContractAddress,
-      "0xBattles": battlesContractAddress,
+      "0xBattleContract": battlesContractAddress,
       "0xFungibleToken": fungibleTokenAddress,
       "0xFlowToken": flowTokenAddress,
     });

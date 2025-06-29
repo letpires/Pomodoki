@@ -1,5 +1,5 @@
- import Battles from 0xBattles
+ import BattleContract from 0xBattleContract
 
-access(all) fun main(): [Battles.Battle] { 
-    return Battles.getBattles()
+access(all) fun main(): [BattleContract.Battle] { 
+    return BattleContract.getBattles()
 } 

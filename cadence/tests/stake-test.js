@@ -12,7 +12,7 @@ fcl.config({
   "discovery.wallet": "http://localhost:8888/fcl/authn",
   "fcl.accountProof.resolver": "http://localhost:8888/fcl/account-proof",
   "0xStakingContract": "0xf8d6e0586b0a20c7",
-  "0xBattles": "0xf8d6e0586b0a20c7",
+  "0xBattleContract": "0xf8d6e0586b0a20c7",
   "0xFungibleToken": "0xee82856bf20e2aa6",
   "0xFlowToken": "0x0ae53cb6e3f42a79",
 });
@@ -105,7 +105,7 @@ function hashMsg(msg) {
 }
 
 // Alternative function to load transaction from file
-async function executeStakeFromFile() {
+async function executeStake() {
   try {
 
     // Create authorization function for emulator
@@ -234,7 +234,6 @@ async function executeGetBattleStats() {
   }
 } 
 
-
 // execute get user stats
 async function executeJoinBattle() {
   try { 
@@ -278,7 +277,7 @@ async function executeJoinBattle() {
 
 // Export functions for use in other files
 module.exports = {
-  executeStakeFromFile,
+  executeStake,
   executeGetUserStats,
   executeCreateBattle,
   executeGetBattleStats,
