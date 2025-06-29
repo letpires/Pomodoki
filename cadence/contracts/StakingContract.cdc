@@ -17,20 +17,20 @@ access(all) contract StakingContract4 {
             self.flowVault <- FlowToken.createEmptyVault(vaultType: Type<@FlowToken.Vault>())
         }
  
-        access(all) fun stake(amount: UFix64, timeCommitted: UFix64) {
+        access(all) fun stake(address: &Account, amount: UFix64, timeCommitted: UFix64) {
             self.flowVault.deposit(from: <- self.vault.withdraw(amount: amount))
-            self.stakedAmount = amount  
-            if self.historyStats[self.address] == nil {
-                self.historyStats[self.address] = []
+            self.stakedAmount = amount   
+            if StakingContract4.historyStats[address.address] == nil {
+                StakingContract4.historyStats[address.address] = []
             }
-            self.historyStats[self.address]!.append(HistoryStats(totalStaked: amount, timeCommitted: timeCommitted))
+            StakingContract4.historyStats[address.address]!.append(HistoryStats(totalStaked: amount, timeCommitted: timeCommitted))
         } 
  
-        access(all) fun cleanup(): @{FungibleToken.Vault} {
-            let remainingAmount = self.stakedAmount
+        access(all) fun cleanup(address: &Account): @{FungibleToken.Vault} {
+            let remainingAmount: UFix64 = self.stakedAmount
             self.stakedAmount = 0.0  
-            let historyStats = self.historyStats[self.address]
-            if historyStats !== nil {
+            let historyStats: [HistoryStats]? = StakingContract4.historyStats[address.address]
+            if historyStats != nil {
                 if historyStats!.length > 0 {
                     historyStats![historyStats!.length - 1].end()
                 }
@@ -42,15 +42,17 @@ access(all) contract StakingContract4 {
 
     access(all) struct HistoryStats {
         access(self) let startDate: UFix64
-        access(self) let endDate: UFix64
-        access(self) var totalStaked: UFix64
+        access(self) var endDate: UFix64
+        access(self) let totalStaked: UFix64
         access(self) var totalUnstaked: UFix64
-        access(self) var timeCommitted: UFix64
+        access(self) let timeCommitted: UFix64
 
         init(totalStaked: UFix64, timeCommitted: UFix64) {
             self.startDate = getCurrentBlock().timestamp
             self.totalStaked = totalStaked 
             self.timeCommitted = timeCommitted
+            self.endDate = 0.0
+            self.totalUnstaked = 0.0
         } 
 
         access(all) fun end() {
@@ -60,7 +62,7 @@ access(all) contract StakingContract4 {
     }
 
     init() {
-        self.statsByDay = {}
+        self.historyStats = {}
     }
  
     access(all) fun createStaking(vault: @{FungibleToken.Vault}): @Staking {

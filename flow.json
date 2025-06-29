@@ -2,7 +2,7 @@
 	"emulators": {
 		"default": {
 			"port": 3569,
-			"serviceAccount": "testnet-account"
+			"serviceAccount": "emulator-account"
 		}
 	},
 	"contracts": {
@@ -38,6 +38,16 @@
 				"signatureAlgorithm": "ECDSA_secp256k1",
 				"hashAlgorithm": "SHA2_256"
 			}
+		},
+		"emulator-account": {
+			"address": "f8d6e0586b0a20c7",
+			"key": {
+				"type": "hex",
+				"index": 0,
+				"signatureAlgorithm": "ECDSA_secp256k1",
+				"hashAlgorithm": "SHA2_256",
+				"privateKey": "39dbc807732235567e28598c64a402af177c0136031caf54f31c7fabd502b04b"
+			}
 		}
 	},
 	"deployments": {
@@ -52,13 +62,13 @@
 			]
 		},
 		"testing": {
-			"testnet-account": [
+			"emulator-account": [
 				"StakingContract",
 				"Battles"
 			]
 		},
 		"emulator": {
-			"testnet-account": [
+			"emulator-account": [
 				"StakingContract",
 				"Battles"
 			]

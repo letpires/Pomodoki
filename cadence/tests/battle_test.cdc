@@ -1,6 +1,5 @@
-import Test
+import Test 
 import Battles from 0x0000000000000007
-import StakingContract4 from 0x0000000000000007 
 
 access(all)
 fun setup() {

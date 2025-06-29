@@ -4,6 +4,7 @@ import StakingContract4 from 0xStakingContract
 
 transaction(amount: UFix64, timeCommitted: UFix64) {
     let stakingRef: &StakingContract4.Staking
+    let account: &Account
 
     prepare(signer: auth(Storage, Capabilities, FungibleToken.Withdraw) &Account) {
         // Borrow a reference with Withdraw entitlement from storage
@@ -30,9 +31,10 @@ transaction(amount: UFix64, timeCommitted: UFix64) {
 
         self.stakingRef = signer.capabilities.borrow<&StakingContract4.Staking>(/public/Staking)
             ?? panic("Could not borrow Staking reference")
+        self.account = signer
     }
 
     execute {
-        self.stakingRef.stake(amount: amount, timeCommitted: timeCommitted)
+        self.stakingRef.stake(address: self.account, amount: amount, timeCommitted: timeCommitted)
     }
 }
