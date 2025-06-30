@@ -57,9 +57,9 @@ access(all) contract BattleContract_V2 {
     }
 
     // TODO - Create a stake mechanism for the battle, user needs to stake a certain amount of tokens to create a battle
-    access(all) fun createBattle(end: UInt64, owner: Address, prize: String, title: String, image: String): UInt64 {
+    access(all) fun createBattle(start: UInt64, end: UInt64, owner: Address, prize: String, title: String, image: String): UInt64 {
         let id: UInt64 = self.nextBattleId
-        let startDate: UInt64 = UInt64(getCurrentBlock().timestamp)
+        let startDate: UInt64 = start
         self.battles[id] = Battle(id: id, owner: owner, startDate: startDate, endDate: end, prize: prize, title: title, image: image) 
         self.nextBattleId = self.nextBattleId + 1
         return id
