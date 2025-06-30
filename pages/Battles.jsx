@@ -76,8 +76,7 @@ export default function Battles({ onHandlePage }) {
       image: battle.image,
       players: battle.users.length,
       status: new Date(battle.endDate * 1000) > Date.now() ? "active" : "finished",
-    }));
-    // Ordenar por id decrescente (mais recente primeiro)
+    })); 
     newBattles.sort((a, b) => b.id - a.id);
     setBattles(newBattles);
   };

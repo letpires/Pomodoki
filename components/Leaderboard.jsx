@@ -15,18 +15,19 @@ export default function Leaderboard({ onClose, onJoinBattle, battle }) {
 
   useEffect(() => {
     const fetchBattleStats = async () => {
-      const battleStats = await getBattleStats(battle.id); 
-  
+      const battleStats = await getBattleStats(battle.id);
+
       if (!battleStats) return;
 
       const users = battleStats.users;
       const usersWithHistory = battleStats.usersWithHistory;
       const leaderboard = users.map((user) => {
         const userHistory = usersWithHistory[user];
-        const totalTimeCommitted = userHistory
-          ?.filter((stat) => stat.totalUnstaked > 0)
-          .filter((stat) => stat.startDate >= battle.startDate)
-          .reduce((acc, stat) => acc + parseInt(stat.timeCommitted), 0) ?? 0;
+        const totalTimeCommitted =
+          userHistory
+            ?.filter((stat) => stat.totalUnstaked > 0)
+            .filter((stat) => stat.startDate >= battle.startDate)
+            .reduce((acc, stat) => acc + parseInt(stat.timeCommitted), 0) ?? 0;
 
         return {
           name: user,
@@ -92,17 +93,19 @@ export default function Leaderboard({ onClose, onJoinBattle, battle }) {
           </div>
         ))}
       </div>
-      <button
-        className={styles.joinBtn}
-        onClick={handleJoin}
-        disabled={joining || isUserInBattle || joined}
-      >
-        {isUserInBattle || joined
-          ? "You are in!"
-          : joining
-          ? "Joining..."
-          : "I want to join"}
-      </button>
+      {joined && (
+        <button
+          className={styles.joinBtn}
+          onClick={handleJoin}
+          disabled={joining || isUserInBattle || joined}
+        >
+          {isUserInBattle || joined
+            ? "You are in!"
+            : joining
+            ? "Joining..."
+            : "I want to join"}
+        </button>
+      )}
     </div>
   );
 }

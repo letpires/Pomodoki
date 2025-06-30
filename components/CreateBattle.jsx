@@ -202,7 +202,7 @@ export default function CreateBattle({ onClose, onCreated }) {
           style={{ marginTop: "8px" }}
           disabled={loading}
         >
-          {loading ? "Criando..." : "Create Battle"}
+          {loading ? "Creating..." : "Create Battle"}
         </button>
       </div>
     </div>
