@@ -39,7 +39,7 @@ const Welcome = ({ onConnectWallet }) => {
           </div>
 
           {/* Botão Continue aparece se já está conectado */}
-          {/* {isLoggedIn && (
+          {isLoggedIn && (
             <button
               onClick={onConnectWallet}
               style={{
@@ -58,9 +58,9 @@ const Welcome = ({ onConnectWallet }) => {
                 marginRight: "auto",
               }}
             >
-              Continue
+              Choose your avatar
             </button>
-          )} */}
+          )}
         </div>
       </div>
     </>

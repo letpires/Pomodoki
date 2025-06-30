@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { CurrentUserContext } from "../context/CurrentUserProvider";
 import Profile from "./Profile";
 
-const Navbar = ({ selectedAvatar = "tomash" }) => {
+const Navbar = ({ selectedAvatar = "tomash", setPage}) => {
   const { currentUser, network, setNetwork, loadingWallet } = useContext(CurrentUserContext);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -42,7 +42,7 @@ const Navbar = ({ selectedAvatar = "tomash" }) => {
       }}
     >
       {/* Left: Avatar */}
-      <div style={{ position: "relative", zIndex: 2 }}>
+      <div style={{ position: "relative", zIndex: 2 }} onClick={() => setPage("welcome")}>
         <div style={{ marginRight: "8px", width: "50px", height: "50px", borderRadius: "50%", overflow: "hidden" }}>
           <Profile type={selectedAvatar} />
         </div>

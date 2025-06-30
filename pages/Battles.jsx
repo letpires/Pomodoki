@@ -115,8 +115,7 @@ export default function Battles({ onHandlePage }) {
   // Novo handler para redirecionar após criar
   const handleCreatedBattle = async () => {
     setIsCreateBattleOpen(false);
-    await fetchBattles();
-    // Garantir que está na aba de battles, se usar tabs
+    await fetchBattles(); 
     setSelectedTab("created");
   };
 
@@ -133,7 +132,7 @@ export default function Battles({ onHandlePage }) {
         paddingTop: "60px",
       }}
     >
-      <Navbar />
+      <Navbar setPage={onHandlePage} />
 
       <h1 className={styles.pageTitle}>Battles</h1>
 

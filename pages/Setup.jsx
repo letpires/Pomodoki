@@ -66,7 +66,7 @@ const Setup = ({ onStart, selectedAvatar = "tomash", onHandlePage }) => {
 
   return (
     <>
-      <Navbar selectedAvatar={selectedAvatar} />
+      <Navbar selectedAvatar={selectedAvatar} setPage={onHandlePage} />
       <div className="popup-container" style={{ backgroundColor: "#ffedae" }}>
         <div
           className="w-full"

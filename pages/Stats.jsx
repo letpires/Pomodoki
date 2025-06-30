@@ -123,7 +123,7 @@ export default function Stats({ onHandlePage }) {
         paddingTop: "50px",
       }}
     >
-      <Navbar />
+      <Navbar setPage={onHandlePage} />
 
       <div
         className={styles.buyTokensBlock}
