@@ -4,6 +4,7 @@ import styles from "../styles/Stats.module.css";
 import BottomNav from "../components/BottomNav";
 import { CurrentUserContext } from "../context/CurrentUserProvider";
 
+
 const overview_default = [
   { key: "streak", icon: "🔥", label: "Streak", value: 0 },
   { key: "focusTime", icon: "⏳", label: "Focus time", value: "0m" },
@@ -26,34 +27,35 @@ const formatTimeDisplay = (totalMinutes) => {
   }
 
   return `${hours}h ${minutes}m`;
-};
-
-// Mock battles (pode importar de outro arquivo se quiser)
-const mockBattles = [
-  {
-    id: 1,
-    title: "Hackathon Cannes",
-    pool: 2.5,
-    players: 3,
-    status: "joined",
-    image: "/lovable-uploads/409d1706-dffe-4c5b-a77a-2f95d5577442.png",
-  },
-  {
-    id: 2,
-    title: "GCP Certification",
-    pool: 2.5,
-    players: 3,
-    status: "joined",
-    image: "/lovable-uploads/409d1706-dffe-4c5b-a77a-2f95d5577442.png",
-  },
-];
+}; 
 
 export default function Stats({ onHandlePage }) {
   const [selectedTab, setSelectedTab] = useState("Stats");
-  const { currentUser, getUserHistory, balance, network } =
+  const { currentUser, getUserHistory, balance, network, getUserBattles } =
     useContext(CurrentUserContext);
   const [overview, setOverview] = useState(overview_default);
+  const [battles, setBattles] = useState([]);
 
+  const fetchBattles = async () => {
+    const battles = await getUserBattles(currentUser.publicAddress);
+    console.log("battles", battles);
+    const newBattles = battles.map((battle) => ({
+      ...battle,
+      title: battle.name,
+      deadline: battle.endDate,
+      image: battle.image,
+      players: battle.users.length,
+      status: new Date(battle.endDate * 1000) > Date.now() ? "active" : "finished",
+    }));
+    setBattles(newBattles);
+  };
+
+  useEffect(() => { 
+    if (!currentUser) return;
+    fetchBattles();
+  }, []);
+
+  
   useEffect(() => {
     if (!currentUser) return;
     const fetchUserHistory = async () => {
@@ -181,12 +183,12 @@ export default function Stats({ onHandlePage }) {
       {selectedTab === "My battles" && (
         <div className={styles.myBattlesSection}>
           <div className={styles.overview}>
-            {mockBattles.length === 0 ? (
+            {battles.length === 0 ? (
               <div style={{ textAlign: "center", color: "#bfa76a", marginTop: 24 }}>
                 You haven&apos;t joined any battles yet.
               </div>
             ) : (
-              mockBattles.map((battle) => (
+              battles.map((battle) => (
                 <div key={battle.id} className={styles.battleCardStats}>
                   <div className={styles.battleCardStatsImageWrapper}>
                     <img src={battle.image} alt={battle.title} className={styles.battleCardStatsImage} />

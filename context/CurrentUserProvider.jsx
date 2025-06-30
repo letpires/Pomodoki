@@ -3,10 +3,11 @@ import * as fcl from "@onflow/fcl";
 import { Magic } from "magic-sdk";
 import { FlowExtension } from "@magic-ext/flow";
 import GET_USER_STATS_CADENCE from "../constants/getUserStats";
-import GET_BATTLES_CADENCE from "../constants/getBattle";
+import GET_BATTLES_CADENCE from "../constants/getBattles";
 import CREATE_BATTLE_CADENCE from "../constants/createBattle";
 import JOIN_BATTLE_CADENCE from "../constants/joinBattle";
 import GET_BATTLE_STATS_CADENCE from "../constants/getBattleStats";
+import GET_USER_BATTLES_CADENCE from "../constants/getUserBattles";
 
 export const CurrentUserContext = createContext({});
 
@@ -144,12 +145,20 @@ const CurrentUserProvider = ({ children }) => {
     console.log("battles", battles);
     return battles;
   };
-
-  // get battle stats
+ 
   const getBattleStats = async (battleId) => { 
     const battle = await fcl.query({
       cadence: GET_BATTLE_STATS_CADENCE,
       args: (arg, t) => [arg(battleId, t.UInt64)],
+    });
+    console.log("battle", battle);
+    return battle;
+  };
+ 
+  const getUserBattles = async (address) => { 
+    const battle = await fcl.query({
+      cadence: GET_USER_BATTLES_CADENCE,
+      args: (arg, t) => [arg(address, t.Address)],
     });
     console.log("battle", battle);
     return battle;
@@ -244,6 +253,7 @@ const CurrentUserProvider = ({ children }) => {
         network,
         setNetwork,
         loadingWallet,
+        getUserBattles,
         getBattles,
         createBattle,
         joinBattle,
