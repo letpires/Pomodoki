@@ -160,7 +160,7 @@ export default function Stats({ onHandlePage }) {
 
       {selectedTab === "My battles" && (
         <div className={styles.myBattlesSection}>
-          <div className={styles.overview}>
+          <div className={styles.myBattlesGrid}>
             {battles.length === 0 ? (
               <div style={{ textAlign: "center", color: "#bfa76a", marginTop: 24 }}>
                 You haven&apos;t joined any battles yet.
@@ -194,3 +194,4 @@ export default function Stats({ onHandlePage }) {
     </div>
   );
 }
+
