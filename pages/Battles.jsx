@@ -95,7 +95,8 @@ export default function Battles({ onHandlePage }) {
   const fetchBattles = async () => {
     const battles = await getBattles();
     console.log("battles", battles);
-    const newBattles = battles.map((battle) => ({
+    // TODO: remove this filter
+    const newBattles = battles.filter(x=>x.id > 17).map((battle) => ({
       ...battle,
       title: battle.title || battle.name,
       deadline: battle.endDate,
