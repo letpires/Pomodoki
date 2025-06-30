@@ -42,7 +42,7 @@ const Navbar = ({ selectedAvatar = "tomash", setPage}) => {
       }}
     >
       {/* Left: Avatar */}
-      <div style={{ position: "relative", zIndex: 2 }} onClick={() => setPage("welcome")}>
+      <div style={{ position: "relative", zIndex: 2, cursor: "pointer" }} onClick={() => setPage("welcome")}>
         <div style={{ marginRight: "8px", width: "50px", height: "50px", borderRadius: "50%", overflow: "hidden" }}>
           <Profile type={selectedAvatar} />
         </div>

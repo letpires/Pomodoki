@@ -6,6 +6,7 @@ import BottomNav from "../components/BottomNav";
 import Leaderboard from "../components/Leaderboard";
 import { CurrentUserContext } from "../context/CurrentUserProvider";
 import CreateBattle from "../components/CreateBattle";
+import { useBattleStore } from '../stores/battleStore'
 
 const tabs = ["all", "created", "joined"];
 
@@ -95,13 +96,13 @@ function NewBattleCard({ onOpenCreateBattle }) {
       <span className={styles.newBattleTitle}>New Battle</span>
     </div>
   );
-}
+} 
 
 export default function Battles({ onHandlePage }) {
   const [selectedTab, setSelectedTab] = useState("created");
   const [selectedBattle, setSelectedBattle] = useState(null);
   const { currentUser, getBattles, joinBattle } = useContext(CurrentUserContext);
-  const [battles, setBattles] = useState([]);
+  const { battles: storeBattles, setBattles: setStoreBattles } = useBattleStore()
   const [isCreateBattleOpen, setIsCreateBattleOpen] = useState(false);
  
   const handleJoinBattle = async (battle) => {
@@ -112,7 +113,6 @@ export default function Battles({ onHandlePage }) {
 
   const fetchBattles = async () => {
     const battles = await getBattles();
-    console.log("battles", battles);
     const newBattles = battles.map((battle) => ({
       ...battle,
       title: battle.title || battle.name,
@@ -121,9 +121,8 @@ export default function Battles({ onHandlePage }) {
       players: battle.users.length,
       status: new Date(battle.endDate * 1000) > Date.now() ? "active" : "finished",
     }));
-    // Ordenar por id decrescente (mais recente primeiro)
     newBattles.sort((a, b) => b.id - a.id);
-    setBattles(newBattles);
+    setStoreBattles(newBattles);
   };
 
   useEffect(() => { 
@@ -197,7 +196,7 @@ export default function Battles({ onHandlePage }) {
       <div className={styles.grid}>
         {/* New battle é mostrado em todos os filtros, sempre como o primeiro card */}
         <NewBattleCard onOpenCreateBattle={handleOpenCreateBattle} />
-        {battles.map((battle) => (
+        {storeBattles.map((battle) => (
           <div
             key={battle.id}
             onClick={() => setSelectedBattle(battle)}

@@ -20,7 +20,8 @@
     "next": "12.1.6",
     "react": "18.1.0",
     "react-dom": "18.1.0",
-    "sha3": "^2.1.4"
+    "sha3": "^2.1.4",
+    "zustand": "^5.0.6"
   },
   "devDependencies": {
     "eslint": "8.16.0",
