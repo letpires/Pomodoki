@@ -8,17 +8,33 @@ import CREATE_BATTLE_CADENCE from "../constants/createBattle";
 import JOIN_BATTLE_CADENCE from "../constants/joinBattle";
 import GET_BATTLE_STATS_CADENCE from "../constants/getBattleStats";
 import GET_USER_BATTLES_CADENCE from "../constants/getUserBattles";
+import { useUserStore } from "../stores/userStore";
 
 export const CurrentUserContext = createContext({});
 
 const CurrentUserProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(false);
-  const [balance, setBalance] = useState(0);
-  const [balanceLoading, setBalanceLoading] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [magic, setMagic] = useState(null);
-  const [network, setNetwork] = useState(null);
-  const [loadingWallet, setLoadingWallet] = useState(true);
+  
+  // Use userStore instead of useState
+  const {
+    currentUser,
+    setCurrentUser,
+    balance,
+    setBalance,
+    balanceLoading,
+    setBalanceLoading,
+    isLoggedIn,
+    setIsLoggedIn,
+    network,
+    setNetwork,
+    loadingWallet,
+    setLoadingWallet,
+    login,
+    logout,
+    updateBalance,
+    resetUser
+  } = useUserStore();
+  
   const AUTHORIZATION_FUNCTION = magic?.flow.authorization;
 
   // Load network from localStorage on component mount
@@ -43,16 +59,16 @@ const CurrentUserProvider = ({ children }) => {
 
         if (accountInfo && accountInfo.balance) {
           const balanceInFlow = parseFloat(accountInfo.balance) / 100000000;
-          setBalance(balanceInFlow);
+          updateBalance(balanceInFlow);
         } else {
-          setBalance(0);
+          updateBalance(0);
         }
       } else {
-        setBalance(0);
+        updateBalance(0);
       }
     } catch (error) {
       console.error("Error fetching balance:", error);
-      setBalance(0);
+      updateBalance(0);
     } finally {
       setBalanceLoading(false);
     }
@@ -99,8 +115,7 @@ const CurrentUserProvider = ({ children }) => {
     try {
       await magic.wallet.connectWithUI();
       const data = await magic.user.getInfo();
-      setCurrentUser(data);
-      setIsLoggedIn(true);
+      login(data);
       // Fetch balance after successful login
       await fetchBalance();
     } catch (error) {
@@ -112,9 +127,7 @@ const CurrentUserProvider = ({ children }) => {
   // create a function to handle the logout
   const handleLogout = async () => {
     await magic.user.logout();
-    setCurrentUser(null);
-    setIsLoggedIn(false);
-    setBalance(0);
+    logout();
   };
 
   // get user stats
@@ -198,7 +211,7 @@ const CurrentUserProvider = ({ children }) => {
     if (!network) return;
 
     setLoadingWallet(true);
-    setBalance(0);
+    updateBalance(0);
     localStorage.setItem("pomodoki-network", network);
 
     setMagic(
