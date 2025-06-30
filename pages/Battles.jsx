@@ -55,35 +55,16 @@ function BattleCard({ battle }) {
         >
           {battle.status === "active" ? "Active" : "Finished"}
         </span>
-        {/* Players badge */}
-        <span
-          className={styles.playersBadge}
-          style={{
-            position: 'absolute',
-            left: 12,
-            bottom: 12,
-            fontSize: 13,
-            padding: '4px 12px',
-            borderRadius: 16,
-            fontFamily: 'VT323, monospace',
-            fontWeight: 'bold',
-            background: '#e2c98f',
-            color: '#655f4d',
-            zIndex: 2,
-            boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
-          }}
-        >
-          {battle.players} players
-        </span>
       </div>
       {/* Card content */}
       <div className={styles.cardContent}>
         <div className={styles.title} style={{fontWeight: 'bold', fontSize: 18, marginBottom: 4}}>{battle.title}</div>
-        {/* <div className={styles.deadline} style={{fontSize: 12, color: '#7c6a4d', marginBottom: 0, lineHeight: 1.2}}>
-          <div>Start: {formatDateShort(battle.startDate)}</div>
-          <div>End: {formatDateShort(battle.deadline)}</div>
-        </div> */}
-        <div className={styles.deadline}>{false? "Countdown" : "Start at"}: {getCountdown(battle.deadline)}</div>
+        {battle.status === 'finished' ? (
+          <div className={styles.deadline} style={{color: '#bfa76a'}}>Ended at: {formatDateShort(battle.deadline)}</div>
+        ) : (
+          <div className={styles.deadline}>{false? "Countdown" : "Start at"}: {getCountdown(battle.deadline)}</div>
+        )}
+        <div className={styles.players} style={{fontSize: 13, color: '#655f4d', marginBottom: 2}}>{battle.players} players</div>
       </div>
     </div>
   );
@@ -96,7 +77,7 @@ function NewBattleCard({ onOpenCreateBattle }) {
       <span className={styles.newBattleTitle}>New Battle</span>
     </div>
   );
-} 
+}
 
 export default function Battles({ onHandlePage }) {
   const [selectedTab, setSelectedTab] = useState("created");
@@ -113,6 +94,7 @@ export default function Battles({ onHandlePage }) {
 
   const fetchBattles = async () => {
     const battles = await getBattles();
+    console.log("battles", battles);
     const newBattles = battles.map((battle) => ({
       ...battle,
       title: battle.title || battle.name,
@@ -121,6 +103,7 @@ export default function Battles({ onHandlePage }) {
       players: battle.users.length,
       status: new Date(battle.endDate * 1000) > Date.now() ? "active" : "finished",
     }));
+    // Ordenar por id decrescente (mais recente primeiro)
     newBattles.sort((a, b) => b.id - a.id);
     setStoreBattles(newBattles);
   };
