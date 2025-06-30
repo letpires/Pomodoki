@@ -4,6 +4,7 @@ import styles from "../styles/Stats.module.css";
 import BottomNav from "../components/BottomNav";
 import { CurrentUserContext } from "../context/CurrentUserProvider";
 import { useOverviewStore } from '../stores/overviewStore';
+import { useBattleStore } from '../stores/battleStore';
 
 const tabs = ["Stats", "My battles"];
 
@@ -28,7 +29,7 @@ export default function Stats({ onHandlePage }) {
   const { currentUser, getUserHistory, balance, network, getUserBattles } =
     useContext(CurrentUserContext);
   const { overview, setOverview } = useOverviewStore();
-  const [battles, setBattles] = useState([]);
+  const { battles, setBattles } = useBattleStore();
 
   const fetchBattles = async () => {
     const battles = await getUserBattles(currentUser.publicAddress);
