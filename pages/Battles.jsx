@@ -10,9 +10,31 @@ import CreateBattle from "../components/CreateBattle";
 const tabs = ["all", "created", "joined"];
 
 function BattleCard({ battle }) {
+  // Função para calcular o countdown
+  function getCountdown(deadline) {
+    const now = Date.now();
+    const end = deadline * 1000;
+    const diff = end - now;
+    if (diff <= 0) return 'Finished';
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    let str = '';
+    if (days > 0) str += `${days}d `;
+    if (hours > 0 || days > 0) str += `${hours}h `;
+    str += `${minutes}m`;
+    return str.trim();
+  }
+  // Função para formatar data curta (sem hora)
+  function formatDateShort(ts) {
+    if (!ts) return '';
+    const d = new Date(ts * 1000);
+    const pad = (n) => n.toString().padStart(2, '0');
+    return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}`;
+  }
   return (
     <div className={`${styles.card} ${styles[battle.status]}`} key={battle.id}>
-      <div className={styles.cardImageWrapper}>
+      <div className={styles.cardImageWrapper} style={{position: 'relative'}}>
         <img
           className={styles.cardImage}
           src={battle.image}
@@ -32,13 +54,35 @@ function BattleCard({ battle }) {
         >
           {battle.status === "active" ? "Active" : "Finished"}
         </span>
+        {/* Players badge */}
+        <span
+          className={styles.playersBadge}
+          style={{
+            position: 'absolute',
+            left: 12,
+            bottom: 12,
+            fontSize: 13,
+            padding: '4px 12px',
+            borderRadius: 16,
+            fontFamily: 'VT323, monospace',
+            fontWeight: 'bold',
+            background: '#e2c98f',
+            color: '#655f4d',
+            zIndex: 2,
+            boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+          }}
+        >
+          {battle.players} players
+        </span>
       </div>
-
       {/* Card content */}
       <div className={styles.cardContent}>
         <div className={styles.title} style={{fontWeight: 'bold', fontSize: 18, marginBottom: 4}}>{battle.title}</div>
-        <div className={styles.deadline}>Deadline: {new Date(battle.deadline * 1000).toLocaleDateString()}</div>
-        <div className={styles.players}>Battle {battle.players} players</div>
+        {/* <div className={styles.deadline} style={{fontSize: 12, color: '#7c6a4d', marginBottom: 0, lineHeight: 1.2}}>
+          <div>Start: {formatDateShort(battle.startDate)}</div>
+          <div>End: {formatDateShort(battle.deadline)}</div>
+        </div> */}
+        <div className={styles.deadline}>{false? "Countdown" : "Start at"}: {getCountdown(battle.deadline)}</div>
       </div>
     </div>
   );
@@ -76,7 +120,8 @@ export default function Battles({ onHandlePage }) {
       image: battle.image,
       players: battle.users.length,
       status: new Date(battle.endDate * 1000) > Date.now() ? "active" : "finished",
-    })); 
+    }));
+    // Ordenar por id decrescente (mais recente primeiro)
     newBattles.sort((a, b) => b.id - a.id);
     setBattles(newBattles);
   };
