@@ -36,7 +36,7 @@ function BattleCard({ battle }) {
 
       {/* Card content */}
       <div className={styles.cardContent}>
-        <div className={styles.title}>{battle.title}</div>
+        <div className={styles.title} style={{fontWeight: 'bold', fontSize: 18, marginBottom: 4}}>{battle.title}</div>
         <div className={styles.deadline}>Deadline: {new Date(battle.deadline * 1000).toLocaleDateString()}</div>
         <div className={styles.players}>Battle {battle.players} players</div>
       </div>
@@ -71,12 +71,14 @@ export default function Battles({ onHandlePage }) {
     console.log("battles", battles);
     const newBattles = battles.map((battle) => ({
       ...battle,
-      title: battle.name,
+      title: battle.title || battle.name,
       deadline: battle.endDate,
       image: battle.image,
       players: battle.users.length,
       status: new Date(battle.endDate * 1000) > Date.now() ? "active" : "finished",
     }));
+    // Ordenar por id decrescente (mais recente primeiro)
+    newBattles.sort((a, b) => b.id - a.id);
     setBattles(newBattles);
   };
 
@@ -105,6 +107,14 @@ export default function Battles({ onHandlePage }) {
   const handleCloseCreateBattle = async () => {
     setIsCreateBattleOpen(false);
     await fetchBattles();
+  };
+
+  // Novo handler para redirecionar após criar
+  const handleCreatedBattle = async () => {
+    setIsCreateBattleOpen(false);
+    await fetchBattles();
+    // Garantir que está na aba de battles, se usar tabs
+    setSelectedTab("created");
   };
 
   
@@ -166,7 +176,7 @@ export default function Battles({ onHandlePage }) {
 
       {isCreateBattleOpen && (
         <div className={styles.createBattleOverlay} style={{ position: "absolute", top: 100, left: 0, right: 0, bottom: 0, zIndex: 1000 }}>
-          <CreateBattle onClose={handleCloseCreateBattle} />
+          <CreateBattle onClose={handleCloseCreateBattle} onCreated={handleCreatedBattle} />
         </div>
       )}
 
