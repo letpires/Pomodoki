@@ -2,6 +2,7 @@
 
 const { exec } = require("child_process");
 const fs = require("fs");
+const path = require("path");
 
 // load .env file
 require("dotenv").config({
@@ -10,7 +11,7 @@ require("dotenv").config({
 
 // change smart contract reference to mainnet
 
-const contractCode = fs.readFileSync(
+let contractCode = fs.readFileSync(
   path.join(__dirname, "../contracts/StakingContract.cdc"),
   "utf8"
 );
@@ -23,8 +24,19 @@ fs.writeFileSync(
   contractCode
 );
 
+let contractCodeBattle = fs.readFileSync(
+  path.join(__dirname, "../contracts/BattleContract.cdc"),
+  "utf8"
+);
+contractCodeBattle = contractCodeBattle.replace("0xStakingContract", "0x2eed39e014db1d54");
+
+fs.writeFileSync(
+  path.join(__dirname, "../contracts/BattleContract.cdc"),
+  contractCodeBattle
+);
+
 exec(
-  "flow project deploy cadence/contracts/StakingContract.cdc --network mainnet",
+  "flow deploy --network mainnet --update",
   (error, stdout, stderr) => {
     if (error) {
       console.error(`Error executing command: ${error}`);
