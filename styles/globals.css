@@ -134,10 +134,14 @@ a {
   transition: background 0.2s, color 0.2s;
 }
 
-.rdp-day_selected, .rdp-day_selected:focus {
-  background-color: #4caf50 !important;
-  color: #fffbe6 !important;
-  border-radius: 8px;
+.rdp-day_selected, .rdp-day_selected:focus, .rdp-day_selected:active {
+  border: 2px solid #655f4d !important;
+  color: #5a4a2c !important;
+  background: #fffbe6 !important;
+}
+
+.rdp-day:focus-visible {
+  outline: 2px solid #655f4d !important;
 }
 
 .rdp-day_today {
