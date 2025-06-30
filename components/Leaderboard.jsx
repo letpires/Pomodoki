@@ -7,6 +7,11 @@ export default function Leaderboard({ onClose, onJoinBattle, battle }) {
   const { currentUser, getBattleStats } = useContext(CurrentUserContext);
 
   const [leaderboard, setLeaderboard] = useState([]);
+  const [joining, setJoining] = useState(false);
+  const [joined, setJoined] = useState(false);
+
+  // Detecta se o usuário já está na batalha
+  const isUserInBattle = battle?.users?.includes(currentUser?.publicAddress);
 
   useEffect(() => {
     const fetchBattleStats = async () => {
@@ -39,7 +44,14 @@ export default function Leaderboard({ onClose, onJoinBattle, battle }) {
       setLeaderboard(sortedLeaderboard);
     };
     fetchBattleStats();
-  }, []);
+  }, [battle, getBattleStats]);
+
+  const handleJoin = async () => {
+    setJoining(true);
+    await onJoinBattle();
+    setJoining(false);
+    setJoined(true);
+  };
 
   return (
     <div className={styles.container}>
@@ -80,8 +92,16 @@ export default function Leaderboard({ onClose, onJoinBattle, battle }) {
           </div>
         ))}
       </div>
-      <button className={styles.joinBtn} onClick={onJoinBattle}>
-        I want to join
+      <button
+        className={styles.joinBtn}
+        onClick={handleJoin}
+        disabled={joining || isUserInBattle || joined}
+      >
+        {isUserInBattle || joined
+          ? "You are in!"
+          : joining
+          ? "Joining..."
+          : "I want to join"}
       </button>
     </div>
   );
