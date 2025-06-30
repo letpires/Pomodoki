@@ -113,3 +113,56 @@ a {
   outline: none;
   box-shadow: 0 0 2px #5c4435;
 }
+
+/* Pomodoki custom DayPicker styles */
+.rdp {
+  --rdp-accent-color: #bfa76a;
+  --rdp-background-color: #ffedae;
+  --rdp-outline: 2px solid #655f4d;
+  font-family: 'VT323', monospace !important;
+  background: #ffedae;
+  border-radius: 18px;
+  box-shadow: 0 2px 16px #bfa76a44;
+  color: #5a4a2c;
+}
+
+.rdp-day {
+  font-family: 'VT323', monospace !important;
+  color: #5a4a2c;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.rdp-day_selected, .rdp-day_selected:focus {
+  background-color: #4caf50 !important;
+  color: #fffbe6 !important;
+  border-radius: 8px;
+}
+
+.rdp-day_today {
+  border: 2px solid #c5361b !important;
+  background: #fffbe6 !important;
+  color: #c5361b !important;
+}
+
+.rdp-caption_label {
+  color: #5a4a2c !important;
+  font-size: 1.1rem;
+  font-family: 'VT323', monospace !important;
+}
+
+.rdp-head_cell {
+  color: #bfa76a !important;
+  font-family: 'VT323', monospace !important;
+  font-size: 1rem;
+}
+
+.rdp-day_outside {
+  color: #bfa76a !important;
+  opacity: 0.5;
+}
+
+.rdp-nav_button {
+  color: #655f4d !important;
+}
