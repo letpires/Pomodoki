@@ -177,12 +177,14 @@ const CurrentUserProvider = ({ children }) => {
     return battle;
   };
 
-  const createBattle = async (endDate, prize, title, image) => {
-    const timestamp = Math.floor(new Date(endDate).getTime() / 1000);
+  const createBattle = async (startDate, endDate, prize, title, image) => {
+    const startTimestamp = Math.floor(new Date(startDate).getTime() / 1000);
+    const endTimestamp = Math.floor(new Date(endDate).getTime() / 1000);
     const battle = await fcl.mutate({
       cadence: CREATE_BATTLE_CADENCE,
       args: (arg, t) => [
-        arg(timestamp, t.UInt64),
+        arg(startTimestamp, t.UInt64),
+        arg(endTimestamp, t.UInt64),
         arg(prize, t.String),
         arg(title, t.String),
         arg(image, t.String),

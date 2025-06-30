@@ -240,10 +240,14 @@ async function executeCreateBattle() {
     const transactionCode = fs.readFileSync(
       path.join(__dirname, "../transactions/createBattle.cdc"),
       "utf8"
-    );
-
+    ); 
     const args = [ 
-      fcl.arg("3600.0", fcl.t.UFix64), 
+      fcl.arg("1720000000", fcl.t.UInt64), 
+      fcl.arg("1730000000", fcl.t.UInt64), 
+      fcl.arg("10.0", fcl.t.UFix64), 
+      fcl.arg("Teste", fcl.t.String), 
+      fcl.arg("Teste", fcl.t.String), 
+      fcl.arg("https://via.placeholder.com/150", fcl.t.String), 
     ];
 
     console.log("🔑 Arguments:", args);

@@ -14,6 +14,7 @@ export default function CreateBattle({ onClose, onCreated }) {
   const [loading, setLoading] = useState(false);
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
+  const [pickerPosition, setPickerPosition] = useState('bottom');
   const { createBattle } = useContext(CurrentUserContext);
   const startPickerRef = useRef(null);
   const endPickerRef = useRef(null);
@@ -54,6 +55,19 @@ export default function CreateBattle({ onClose, onCreated }) {
     } else {
       setShowEndPicker(false);
     }
+  };
+
+  const toggleEndPicker = () => {
+    if (!showEndPicker) {
+      // Check if there's enough space below, if not, position above
+      const rect = endPickerRef.current?.getBoundingClientRect();
+      if (rect) {
+        const spaceBelow = window.innerHeight - rect.bottom;
+        const spaceAbove = rect.top;
+        setPickerPosition(spaceBelow < 350 && spaceAbove > spaceBelow ? 'top' : 'bottom');
+      }
+    }
+    setShowEndPicker(!showEndPicker);
   };
 
   const handleTimeChange = (e, field) => {
@@ -106,7 +120,8 @@ export default function CreateBattle({ onClose, onCreated }) {
       ];
       const image = images[Math.floor(Math.random() * images.length)];
       const endDateISO = formData.endDate ? formData.endDate.toISOString() : new Date().toISOString();
-      const battle = await createBattle(endDateISO, prize, title, image);
+      const startDateISO = formData.startDate ? formData.startDate.toISOString() : new Date().toISOString();
+      const battle = await createBattle(startDateISO, endDateISO, prize, title, image);
       if (onCreated) onCreated();
       onClose();
     } catch (err) {
@@ -334,7 +349,7 @@ export default function CreateBattle({ onClose, onCreated }) {
             <div style={{ position: "relative" }} ref={endPickerRef}>
               <button
                 type="button"
-                onClick={() => setShowEndPicker(!showEndPicker)}
+                onClick={toggleEndPicker}
                 style={{
                   width: "100%",
                   padding: "12px 16px",
@@ -358,7 +373,7 @@ export default function CreateBattle({ onClose, onCreated }) {
                 <div
                   style={{ 
                     position: "absolute",
-                    top: "100%",
+                    [pickerPosition === 'top' ? 'bottom' : 'top']: "100%",
                     left: 0,
                     right: 0,
                     maxHeight: "400px",
@@ -368,8 +383,11 @@ export default function CreateBattle({ onClose, onCreated }) {
                     border: "1.5px solid #655f4d",
                     borderRadius: "12px",
                     padding: "6px 2px 16px 2px",
-                    marginTop: "4px",
+                    marginTop: pickerPosition === 'top' ? "0px" : "4px",
+                    marginBottom: pickerPosition === 'top' ? "4px" : "0px",
                     boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                    transform: "translateY(0)",
+                    maxWidth: "calc(100vw - 32px)",
                   }}
                 >
                   <DayPicker
@@ -384,7 +402,7 @@ export default function CreateBattle({ onClose, onCreated }) {
                       day_selected: { backgroundColor: "#4caf50", color: "white" },
                       day_today: { color: "#4caf50", fontWeight: "bold" },
                     }}
-                  />
+                  /> 
                   <div style={{ marginTop: "12px" }}>
                     <label style={{ color: "#5a4a2c", fontFamily: "VT323, monospace", fontSize: "14px" }}>
                       Time:
