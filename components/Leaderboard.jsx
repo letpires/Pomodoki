@@ -15,9 +15,8 @@ export default function Leaderboard({ onClose, onJoinBattle, battle }) {
 
   useEffect(() => {
     const fetchBattleStats = async () => {
-      const battleStats = await getBattleStats(battle.id);
-      console.log("battleStats", battleStats);
-
+      const battleStats = await getBattleStats(battle.id); 
+  
       if (!battleStats) return;
 
       const users = battleStats.users;
@@ -26,6 +25,7 @@ export default function Leaderboard({ onClose, onJoinBattle, battle }) {
         const userHistory = usersWithHistory[user];
         const totalTimeCommitted = userHistory
           ?.filter((stat) => stat.totalUnstaked > 0)
+          .filter((stat) => stat.startDate >= battle.startDate)
           .reduce((acc, stat) => acc + parseInt(stat.timeCommitted), 0) ?? 0;
 
         return {
