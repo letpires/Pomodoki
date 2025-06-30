@@ -258,13 +258,14 @@
 }
 
 .battleCardStatsTitle {
-  font-size: 12px;
+  font-size: 15px;
   font-weight: bold;
   color: #5a4a2c;
   line-height: 1.2;
   font-family: 'VT323', monospace;
   margin-top: 2px;
   text-align: left;
+  margin-bottom: 2px;
 }
 
 .battleCardStatsPlayers {
@@ -272,6 +273,16 @@
   color: #7c6a4d;
   font-weight: 500;
   font-family: 'VT323', monospace;
+  margin-top: 0;
+}
+
+.battleCardStatsCountdown {
+  font-family: 'VT323', monospace;
+  color: #5a4a2c;
+  font-size: 11px;
+  margin-top: -2px;
+  margin-bottom: 0;
+  text-align: left;
 }
 
 .myBattlesSection {
@@ -302,4 +313,13 @@
 
 .myBattlesGrid::-webkit-scrollbar {
   display: none;
+}
+
+.badgeActive {
+  background: rgba(76, 175, 80, 0.85);
+  color: #fff;
+}
+.badgeFinished {
+  background: rgba(229, 115, 115, 0.85);
+  color: #fff;
 }

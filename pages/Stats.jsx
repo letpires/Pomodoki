@@ -36,7 +36,7 @@ export default function Stats({ onHandlePage }) {
     console.log("battles", battles);
     const newBattles = battles.map((battle) => ({
       ...battle,
-      title: battle.name,
+      title: battle.title,
       deadline: battle.endDate,
       image: battle.image,
       players: battle.users.length,
@@ -168,12 +168,34 @@ export default function Stats({ onHandlePage }) {
             ) : (
               battles.map((battle) => (
                 <div key={battle.id} className={styles.battleCardStats}>
-                  <div className={styles.battleCardStatsImageWrapper}>
+                  <div className={styles.battleCardStatsImageWrapper} style={{position: 'relative'}}>
                     <img src={battle.image} alt={battle.title} className={styles.battleCardStatsImage} />
+                    <span
+                      className={battle.status === 'active' ? styles.badgeActive : styles.badgeFinished}
+                      style={{
+                        position: 'absolute',
+                        top: 8,
+                        right: 8,
+                        fontSize: 12,
+                        padding: '4px 12px',
+                        borderRadius: 16,
+                        fontFamily: 'VT323, monospace',
+                        fontWeight: 'bold',
+                        zIndex: 2,
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+                      }}
+                    >
+                      {battle.status === 'active' ? 'Active' : 'Finished'}
+                    </span>
                   </div>
                   <div className={styles.battleCardStatsContent}>
-                    <div className={styles.battleCardStatsTitle}>{battle.title}</div>
-                    <div className={styles.battleCardStatsPlayers}>Battle {battle.players} players</div>
+                    <div className={styles.battleCardStatsTitle}>{battle.name || battle.title}</div>
+                    {battle.status === 'finished' ? (
+                      <div className={styles.battleCardStatsCountdown}>Ended at: {formatDateShort(battle.deadline)}</div>
+                    ) : (
+                      <div className={styles.battleCardStatsCountdown}>Start at: {getCountdown(battle.deadline)}</div>
+                    )}
+                    <div className={styles.battleCardStatsPlayers}>{battle.players} players</div>
                   </div>
                 </div>
               ))
@@ -193,5 +215,27 @@ export default function Stats({ onHandlePage }) {
       />
     </div>
   );
+}
+
+function getCountdown(deadline) {
+  const now = Date.now();
+  const end = deadline * 1000;
+  const diff = end - now;
+  if (diff <= 0) return 'Finished';
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  let str = '';
+  if (days > 0) str += `${days}d `;
+  if (hours > 0 || days > 0) str += `${hours}h `;
+  str += `${minutes}m`;
+  return str.trim();
+}
+
+function formatDateShort(ts) {
+  if (!ts) return '';
+  const d = new Date(ts * 1000);
+  const pad = (n) => n.toString().padStart(2, '0');
+  return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}`;
 }
 
