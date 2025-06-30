@@ -104,9 +104,12 @@ export default function Battles({ onHandlePage }) {
     setIsCreateBattleOpen(true);
   };
 
+
   const handleCloseCreateBattle = async () => {
     setIsCreateBattleOpen(false);
-    await fetchBattles();
+    setTimeout(async () => {
+      await fetchBattles();
+    }, 5000);
   };
 
   // Novo handler para redirecionar após criar
