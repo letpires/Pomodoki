@@ -129,7 +129,59 @@ async function executeStake() {
 
     const args = [
       fcl.arg("10.0", fcl.t.UFix64), // amount: 10 FLOW
-      fcl.arg("3600.0", fcl.t.UFix64), // timeCommitted: 1 hour
+      fcl.arg("60", fcl.t.UInt64), // timeCommitted: 1 hour
+    ];
+
+    // console.log("🔑 Arguments:", args);
+
+    const transactionId = await fcl.send([
+      fcl.transaction(transactionCode),
+      fcl.args(args),
+      fcl.proposer(authz),
+      fcl.authorizations([authz]),
+      fcl.payer(authz),
+      fcl.limit(1000),
+    ]);
+
+    console.log("📝 Transaction submitted with ID:", transactionId);
+
+    const transaction = await fcl.tx(transactionId).onceSealed();
+
+    if (transaction.status === 4) {
+      console.log("✅ Transaction successful!");
+    } else {
+      console.log("❌ Transaction failed:", transaction);
+    }
+  } catch (error) {
+    // console.error("❌ Error executing stake transaction from file:", error);
+  }
+}
+
+
+// Alternative function to load transaction from file
+async function executeRedeem() {
+  try {
+
+    // Create authorization function for emulator
+    const authz = await authorizeMinter(
+      EMULATOR_ACCOUNT.address,
+      EMULATOR_ACCOUNT.keyIndex,
+      EMULATOR_ACCOUNT.privateKey
+    );
+    
+    // await deployStakingContract(contractCode, authz);
+
+    // Load transaction from file
+    const transactionCode = fs.readFileSync(
+      path.join(__dirname, "../transactions/redeem.cdc"),
+      "utf8"
+    );
+
+    console.log("🚀 Starting redeem transaction from file..."); 
+
+    // console.log("🔑 Authorization created", authz);
+
+    const args = [ 
     ];
 
     // console.log("🔑 Arguments:", args);
@@ -282,5 +334,6 @@ module.exports = {
   executeCreateBattle,
   executeGetBattleStats,
   executeJoinBattle,
+  executeRedeem,
   EMULATOR_ACCOUNT,
 };

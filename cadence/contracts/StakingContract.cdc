@@ -32,7 +32,11 @@ access(all) contract StakingContract_V2 {
             let historyStats: [HistoryStats]? = StakingContract_V2.historyStats[address.address]
             if historyStats != nil {
                 if historyStats!.length > 0 {
-                    historyStats![historyStats!.length - 1].end()
+                    var mutableHistoryStats: [StakingContract_V2.HistoryStats] = historyStats!
+                    let lastHistory: StakingContract_V2.HistoryStats = mutableHistoryStats[mutableHistoryStats.length - 1]
+                    lastHistory.end()
+                    mutableHistoryStats[mutableHistoryStats.length - 1] = lastHistory
+                    StakingContract_V2.historyStats[address.address] = mutableHistoryStats
                 }
             }
 
