@@ -93,17 +93,13 @@ export default function Leaderboard({ onClose, onJoinBattle, battle }) {
           </div>
         ))}
       </div>
-      {joined && (
+      {!isUserInBattle && (
         <button
           className={styles.joinBtn}
           onClick={handleJoin}
-          disabled={joining || isUserInBattle || joined}
+          disabled={joining}
         >
-          {isUserInBattle || joined
-            ? "You are in!"
-            : joining
-            ? "Joining..."
-            : "I want to join"}
+          {joining ? "Joining..." : "I want to join"}
         </button>
       )}
     </div>
