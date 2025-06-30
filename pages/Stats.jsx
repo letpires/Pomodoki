@@ -189,7 +189,7 @@ export default function Stats({ onHandlePage }) {
               mockBattles.map((battle) => (
                 <div key={battle.id} className={styles.battleCardStats}>
                   <div className={styles.battleCardStatsImageWrapper}>
-                    <img src={'/images/hackathon.png'} alt={battle.title} className={styles.battleCardStatsImage} />
+                    <img src={battle.image} alt={battle.title} className={styles.battleCardStatsImage} />
                   </div>
                   <div className={styles.battleCardStatsContent}>
                     <div className={styles.battleCardStatsTitle}>{battle.title}</div>

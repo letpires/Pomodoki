@@ -8,7 +8,7 @@ export default function CreateBattle({ onClose }) {
     description: "",
     endDate: "",
   });
-  const { currentUser, createBattle } = useContext(CurrentUserContext);
+  const { createBattle } = useContext(CurrentUserContext);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -21,9 +21,10 @@ export default function CreateBattle({ onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Form data:", formData);
-    const prize = "Tamagotchi";
+    const prize = "Tamagotchi"; 
     const title = "Test Battle";
-    const image = "/images/hackathon.png";
+    const images = ["/images/hackathon.png", "/images/bt_battle.png", "/images/bt_capivara.png", "/images/bt_galo.png", "/images/bt_kiwi.png", "/images/bt_orange.png", "/images/bt_pera.png", "/images/bt_pinneaple.png", "/images/bt_strawberry.png"];
+    const image = images[Math.floor(Math.random() * images.length)];
     const battle = await createBattle(formData.endDate, prize, title, image);
     console.log("battle", battle);
     onClose();
