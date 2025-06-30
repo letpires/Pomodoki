@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import FlowLogin from "../components/FlowLogin";
 import { CurrentUserContext } from "../context/CurrentUserProvider";
 
-const Welcome = ({ onConnectWallet }) => {
+const Welcome = ({ onConnectWallet, setPage }) => {
   const { isLoggedIn } = useContext(CurrentUserContext);
 
   return (
@@ -41,7 +41,7 @@ const Welcome = ({ onConnectWallet }) => {
           {/* Botão Continue aparece se já está conectado */}
           {isLoggedIn && (
             <button
-              onClick={onConnectWallet}
+              onClick={() => setPage("avatar")}
               style={{
                 marginTop: "24px",
                 backgroundColor: "#fed35c",

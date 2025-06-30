@@ -116,7 +116,7 @@ export default function Home() {
   const handleBackToHome = () => setPage("welcome");
 
   if (page === "welcome")
-    return <Welcome onConnectWallet={handleConnectWallet} />;
+    return <Welcome onConnectWallet={handleConnectWallet} setPage={setPage} />;
 
   if (page === "allset") return <AllSet />;
 
