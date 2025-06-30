@@ -24,8 +24,8 @@ export default function CreateBattle({ onClose, onCreated }) {
     e.preventDefault();
     setLoading(true);
     try {
-      const prize = "Tamagotchi";
-      const title = formData.name || "Test Battle";
+      const title = formData.name;
+      const prize = formData.description;
       const images = [
         "/images/hackathon.png",
         "/images/bt_battle.png",
@@ -38,7 +38,7 @@ export default function CreateBattle({ onClose, onCreated }) {
         "/images/bt_strawberry.png",
       ];
       const image = images[Math.floor(Math.random() * images.length)];
-      const battle = await createBattle(formData.startDate, formData.endDate, prize, title, image);
+      const battle = await createBattle(formData.endDate, prize, title, image);
       if (onCreated) onCreated();
       onClose();
     } catch (err) {
@@ -232,9 +232,26 @@ export default function CreateBattle({ onClose, onCreated }) {
         <button
           className={styles.joinBtn}
           onClick={handleSubmit}
-          style={{ marginTop: "8px" }}
+          style={{
+            margin: '24px auto 0 auto',
+            background: loading ? '#bfa76a' : '#4caf50',
+            color: '#fffbe6',
+            fontFamily: "'VT323', monospace",
+            fontSize: '1.2rem',
+            border: '2px solid #5a4a2c',
+            borderRadius: '8px',
+            padding: '12px 0',
+            width: '100%',
+            maxWidth: 320,
+            cursor: loading ? 'not-allowed' : 'pointer',
+            boxShadow: '2px 3px 0 #5a4a2c',
+            opacity: loading ? 0.7 : 1,
+            transition: 'background 0.2s',
+            display: 'block',
+          }}
           disabled={loading}
         >
+          {loading ? "Creating..." : "Create Battle"}
         </button>
       </div>
     </div>
