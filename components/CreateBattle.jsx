@@ -2,12 +2,13 @@ import React, { useState, useContext } from "react";
 import styles from "../styles/Leaderboard.module.css";
 import { CurrentUserContext } from "../context/CurrentUserProvider";
 
-export default function CreateBattle({ onClose }) {
+export default function CreateBattle({ onClose, onCreated }) {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     endDate: "",
   });
+  const [loading, setLoading] = useState(false);
   const { createBattle } = useContext(CurrentUserContext);
 
   const handleInputChange = (e) => {
@@ -20,14 +21,30 @@ export default function CreateBattle({ onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form data:", formData);
-    const prize = "Tamagotchi"; 
-    const title = "Test Battle";
-    const images = ["/images/hackathon.png", "/images/bt_battle.png", "/images/bt_capivara.png", "/images/bt_galo.png", "/images/bt_kiwi.png", "/images/bt_orange.png", "/images/bt_pera.png", "/images/bt_pinneaple.png", "/images/bt_strawberry.png"];
-    const image = images[Math.floor(Math.random() * images.length)];
-    const battle = await createBattle(formData.endDate, prize, title, image);
-    console.log("battle", battle);
-    onClose();
+    setLoading(true);
+    try {
+      const prize = "Tamagotchi";
+      const title = formData.name || "Test Battle";
+      const images = [
+        "/images/hackathon.png",
+        "/images/bt_battle.png",
+        "/images/bt_capivara.png",
+        "/images/bt_galo.png",
+        "/images/bt_kiwi.png",
+        "/images/bt_orange.png",
+        "/images/bt_pera.png",
+        "/images/bt_pinneaple.png",
+        "/images/bt_strawberry.png",
+      ];
+      const image = images[Math.floor(Math.random() * images.length)];
+      const battle = await createBattle(formData.endDate, prize, title, image);
+      if (onCreated) onCreated();
+      onClose();
+    } catch (err) {
+      alert("Erro ao criar batalha");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -183,8 +200,9 @@ export default function CreateBattle({ onClose }) {
           className={styles.joinBtn}
           onClick={handleSubmit}
           style={{ marginTop: "8px" }}
+          disabled={loading}
         >
-          Create Battle
+          {loading ? "Criando..." : "Create Battle"}
         </button>
       </div>
     </div>
