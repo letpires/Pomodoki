@@ -6,6 +6,7 @@ export default function CreateBattle({ onClose, onCreated }) {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
+    startDate: new Date().toISOString().slice(0, 16),
     endDate: "",
   });
   const [loading, setLoading] = useState(false);
@@ -37,7 +38,7 @@ export default function CreateBattle({ onClose, onCreated }) {
         "/images/bt_strawberry.png",
       ];
       const image = images[Math.floor(Math.random() * images.length)];
-      const battle = await createBattle(formData.endDate, prize, title, image);
+      const battle = await createBattle(formData.startDate, formData.endDate, prize, title, image);
       if (onCreated) onCreated();
       onClose();
     } catch (err) {
@@ -138,12 +139,12 @@ export default function CreateBattle({ onClose, onCreated }) {
             >
               Prize Description
             </label>
-            <textarea
+            <input
+              type="text"
               name="description"
               value={formData.description}
               onChange={handleInputChange}
               placeholder="Describe prize..."
-              rows="3"
               style={{
                 width: "100%",
                 padding: "12px 16px",
@@ -155,8 +156,40 @@ export default function CreateBattle({ onClose, onCreated }) {
                 color: "#5a4a2c",
                 outline: "none",
                 boxShadow: "none",
-                resize: "vertical",
-                minHeight: "80px",
+              }}
+              required
+            />
+          </div>
+
+          <div style={{ marginBottom: "16px" }}>
+            <label
+              style={{
+                display: "block",
+                marginBottom: "8px",
+                color: "#5a4a2c",
+                fontFamily: "VT323, monospace",
+                fontSize: "16px",
+                fontWeight: "bold",
+              }}
+            >
+              Start Date
+            </label>
+            <input
+              type="datetime-local"
+              name="startDate"
+              value={formData.startDate}
+              onChange={handleInputChange}
+              style={{
+                width: "100%",
+                padding: "12px 16px",
+                border: "1.5px solid #655f4d",
+                borderRadius: "12px",
+                backgroundColor: "#fef6bf",
+                fontFamily: "VT323, monospace",
+                fontSize: "16px",
+                color: "#5a4a2c",
+                outline: "none",
+                boxShadow: "none",
               }}
               required
             />
@@ -202,7 +235,6 @@ export default function CreateBattle({ onClose, onCreated }) {
           style={{ marginTop: "8px" }}
           disabled={loading}
         >
-          {loading ? "Creating..." : "Create Battle"}
         </button>
       </div>
     </div>
