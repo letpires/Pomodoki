@@ -98,7 +98,7 @@ access(all) contract BattleContract_V2 {
         return battleResponse
     }
     
-    access(all) fun getBattles( ): [Battle] {
+    access(all) fun getBattles(): [Battle] {
         return self.battles.values  
     }  
     
