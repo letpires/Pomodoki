@@ -154,8 +154,7 @@ export default function Battles({ onHandlePage }) {
         backgroundColor: "#ffedae",
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
-        height: "100vh",
+        alignItems: "center", 
         paddingTop: "60px",
       }}
     >

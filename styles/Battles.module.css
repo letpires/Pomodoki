@@ -7,7 +7,7 @@
   grid-template-columns: 1fr 1fr; /* Define duas colunas de igual largura */
   display: grid;
   min-height: 100vh;
-
+  height: 600px;
 }
 
 .header {

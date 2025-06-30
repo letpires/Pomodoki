@@ -5,6 +5,7 @@
   font-family: 'Press Start 2P', 'Courier New', Courier, monospace;
   position: relative;
   min-height: 100vh;
+  height: 600px;
 }
 
 .buyTokens {
