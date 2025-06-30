@@ -3,13 +3,7 @@ import Navbar from "../components/Navbar";
 import styles from "../styles/Stats.module.css";
 import BottomNav from "../components/BottomNav";
 import { CurrentUserContext } from "../context/CurrentUserProvider";
-
-
-const overview_default = [
-  { key: "streak", icon: "🔥", label: "Streak", value: 0 },
-  { key: "focusTime", icon: "⏳", label: "Focus time", value: "0m" },
-  { key: "sessions", icon: "🍅", label: "Sessions", value: 0 },
-];
+import { useOverviewStore } from '../stores/overviewStore';
 
 const tabs = ["Stats", "My battles"];
 
@@ -33,7 +27,7 @@ export default function Stats({ onHandlePage }) {
   const [selectedTab, setSelectedTab] = useState("Stats");
   const { currentUser, getUserHistory, balance, network, getUserBattles } =
     useContext(CurrentUserContext);
-  const [overview, setOverview] = useState(overview_default);
+  const { overview, setOverview } = useOverviewStore();
   const [battles, setBattles] = useState([]);
 
   const fetchBattles = async () => {
@@ -92,24 +86,7 @@ export default function Stats({ onHandlePage }) {
       }
     };
     fetchUserHistory();
-  }, [currentUser]);
-
-  const overviewMemo = useMemo(
-    () => (
-      <>
-        {overview.map((item) => (
-          <div className={styles.overviewCard} key={item.label}>
-            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, marginBottom: 2}}>
-              <span className={styles.icon}>{item.icon}</span>
-              <span className={styles.label}>{item.label}</span>
-            </div>
-            <span className={styles.value}>{item.value}</span>
-          </div>
-        ))}
-      </>
-    ),
-    [overview]
-  );
+  }, [currentUser]); 
 
   return (
     <div
