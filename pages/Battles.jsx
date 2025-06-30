@@ -7,15 +7,6 @@ import Leaderboard from "../components/Leaderboard";
 import { CurrentUserContext } from "../context/CurrentUserProvider";
 import CreateBattle from "../components/CreateBattle";
 
-// ------------------------------------------------------------
-// Mock data ---------------------------------------------------
-// ------------------------------------------------------------
-const mockLeaderboard = [
-  { rank: 1, name: "XVMDOJFHE98374", focus: "3:30" },
-  { rank: 2, name: "XVMDOJFHE98374", focus: "3:30" },
-  { rank: 3, name: "XVMDOJFHE98374", focus: "3:30" },
-]; 
-
 const tabs = ["all", "created", "joined"];
 
 function BattleCard({ battle }) {
@@ -166,7 +157,7 @@ export default function Battles({ onHandlePage }) {
         <div className={styles.leaderboardOverlay}>
           <Leaderboard
             battle={selectedBattle}
-            leaderboard={selectedBattle.leaderboard || mockLeaderboard}
+            leaderboard={selectedBattle.leaderboard || []}
             onClose={() => setSelectedBattle(null)}
             onJoinBattle={() => handleJoinBattle(selectedBattle)}
           />
