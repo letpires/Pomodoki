@@ -138,7 +138,7 @@ export default function Stats({ onHandlePage }) {
         <div className={styles.buyCircle}>
           <span className={styles.buyArrow}>↙</span>
         </div>
-        <div className={styles.buyText}>Buy tokens</div>
+        <div className={styles.buyText}>BUY FLOW</div>
       </div>
 
       <div className={styles.tabs}>
@@ -174,7 +174,7 @@ export default function Stats({ onHandlePage }) {
               <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, marginBottom: 2}}>
                 <span className={styles.label}>Balance</span>
               </div>
-              <span className={styles.value}>{balance}</span>
+              <span className={styles.value}>{balance.toFixed(2)} FLOW</span>
             </div>
           </div>
         </>
