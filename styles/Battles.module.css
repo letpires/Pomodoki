@@ -229,6 +229,10 @@
   background: rgba(229, 115, 115, 0.85);
   color: #fff;
 }
+.badgeUpcoming {
+  background: rgba(0, 0, 255, 0.85);
+  color: #fff;
+}
 .footer {
   position: fixed;
   left: 0;

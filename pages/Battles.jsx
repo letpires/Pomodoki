@@ -6,7 +6,7 @@ import BottomNav from "../components/BottomNav";
 import Leaderboard from "../components/Leaderboard";
 import { CurrentUserContext } from "../context/CurrentUserProvider";
 import CreateBattle from "../components/CreateBattle";
-import { useBattleStore } from '../stores/battleStore'
+import { useBattleStore } from "../stores/battleStore";
 
 const tabs = ["all", "created", "joined"];
 
@@ -16,11 +16,11 @@ function BattleCard({ battle }) {
     const now = Date.now();
     const end = deadline * 1000;
     const diff = end - now;
-    if (diff <= 0) return 'Finished';
+    if (diff <= 0) return "Finished";
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    let str = '';
+    let str = "";
     if (days > 0) str += `${days}d `;
     if (hours > 0 || days > 0) str += `${hours}h `;
     str += `${minutes}m`;
@@ -28,14 +28,14 @@ function BattleCard({ battle }) {
   }
   // Função para formatar data curta (sem hora)
   function formatDateShort(ts) {
-    if (!ts) return '';
+    if (!ts) return "";
     const d = new Date(ts * 1000);
-    const pad = (n) => n.toString().padStart(2, '0');
+    const pad = (n) => n.toString().padStart(2, "0");
     return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}`;
   }
   return (
     <div className={`${styles.card} ${styles[battle.status]}`} key={battle.id}>
-      <div className={styles.cardImageWrapper} style={{position: 'relative'}}>
+      <div className={styles.cardImageWrapper} style={{ position: "relative" }}>
         <img
           className={styles.cardImage}
           src={battle.image}
@@ -50,21 +50,42 @@ function BattleCard({ battle }) {
           className={`${styles.badge} ${
             battle.status === "active"
               ? styles.badgeActive
+              : battle.status === "upcoming"
+              ? styles.badgeUpcoming
               : styles.badgeCancelled
           }`}
         >
-          {battle.status === "active" ? "Active" : "Finished"}
+          {battle.status === "active"
+            ? "Active"
+            : battle.status === "upcoming"
+            ? "Upcoming"
+            : "Finished"}
         </span>
       </div>
       {/* Card content */}
       <div className={styles.cardContent}>
-        <div className={styles.title} style={{fontWeight: 'bold', fontSize: 18, marginBottom: 4}}>{battle.title}</div>
-        {battle.status === 'finished' ? (
-          <div className={styles.deadline} style={{color: '#bfa76a'}}>Ended at: {formatDateShort(battle.deadline)}</div>
+        <div
+          className={styles.title}
+          style={{ fontWeight: "bold", fontSize: 18, marginBottom: 4 }}
+        >
+          {battle.title}
+        </div>
+        {battle.status === "finished" ? (
+          <div className={styles.deadline} style={{ color: "#bfa76a" }}>
+            Ended at: {formatDateShort(battle.deadline)}
+          </div>
         ) : (
-          <div className={styles.deadline}>{false? "Countdown" : "Start at"}: {getCountdown(battle.deadline)}</div>
+          <div className={styles.deadline}>
+            {battle.status === "active" ? "Countdown" : "Start at"}:{" "}
+            {getCountdown(battle.deadline)}
+          </div>
         )}
-        <div className={styles.players} style={{fontSize: 13, color: '#655f4d', marginBottom: 2}}>{battle.players} players</div>
+        <div
+          className={styles.players}
+          style={{ fontSize: 13, color: "#655f4d", marginBottom: 2 }}
+        >
+          {battle.players} players
+        </div>
       </div>
     </div>
   );
@@ -82,10 +103,12 @@ function NewBattleCard({ onOpenCreateBattle }) {
 export default function Battles({ onHandlePage }) {
   const [selectedTab, setSelectedTab] = useState("created");
   const [selectedBattle, setSelectedBattle] = useState(null);
-  const { currentUser, getBattles, joinBattle } = useContext(CurrentUserContext);
-  const { battles: storeBattles, setBattles: setStoreBattles } = useBattleStore()
+  const { currentUser, getBattles, joinBattle } =
+    useContext(CurrentUserContext);
+  const { battles: storeBattles, setBattles: setStoreBattles } =
+    useBattleStore();
   const [isCreateBattleOpen, setIsCreateBattleOpen] = useState(false);
- 
+
   const handleJoinBattle = async (battle) => {
     const battleId = parseInt(battle.id);
     const battleResponse = await joinBattle(battleId);
@@ -94,26 +117,34 @@ export default function Battles({ onHandlePage }) {
 
   const fetchBattles = async () => {
     const battles = await getBattles();
-    console.log("battles", battles);
     // TODO: remove this filter
-    const newBattles = battles.filter(x=>x.id > 17).map((battle) => ({
-      ...battle,
-      title: battle.title || battle.name,
-      deadline: battle.endDate,
-      image: battle.image,
-      players: battle.users.length,
-      status: new Date(battle.endDate * 1000) > Date.now() ? "active" : "finished",
-    }));
+    const newBattles = battles
+      .filter((x) => x.id > 17)
+      .map((battle) => ({
+        ...battle,
+        title: battle.title || battle.name,
+        deadline: battle.endDate,
+        image: battle.image,
+        players: battle.users.length,
+        date: new Date(battle.startDate * 1000),
+        status:
+          new Date(battle.endDate * 1000) > Date.now()
+            ? new Date(battle.startDate * 1000) > Date.now()
+              ? "upcoming"
+              : "active"
+            : "finished",
+      }));
+    console.log("newBattles", newBattles);
     // Ordenar por id decrescente (mais recente primeiro)
     newBattles.sort((a, b) => b.id - a.id);
     setStoreBattles(newBattles);
   };
 
-  useEffect(() => { 
+  useEffect(() => {
     if (!currentUser) return;
     fetchBattles();
   }, [currentUser]);
- 
+
   // Functions to filter battles by tab -----------------------
   const battlesForTab = (tab) => {
     switch (tab) {
@@ -125,12 +156,11 @@ export default function Battles({ onHandlePage }) {
         return mockBattles;
     }
   };
- 
+
   const handleOpenCreateBattle = () => {
     console.log("handleOpenCreateBattle");
     setIsCreateBattleOpen(true);
   };
-
 
   const handleCloseCreateBattle = async () => {
     setIsCreateBattleOpen(false);
@@ -142,11 +172,10 @@ export default function Battles({ onHandlePage }) {
   // Novo handler para redirecionar após criar
   const handleCreatedBattle = async () => {
     setIsCreateBattleOpen(false);
-    await fetchBattles(); 
+    await fetchBattles();
     setSelectedTab("created");
   };
 
-  
   return (
     <div
       className={styles.container}
@@ -154,7 +183,7 @@ export default function Battles({ onHandlePage }) {
         backgroundColor: "#ffedae",
         display: "flex",
         flexDirection: "column",
-        alignItems: "center", 
+        alignItems: "center",
         paddingTop: "60px",
       }}
     >
@@ -203,8 +232,21 @@ export default function Battles({ onHandlePage }) {
       )}
 
       {isCreateBattleOpen && (
-        <div className={styles.createBattleOverlay} style={{ position: "absolute", top: 100, left: 0, right: 0, bottom: 0, zIndex: 1000 }}>
-          <CreateBattle onClose={handleCloseCreateBattle} onCreated={handleCreatedBattle} />
+        <div
+          className={styles.createBattleOverlay}
+          style={{
+            position: "absolute",
+            top: 100,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 1000,
+          }}
+        >
+          <CreateBattle
+            onClose={handleCloseCreateBattle}
+            onCreated={handleCreatedBattle}
+          />
         </div>
       )}
 
