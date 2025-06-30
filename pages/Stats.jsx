@@ -3,8 +3,8 @@ import Navbar from "../components/Navbar";
 import styles from "../styles/Stats.module.css";
 import BottomNav from "../components/BottomNav";
 import { CurrentUserContext } from "../context/CurrentUserProvider";
-import { useOverviewStore } from '../stores/overviewStore';
-import { useBattleStore } from '../stores/battleStore';
+import { useOverviewStore } from "../stores/overviewStore";
+import { useBattleStore } from "../stores/battleStore";
 
 const tabs = ["Stats", "My battles"];
 
@@ -22,13 +22,13 @@ const formatTimeDisplay = (totalMinutes) => {
   }
 
   return `${hours}h ${minutes}m`;
-}; 
+};
 
 export default function Stats({ onHandlePage }) {
   const [selectedTab, setSelectedTab] = useState("Stats");
   const { currentUser, getUserHistory, balance, network, getUserBattles } =
     useContext(CurrentUserContext);
-  const { overview, setOverview } = useOverviewStore();
+  const { overview, setOverview, resetOverview } = useOverviewStore();
   const { battles, setBattles } = useBattleStore();
 
   const fetchBattles = async () => {
@@ -40,17 +40,17 @@ export default function Stats({ onHandlePage }) {
       deadline: battle.endDate,
       image: battle.image,
       players: battle.users.length,
-      status: new Date(battle.endDate * 1000) > Date.now() ? "active" : "finished",
+      status:
+        new Date(battle.endDate * 1000) > Date.now() ? "active" : "finished",
     }));
     setBattles(newBattles);
   };
 
-  useEffect(() => { 
+  useEffect(() => {
     if (!currentUser) return;
     fetchBattles();
   }, []);
 
-  
   useEffect(() => {
     if (!currentUser) return;
     const fetchUserHistory = async () => {
@@ -84,10 +84,12 @@ export default function Stats({ onHandlePage }) {
           return item;
         });
         setOverview(newOverview);
+      } else {
+        resetOverview();
       }
     };
     fetchUserHistory();
-  }, [currentUser]); 
+  }, [currentUser]);
 
   return (
     <div
@@ -139,7 +141,15 @@ export default function Stats({ onHandlePage }) {
           <div className={styles.overview}>
             {overview.map((item) => (
               <div className={styles.overviewCard} key={item.label}>
-                <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, marginBottom: 2}}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 4,
+                    marginBottom: 2,
+                  }}
+                >
                   <span className={styles.icon}>{item.icon}</span>
                   <span className={styles.label}>{item.label}</span>
                 </div>
@@ -148,8 +158,16 @@ export default function Stats({ onHandlePage }) {
             ))}
           </div>
           <div className={styles.balanceOverview}>
-            <div className={styles.overviewCard + ' ' + styles.balanceCard}>
-              <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, marginBottom: 2}}>
+            <div className={styles.overviewCard + " " + styles.balanceCard}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 4,
+                  marginBottom: 2,
+                }}
+              >
                 <span className={styles.label}>Balance</span>
               </div>
               <span className={styles.value}>{balance.toFixed(2)} FLOW</span>
@@ -162,40 +180,61 @@ export default function Stats({ onHandlePage }) {
         <div className={styles.myBattlesSection}>
           <div className={styles.myBattlesGrid}>
             {battles.length === 0 ? (
-              <div style={{ textAlign: "center", color: "#bfa76a", marginTop: 24 }}>
+              <div
+                style={{ textAlign: "center", color: "#bfa76a", marginTop: 24 }}
+              >
                 You haven&apos;t joined any battles yet.
               </div>
             ) : (
               battles.map((battle) => (
                 <div key={battle.id} className={styles.battleCardStats}>
-                  <div className={styles.battleCardStatsImageWrapper} style={{position: 'relative'}}>
-                    <img src={battle.image} alt={battle.title} className={styles.battleCardStatsImage} />
+                  <div
+                    className={styles.battleCardStatsImageWrapper}
+                    style={{ position: "relative" }}
+                  >
+                    <img
+                      src={battle.image}
+                      alt={battle.title}
+                      className={styles.battleCardStatsImage}
+                    />
                     <span
-                      className={battle.status === 'active' ? styles.badgeActive : styles.badgeFinished}
+                      className={
+                        battle.status === "active"
+                          ? styles.badgeActive
+                          : styles.badgeFinished
+                      }
                       style={{
-                        position: 'absolute',
+                        position: "absolute",
                         top: 8,
                         right: 8,
                         fontSize: 12,
-                        padding: '4px 12px',
+                        padding: "4px 12px",
                         borderRadius: 16,
-                        fontFamily: 'VT323, monospace',
-                        fontWeight: 'bold',
+                        fontFamily: "VT323, monospace",
+                        fontWeight: "bold",
                         zIndex: 2,
-                        boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
                       }}
                     >
-                      {battle.status === 'active' ? 'Active' : 'Finished'}
+                      {battle.status === "active" ? "Active" : "Finished"}
                     </span>
                   </div>
                   <div className={styles.battleCardStatsContent}>
-                    <div className={styles.battleCardStatsTitle}>{battle.name || battle.title}</div>
-                    {battle.status === 'finished' ? (
-                      <div className={styles.battleCardStatsCountdown}>Ended at: {formatDateShort(battle.deadline)}</div>
+                    <div className={styles.battleCardStatsTitle}>
+                      {battle.name || battle.title}
+                    </div>
+                    {battle.status === "finished" ? (
+                      <div className={styles.battleCardStatsCountdown}>
+                        Ended at: {formatDateShort(battle.deadline)}
+                      </div>
                     ) : (
-                      <div className={styles.battleCardStatsCountdown}>Start at: {getCountdown(battle.deadline)}</div>
+                      <div className={styles.battleCardStatsCountdown}>
+                        Start at: {getCountdown(battle.deadline)}
+                      </div>
                     )}
-                    <div className={styles.battleCardStatsPlayers}>{battle.players} players</div>
+                    <div className={styles.battleCardStatsPlayers}>
+                      {battle.players} players
+                    </div>
                   </div>
                 </div>
               ))
@@ -221,11 +260,11 @@ function getCountdown(deadline) {
   const now = Date.now();
   const end = deadline * 1000;
   const diff = end - now;
-  if (diff <= 0) return 'Finished';
+  if (diff <= 0) return "Finished";
   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
   const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  let str = '';
+  let str = "";
   if (days > 0) str += `${days}d `;
   if (hours > 0 || days > 0) str += `${hours}h `;
   str += `${minutes}m`;
@@ -233,9 +272,8 @@ function getCountdown(deadline) {
 }
 
 function formatDateShort(ts) {
-  if (!ts) return '';
+  if (!ts) return "";
   const d = new Date(ts * 1000);
-  const pad = (n) => n.toString().padStart(2, '0');
+  const pad = (n) => n.toString().padStart(2, "0");
   return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}`;
 }
-
