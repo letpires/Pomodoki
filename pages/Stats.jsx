@@ -163,7 +163,7 @@ export default function Stats({ onHandlePage }) {
           <div className={styles.buyCircle}>
             <span className={styles.buyArrow}>🎁</span>
           </div>
-          <div className={styles.buyText}>AIRDROP MODOKI</div>
+          <div className={styles.buyText}>AIRDROP</div>
         </div>
       </div>
 
@@ -218,7 +218,7 @@ export default function Stats({ onHandlePage }) {
               </div>
               <span className={styles.value}>{balance.toFixed(2)} FLOW</span>
               {balance === 0 && (
-                <div style={{fontSize: 12, color: '#666', marginTop: 4}}>
+                <div style={{ fontSize: 12, color: "#666", marginTop: 4 }}>
                   Buy FLOW or request an airdrop to get started
                 </div>
               )}
@@ -232,62 +232,68 @@ export default function Stats({ onHandlePage }) {
           {battles.length === 0 ? (
             <div className={styles.emptyBattlesMessage}>
               You haven&apos;t joined any battles yet.
-            </div>
-          ) : (
-            <div className={styles.myBattlesGrid}>
-              {battles.map((battle) => (
-                <div key={battle.id} className={styles.battleCardStats}>
-                  <div
-                    className={styles.battleCardStatsImageWrapper}
-                    style={{ position: "relative" }}
-                  >
-                    <img
-                      src={battle.image}
-                      alt={battle.title}
-                      className={styles.battleCardStatsImage}
-                    />
-                    <span
-                      className={
-                        battle.status === "active"
-                          ? styles.badgeActive
-                          : styles.badgeFinished
-                      }
-                      style={{
-                        position: "absolute",
-                        top: 8,
-                        right: 8,
-                        fontSize: 12,
-                        padding: "4px 12px",
-                        borderRadius: 16,
-                        fontFamily: "VT323, monospace",
-                        fontWeight: "bold",
-                        zIndex: 2,
-                        boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-                      }}
+            </div> 
+          ) : ( 
+            <div 
+              style={{ 
+                margin: " 20px",
+              }}
+            > 
+              <div className={styles.myBattlesGrid}>
+                {battles.map((battle) => (
+                  <div key={battle.id} className={styles.battleCardStats}>
+                    <div
+                      className={styles.battleCardStatsImageWrapper}
+                      style={{ position: "relative" }}
                     >
-                      {battle.status === "active" ? "Active" : "Finished"}
-                    </span>
-                  </div>
-                  <div className={styles.battleCardStatsContent}>
-                    <div className={styles.battleCardStatsTitle}>
-                      {battle.name || battle.title}
+                      <img
+                        src={battle.image}
+                        alt={battle.title}
+                        className={styles.battleCardStatsImage}
+                      />
+                      <span
+                        className={
+                          battle.status === "active"
+                            ? styles.badgeActive
+                            : styles.badgeFinished
+                        }
+                        style={{
+                          position: "absolute",
+                          top: 8,
+                          right: 8,
+                          fontSize: 12,
+                          padding: "4px 12px",
+                          borderRadius: 16,
+                          fontFamily: "VT323, monospace",
+                          fontWeight: "bold",
+                          zIndex: 2,
+                          boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                        }}
+                      >
+                        {battle.status === "active" ? "Active" : "Finished"}
+                      </span>
                     </div>
-                    {battle.status === "finished" ? (
-                      <div className={styles.battleCardStatsCountdown}>
-                        Ended at: {formatDateShort(battle.deadline)}
+                    <div className={styles.battleCardStatsContent}>
+                      <div className={styles.battleCardStatsTitle}>
+                        {battle.name || battle.title}
                       </div>
-                    ) : (
-                      <div className={styles.battleCardStatsCountdown}>
-                        Start at: {getCountdown(battle.deadline)}
+                      {battle.status === "finished" ? (
+                        <div className={styles.battleCardStatsCountdown}>
+                          Ended at: {formatDateShort(battle.deadline)}
+                        </div>
+                      ) : (
+                        <div className={styles.battleCardStatsCountdown}>
+                          Start at: {getCountdown(battle.deadline)}
+                        </div>
+                      )}
+                      <div className={styles.battleCardStatsPlayers}>
+                        {battle.players} players
                       </div>
-                    )}
-                    <div className={styles.battleCardStatsPlayers}>
-                      {battle.players} players
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            </div> 
           )}
         </div>
       )}

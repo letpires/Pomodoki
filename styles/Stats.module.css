@@ -301,8 +301,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   grid-auto-flow: column;
-  gap: 6px;
-  min-width: 380px;
+  gap: 6px; 
   max-width: 100vw;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
