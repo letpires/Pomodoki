@@ -6,6 +6,12 @@
   position: relative;
   min-height: 100vh;
   height: 600px;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
+.container::-webkit-scrollbar {
+  display: none;
 }
 
 .buyTokens {

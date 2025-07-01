@@ -170,3 +170,14 @@ a {
 .rdp-nav_button {
   color: #655f4d !important;
 }
+
+/* Esconde a scrollbar no Chrome, Edge e Safari */
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Esconde a scrollbar no Firefox */
+body {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
