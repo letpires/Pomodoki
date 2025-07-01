@@ -27,6 +27,7 @@ export default function Leaderboard({ onClose, onJoinBattle, battle }) {
           userHistory
             ?.filter((stat) => stat.totalUnstaked > 0)
             .filter((stat) => stat.startDate >= battle.startDate)
+            .filter((stat) => stat.endDate <= battle.endDate)
             .reduce((acc, stat) => acc + parseInt(stat.timeCommitted), 0) ?? 0;
 
         return {
