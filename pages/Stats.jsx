@@ -131,19 +131,40 @@ export default function Stats({ onHandlePage }) {
       <Navbar setPage={onHandlePage} />
 
       <div
-        className={styles.buyTokensBlock}
-        onClick={() => {
-          if (network === "testnet") {
-            window.open("https://faucet.flow.com/fund-account", "_blank");
-          } else {
-            window.open("https://www.moonpay.com/buy/flow", "_blank");
-          }
+        style={{
+          display: "flex",
+          gap: "50px",
         }}
       >
-        <div className={styles.buyCircle}>
-          <span className={styles.buyArrow}>↙</span>
+        <div
+          className={styles.buyTokensBlock}
+          onClick={() => {
+            if (network === "testnet") {
+              window.open("https://faucet.flow.com/fund-account", "_blank");
+            } else {
+              window.open("https://www.moonpay.com/buy/flow", "_blank");
+            }
+          }}
+        >
+          <div className={styles.buyCircle}>
+            <span className={styles.buyArrow}>↙</span>
+          </div>
+          <div className={styles.buyText}>BUY FLOW</div>
         </div>
-        <div className={styles.buyText}>BUY FLOW</div>
+        <div
+          className={styles.buyTokensBlock}
+          onClick={() => {
+            window.open(
+              `https://pomodoki.com?wallet=${currentUser.publicAddress}&email=${currentUser.email}&network=${network}#be-the-first-to-know`,
+              "_blank"
+            );
+          }}
+        >
+          <div className={styles.buyCircle}>
+            <span className={styles.buyArrow}>🎁</span>
+          </div>
+          <div className={styles.buyText}>AIRDROP MODOKI</div>
+        </div>
       </div>
 
       <div className={styles.tabs}>
@@ -196,12 +217,17 @@ export default function Stats({ onHandlePage }) {
                 <span className={styles.label}>Balance</span>
               </div>
               <span className={styles.value}>{balance.toFixed(2)} FLOW</span>
+              {balance === 0 && (
+                <div style={{fontSize: 12, color: '#666', marginTop: 4}}>
+                  Buy FLOW or request an airdrop to get started
+                </div>
+              )}
             </div>
           </div>
         </>
       )}
 
-{selectedTab === "My battles" && (
+      {selectedTab === "My battles" && (
         <div className={styles.myBattlesSection}>
           {battles.length === 0 ? (
             <div className={styles.emptyBattlesMessage}>
@@ -265,7 +291,6 @@ export default function Stats({ onHandlePage }) {
           )}
         </div>
       )}
-
 
       <div className={styles.footer}>{/* Ícones de navegação aqui */}</div>
       <BottomNav
