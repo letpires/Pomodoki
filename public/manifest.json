@@ -24,7 +24,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["timer-overlay.css", "test-timer.html", "images/*"],
+      "resources": ["timer-overlay.css", "images/*"],
       "matches": ["<all_urls>"]
     }
   ],
