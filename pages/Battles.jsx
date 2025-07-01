@@ -103,7 +103,7 @@ function NewBattleCard({ onOpenCreateBattle }) {
 export default function Battles({ onHandlePage }) {
   const [selectedTab, setSelectedTab] = useState("created");
   const [selectedBattle, setSelectedBattle] = useState(null);
-  const { currentUser, getBattles, joinBattle } =
+  const { currentUser, getBattles, joinBattle, network } =
     useContext(CurrentUserContext);
   const { battles: storeBattles, setBattles: setStoreBattles } =
     useBattleStore();
@@ -119,7 +119,7 @@ export default function Battles({ onHandlePage }) {
     const battles = await getBattles();
     // TODO: remove this filter
     const newBattles = battles
-      .filter((x) => x.id > 17)
+      .filter((x) => network === "testnet" ? x.id > 17 : x.id > 0)
       .map((battle) => ({
         ...battle,
         title: battle.title || battle.name,

@@ -60,16 +60,41 @@ export default function Stats({ onHandlePage }) {
         const totalTimeCommitted = stats
           .filter((stat) => stat.totalUnstaked > 0)
           .reduce((acc, stat) => acc + parseInt(stat.timeCommitted), 0);
-        const totalStakes = stats.reduce((acc, stat, index) => {
-          if (index === 0) return 0;
-          const prevStat = stats[index - 1];
-          const prevDate = new Date(prevStat.timestamp);
-          const currDate = new Date(stat.timestamp);
+        const stakesPerDay = stats
+          .filter((stat) => stat.totalUnstaked > 0)
+          .reduce((acc, stat) => {
+            const date = new Date(stat.startDate * 1000);
+            const dateKey = date.toISOString().split("T")[0];
+
+            if (!acc[dateKey]) {
+              acc[dateKey] = 1;
+            } else {
+              acc[dateKey]++;
+            }
+            return acc;
+          }, {});
+
+        // Calculate streak by looking for consecutive days
+        const dates = Object.keys(stakesPerDay).sort();
+        let currentStreak = 1;
+        let maxStreak = 1;
+
+        for (let i = 1; i < dates.length; i++) {
+          const prevDate = new Date(dates[i - 1]);
+          const currDate = new Date(dates[i]);
           const diffDays = Math.floor(
             (currDate - prevDate) / (1000 * 60 * 60 * 24)
           );
-          return diffDays === 1 ? acc + 1 : 1;
-        }, 0);
+
+          if (diffDays === 1) {
+            currentStreak++;
+            maxStreak = Math.max(maxStreak, currentStreak);
+          } else {
+            currentStreak = 1;
+          }
+        }
+
+        const totalStakes = maxStreak;
 
         const newOverview = overview.map((item) => {
           if (item.key === "focusTime") {
