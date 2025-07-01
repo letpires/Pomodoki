@@ -2,6 +2,7 @@
 let timerOverlay = null;
 let timerInterval = null;
 let sessionData = null;
+let currentAvatar = null;
 
 // Inject CSS styles
 function injectStyles() {
@@ -33,6 +34,18 @@ function createTimerOverlay() {
     line-height: 1.2;
   `;
 
+  // Create avatar image element
+  const avatarImg = document.createElement('img');
+  avatarImg.id = 'pomodoki-avatar';
+  avatarImg.style.cssText = `
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    image-rendering: pixelated;
+    margin-bottom: 4px;
+    border-radius: 4px;
+  `;
+
   const closeButton = document.createElement('div');
   closeButton.innerHTML = '×';
   closeButton.className = 'close-button';
@@ -41,6 +54,7 @@ function createTimerOverlay() {
     hideTimerOverlay();
   });
 
+  timerOverlay.appendChild(avatarImg);
   timerOverlay.appendChild(timerText);
   timerOverlay.appendChild(closeButton);
   document.body.appendChild(timerOverlay);
@@ -142,6 +156,21 @@ function updateTimer() {
     `;
   }
 
+  // Update avatar if available
+  const avatarImg = document.getElementById('pomodoki-avatar');
+  if (avatarImg && currentAvatar) {
+    const avatarImages = {
+      tomash: chrome.runtime.getURL('/images/tomash_session.png'),
+      bubbiberry: chrome.runtime.getURL('/images/bubbi_session.png'),
+      batatack: chrome.runtime.getURL('/images/batatack_session.png')
+    };
+    
+    if (avatarImages[currentAvatar]) {
+      avatarImg.src = avatarImages[currentAvatar];
+      avatarImg.alt = currentAvatar;
+    }
+  }
+
   // Add visual feedback for last 30 seconds
   if (remaining <= 30 && remaining > 0) {
     timerOverlay.classList.add('completing');
@@ -158,6 +187,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       duration: request.duration * 60 // Convert minutes to seconds
     };
     
+    currentAvatar = request.avatar;
+    
     showTimerOverlay();
     
     if (timerInterval) clearInterval(timerInterval);
@@ -170,13 +201,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'stopTimer') {
     hideTimerOverlay();
     sessionData = null;
+    currentAvatar = null;
     sendResponse({ status: 'timer stopped' });
   }
   
   if (request.action === 'getTimerStatus') {
     sendResponse({ 
       hasTimer: !!timerOverlay && timerOverlay.style.display !== 'none',
-      sessionData: sessionData
+      sessionData: sessionData,
+      avatar: currentAvatar
     });
   }
 });
@@ -194,6 +227,8 @@ chrome.storage.local.get(['pomodokiSession'], (result) => {
         startTime: session.startTime,
         duration: session.duration
       };
+      
+      currentAvatar = session.avatar;
       
       showTimerOverlay();
       if (timerInterval) clearInterval(timerInterval);

@@ -46,9 +46,9 @@
         <h2>Timer Controls</h2>
         <p>Use these buttons to test the timer injection functionality:</p>
         
-        <button onclick="startTimer(25)">Start 25min Timer</button>
-        <button onclick="startTimer(5)">Start 5min Timer</button>
-        <button onclick="startTimer(1)">Start 1min Timer</button>
+        <button onclick="startTimer(25, 'tomash')">Start 25min Timer (Tomash)</button>
+        <button onclick="startTimer(5, 'bubbiberry')">Start 5min Timer (Bubbiberry)</button>
+        <button onclick="startTimer(1, 'batatack')">Start 1min Timer (Batatack)</button>
         <button onclick="stopTimer()">Stop Timer</button>
         
         <div id="status"></div>
@@ -86,14 +86,15 @@
             }, 3000);
         }
 
-        function startTimer(duration) {
+        function startTimer(duration, avatar) {
             if (chrome && chrome.runtime) {
                 chrome.runtime.sendMessage({
                     action: 'startTimer',
-                    duration: duration
+                    duration: duration,
+                    avatar: avatar
                 }, (response) => {
                     if (response && response.status === 'started') {
-                        showStatus(`Timer started for ${duration} minutes!`);
+                        showStatus(`Timer started for ${duration} minutes with ${avatar} avatar!`);
                     } else {
                         showStatus('Failed to start timer', 'error');
                     }

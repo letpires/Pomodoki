@@ -21,7 +21,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     chrome.storage.local.set({
       pomodokiSession: {
         startTime: startTime,
-        duration: sessionDuration
+        duration: sessionDuration,
+        avatar: request.avatar
       }
     });
 
@@ -34,7 +35,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         if (tab.url && !tab.url.startsWith('chrome://') && !tab.url.startsWith('chrome-extension://')) {
           chrome.tabs.sendMessage(tab.id, {
             action: 'startTimer',
-            duration: request.duration
+            duration: request.duration,
+            avatar: request.avatar
           }).catch(() => {
             // Content script might not be loaded yet, ignore errors
           });

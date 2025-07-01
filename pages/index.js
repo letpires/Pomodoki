@@ -102,6 +102,7 @@ export default function Home() {
     chrome.runtime?.sendMessage({
       action: "startTimer",
       duration: pomodoro,
+      avatar: selectedAvatar,
     });
 
     setPage("timer");
