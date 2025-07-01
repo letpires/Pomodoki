@@ -85,7 +85,7 @@ export default function Home() {
       });
     };
 
-    const interval = setInterval(checkFailure, 1000); // checa a cada 1s
+    const interval = setInterval(checkFailure, 500); // checa a cada 1s
     return () => clearInterval(interval); // limpa ao desmontar
   }, []);
 
