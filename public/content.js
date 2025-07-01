@@ -3,6 +3,7 @@ let timerOverlay = null;
 let timerInterval = null;
 let sessionData = null;
 let currentAvatar = null;
+let animationId = null;
 
 // Inject CSS styles
 function injectStyles() {
@@ -65,56 +66,104 @@ function createTimerOverlay() {
   document.body.appendChild(timerOverlay);
 
   // Make overlay draggable
-  makeDraggable(timerOverlay);
+  // makeDraggable(timerOverlay);
 }
 
 // Make the overlay draggable
 function makeDraggable(element) {
   let isDragging = false;
-  let currentX;
-  let currentY;
-  let initialX;
-  let initialY;
-  let xOffset = 0;
-  let yOffset = 0;
+  let dragStartX = 0;
+  let dragStartY = 0;
+  let elementStartX = 0;
+  let elementStartY = 0;
+  
+  // Use requestAnimationFrame for smooth dragging
+  animationId = null;
 
+  const dragStart = (e) => {
+    if (e.target.tagName === 'DIV' && e.target.innerHTML === '×') return;
+    
+    if (e.target === element || e.target.closest('#pomodoki-timer-overlay')) {
+      isDragging = true;
+      
+      // Store the initial mouse position
+      dragStartX = e.clientX;
+      dragStartY = e.clientY;
+      
+      // Store the current element position
+      const transform = element.style.transform;
+      const match = transform.match(/translate\(([^,]+),\s*([^)]+)\)/);
+      if (match) {
+        elementStartX = parseFloat(match[1]);
+        elementStartY = parseFloat(match[2]);
+      } else {
+        elementStartX = 0;
+        elementStartY = 0;
+      }
+      
+      element.style.cursor = 'grabbing';
+      element.style.userSelect = 'none';
+    }
+  };
+
+  const drag = (e) => {
+    if (isDragging) {
+      e.preventDefault();
+      
+      // Calculate new position based on mouse movement
+      const deltaX = e.clientX - dragStartX;
+      const deltaY = e.clientY - dragStartY;
+      const newX = elementStartX + deltaX;
+      const newY = elementStartY + deltaY;
+
+      // Use requestAnimationFrame for smooth updates
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+      
+      animationId = requestAnimationFrame(() => {
+        element.style.transform = `translate(${newX}px, ${newY}px)`;
+      });
+    }
+  };
+
+  const dragEnd = () => {
+    if (isDragging) {
+      isDragging = false;
+      element.style.cursor = 'grab';
+      element.style.userSelect = 'auto';
+      
+      // Update the element's starting position for the next drag
+      const transform = element.style.transform;
+      const match = transform.match(/translate\(([^,]+),\s*([^)]+)\)/);
+      if (match) {
+        elementStartX = parseFloat(match[1]);
+        elementStartY = parseFloat(match[2]);
+      }
+      
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+      }
+    }
+  };
+
+  // Add event listeners
   element.addEventListener('mousedown', dragStart);
   document.addEventListener('mousemove', drag);
   document.addEventListener('mouseup', dragEnd);
-
-  function dragStart(e) {
-    if (e.target.tagName === 'DIV' && e.target.innerHTML === '×') return;
-    
-    initialX = e.clientX - xOffset;
-    initialY = e.clientY - yOffset;
-
-    if (e.target === element) {
-      isDragging = true;
+  
+  // Set initial cursor style
+  element.style.cursor = 'grab';
+  
+  // Store cleanup function on the element
+  element._cleanupDrag = () => {
+    document.removeEventListener('mousemove', drag);
+    document.removeEventListener('mouseup', dragEnd);
+    if (animationId) {
+      cancelAnimationFrame(animationId);
     }
-  }
-
-  function drag(e) {
-    if (isDragging) {
-      e.preventDefault();
-      currentX = e.clientX - initialX;
-      currentY = e.clientY - initialY;
-
-      xOffset = currentX;
-      yOffset = currentY;
-
-      setTranslate(currentX, currentY, element);
-    }
-  }
-
-  function setTranslate(xPos, yPos, el) {
-    el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
-  }
-
-  function dragEnd() {
-    initialX = currentX;
-    initialY = currentY;
-    isDragging = false;
-  }
+  };
 }
 
 // Show the timer overlay
@@ -143,6 +192,10 @@ function hideTimerOverlay() {
 function removeTimerOverlay() {
   console.log('Removing timer overlay');
   if (timerOverlay) {
+    // Clean up drag event listeners
+    if (timerOverlay._cleanupDrag) {
+      timerOverlay._cleanupDrag();
+    }
     timerOverlay.remove();
     timerOverlay = null;
     console.log('Timer overlay removed from DOM');
