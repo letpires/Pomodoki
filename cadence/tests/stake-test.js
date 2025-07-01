@@ -25,6 +25,27 @@ const EMULATOR_ACCOUNT = {
   keyIndex: 0,
 };
 
+
+// Configure FCL for emulator
+// fcl.config({
+//   "flow.network": "testnet",
+//   "accessNode.api": "https://rest-testnet.onflow.org",
+//   "discovery.wallet": "https://fcl-discovery.onflow.org/testnet/authn",
+//   "fcl.accountProof.resolver": "http://localhost:8888/fcl/account-proof",
+//   "0xStakingContract": "0xacdf784e6e2a83f0",
+//   "0xBattleContract": "0xacdf784e6e2a83f0",
+//   "0xFungibleToken": "0x9a0766d93b6608b7",
+//   "0xFlowToken": "0x7e60df042a9c0868",
+// }); 
+
+// // Emulator account configuration
+// const TESTNET_ACCOUNT = {
+//   address: "0x7e57a6a684f820cb",
+//   privateKey:
+//     "",
+//   keyIndex: 0,
+// };
+
 const deployStakingContract = async (contractCode, authz) => {
   try {
     const transactionId = await fcl.mutate({
@@ -241,10 +262,10 @@ async function executeCreateBattle() {
       path.join(__dirname, "../transactions/createBattle.cdc"),
       "utf8"
     ); 
+ 
     const args = [ 
       fcl.arg("1720000000", fcl.t.UInt64), 
-      fcl.arg("1730000000", fcl.t.UInt64), 
-      fcl.arg("10.0", fcl.t.UFix64), 
+      fcl.arg("1730000000", fcl.t.UInt64),  
       fcl.arg("Teste", fcl.t.String), 
       fcl.arg("Teste", fcl.t.String), 
       fcl.arg("https://via.placeholder.com/150", fcl.t.String), 
@@ -329,7 +350,51 @@ async function executeJoinBattle() {
   } catch (error) {
     console.error("❌ Error executing get user stats transaction:", error);
   }
-} 
+}  
+
+// execute get user stats
+async function executeJoinBattleByUser(user) {
+  try { 
+    // Create authorization function for emulator
+    const authz = await authorizeMinter(
+      EMULATOR_ACCOUNT.address,
+      EMULATOR_ACCOUNT.keyIndex,
+      EMULATOR_ACCOUNT.privateKey
+    );
+    
+    const transactionCode = fs.readFileSync(
+      path.join(__dirname, "../transactions/joinBattleByUser.cdc"),
+      "utf8"
+    );
+
+    const args = [ 
+      fcl.arg("18", fcl.t.UInt64), 
+      fcl.arg(user, fcl.t.Address),
+    ];
+
+    console.log("🔑 Arguments:", args);
+
+    const {transactionId} = await fcl.send([
+      fcl.transaction(transactionCode),
+      fcl.args(args),
+      fcl.proposer(authz),
+      fcl.authorizations([authz]),
+      fcl.payer(authz),
+      fcl.limit(1000),
+    ]);
+    console.log("🔑 Transaction ID:", transactionId);
+    const transaction = await fcl.tx(transactionId).onceSealed();
+
+    if (transaction.status === 4) {
+      console.log("✅ Transaction successful!");
+    } else {
+      console.log("❌ Transaction failed:", transaction);
+    }
+  } catch (error) {
+    console.error("❌ Error executing get user stats transaction:", error);
+  }
+}  
+
 
 // Export functions for use in other files
 module.exports = {
@@ -337,6 +402,7 @@ module.exports = {
   executeGetUserStats,
   executeCreateBattle,
   executeGetBattleStats,
+  executeJoinBattleByUser,
   executeJoinBattle,
   executeRedeem,
   EMULATOR_ACCOUNT,

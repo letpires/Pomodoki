@@ -6,9 +6,12 @@ const blockedSites = [
   "youtube.com",
   "tiktok.com",
   "twitter.com",
+  "x.com",
   "linkedin.com",
   "facebook.com"
 ];
+
+
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'startTimer') { 
@@ -31,10 +34,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (changeInfo.url && startTime) {
-    const openedUrl = changeInfo.url;
+  if ((changeInfo.url || tab.url) && startTime) {
+    const openedUrl = changeInfo.url ?? tab.url;
 
-    console.log("chrome.tabs.onUpdated.addListener", openedUrl);
+    console.log("New page opened/changed", openedUrl);
 
     for (const site of blockedSites) {
       if (openedUrl.includes(site)) {
