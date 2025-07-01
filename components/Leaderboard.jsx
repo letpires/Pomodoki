@@ -81,12 +81,6 @@ export default function Leaderboard({ onClose, onJoinBattle, battle }) {
         {leaderboard.map((user, index) => (
           <div className={styles.card} key={user.rank}>
             <span className={styles.rank}>#{index + 1}</span>
-            <img
-              src={user?.avatar || "/images/tomash_profile.png"}
-              alt={user?.avatar || "Tomash"}
-              className={styles.avatar}
-              style={{ width: 32, height: 32 }}
-            />
             <div className={styles.info}>
               <div className={styles.name}>{user.name}</div>
               <div className={styles.focus}>Focus time: {user.focus}</div>
