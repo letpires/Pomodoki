@@ -152,6 +152,8 @@ export default function CreateBattle({ onClose, onCreated }) {
           borderRadius: 32,
           boxShadow: '0 2px 16px #bfa76a44',
           background: '#ffedae',
+          padding: '40px 32px 32px 32px',
+          boxSizing: 'border-box',
         }}
       >
         <button
@@ -172,8 +174,11 @@ export default function CreateBattle({ onClose, onCreated }) {
         >
           ×
         </button>
-        <h1 className={styles.title}>Create Battle</h1>
-        <form onSubmit={handleSubmit} className={styles.list} style={{width: '100%', padding: 0, margin: 0}}>
+        <h1 className={styles.title} style={{ fontSize: '1.3rem', margin: '0 0 16px 0', lineHeight: 1.1 }}>
+          Create<br />
+          Battle
+        </h1>
+        <form onSubmit={handleSubmit} className={styles.list} style={{width: '100%', padding: 0, margin: 0, boxSizing: 'border-box'}}>
           <div style={{ marginBottom: "16px" }}>
             <label
               style={{
