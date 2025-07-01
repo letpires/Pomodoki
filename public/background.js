@@ -1,6 +1,5 @@
 let timer = null;
-let startTime = null;
-let duration = 1500; // default in seconds (25 min)
+let startTime = null; 
 
 const blockedSites = [
   "instagram.com",
@@ -12,8 +11,7 @@ const blockedSites = [
 ];
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === 'startTimer') {
-    duration = request.duration;
+  if (request.action === 'startTimer') { 
     startTime = Date.now();
 
     if (timer) clearInterval(timer);
@@ -22,16 +20,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     sendResponse({ status: 'started' });
     return true;
   }
-
-  if (request.action === 'getRemaining') {
-    if (!startTime) return sendResponse({ remaining: duration });
-
-    const elapsed = Math.floor((Date.now() - startTime) / 1000);
-    const remaining = Math.max(duration - elapsed, 0);
-    sendResponse({ remaining });
-    return true;
-  }
-
+ 
   if (request.action === 'stopTimer') {
     if (timer) clearInterval(timer);
     timer = null;
@@ -44,6 +33,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.url && startTime) {
     const openedUrl = changeInfo.url;
+
+    console.log("chrome.tabs.onUpdated.addListener", openedUrl);
 
     for (const site of blockedSites) {
       if (openedUrl.includes(site)) {
