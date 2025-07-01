@@ -1,0 +1,83 @@
+/* Pomodoki Timer Overlay Styles */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+#pomodoki-timer-overlay {
+  font-family: 'Press Start 2P', monospace !important;
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  width: 120px !important;
+  height: 100px !important;
+  background: #ffedae !important;
+  /* border: 3px solid #5c4435 !important; */
+  border-radius: 8px !important;
+  z-index: 999999 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+  cursor: move !important;
+  user-select: none !important;
+  backdrop-filter: blur(5px) !important;
+}
+
+#pomodoki-timer-overlay:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3) !important;
+  transform: translateY(-2px) !important;
+  transition: all 0.2s ease !important;
+}
+
+#pomodoki-timer-text {
+  font-size: 14px !important;
+  color: #5c4435 !important;
+  text-align: center !important;
+  line-height: 1.2 !important;
+  font-family: 'Press Start 2P', monospace !important;
+}
+
+#pomodoki-avatar {
+  width: 54px !important;
+  height: 54px !important;
+  object-fit: cover !important;
+  image-rendering: pixelated !important;
+  margin-bottom: 4px !important;
+  border-radius: 4px !important;
+  /* border: 1px solid #5c4435 !important; */
+}
+
+#pomodoki-timer-overlay .close-button {
+  position: absolute !important;
+  top: -8px !important;
+  right: -8px !important;
+  width: 20px !important;
+  height: 20px !important;
+  background: #ff4444 !important;
+  color: white !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  font-size: 12px !important;
+  font-weight: bold !important;
+  border: 2px solid #5c4435 !important;
+  transition: all 0.2s ease !important;
+}
+
+#pomodoki-timer-overlay .close-button:hover {
+  background: #ff6666 !important;
+  transform: scale(1.1) !important;
+}
+
+/* Animation for timer completion */
+@keyframes pomodokiPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+#pomodoki-timer-overlay.completing {
+  animation: pomodokiPulse 1s ease-in-out infinite !important;
+  border-color: #4CAF50 !important;
+} 

@@ -101,7 +101,8 @@ export default function Home() {
 
     chrome.runtime?.sendMessage({
       action: "startTimer",
-      duration: pomodoro * 60,
+      duration: pomodoro,
+      avatar: selectedAvatar,
     });
 
     setPage("timer");
@@ -111,8 +112,19 @@ export default function Home() {
     await handleLogin();
     setPage("allset");
   };
-  const handleTimerComplete = () => setPage("success");
-  const handleTimerFail = () => setPage("failure");
+  const handleTimerComplete = () => {
+    chrome.runtime?.sendMessage({
+      action: "stopTimer",
+    });
+    setPage("success");
+  };
+  
+  const handleTimerFail = () => {
+    chrome.runtime?.sendMessage({
+      action: "stopTimer",
+    });
+    setPage("failure");
+  };
   const handleBackToHome = () => setPage("welcome");
 
   if (page === "welcome")

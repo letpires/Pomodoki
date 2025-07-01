@@ -10,10 +10,24 @@
     "48": "/icons/favicon.png",
     "128": "/icons/favicon.png"
   },
-  "permissions": ["storage", "tabs"], 
+  "permissions": ["storage", "tabs", "activeTab", "scripting"],
+  "host_permissions": ["<all_urls>"], 
   "background": {
     "service_worker": "background.js"
   },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["timer-overlay.css", "images/*"],
+      "matches": ["<all_urls>"]
+    }
+  ],
   "action": {
     "default_popup": "index.html"
   }
