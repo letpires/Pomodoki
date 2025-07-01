@@ -8,8 +8,8 @@
   right: 20px !important;
   width: 120px !important;
   height: 100px !important;
-  background: rgba(255, 255, 255, 0.95) !important;
-  border: 3px solid #5c4435 !important;
+  background: #ffedae !important;
+  /* border: 3px solid #5c4435 !important; */
   border-radius: 8px !important;
   z-index: 999999 !important;
   display: flex !important;
@@ -37,13 +37,13 @@
 }
 
 #pomodoki-avatar {
-  width: 32px !important;
-  height: 32px !important;
+  width: 54px !important;
+  height: 54px !important;
   object-fit: cover !important;
   image-rendering: pixelated !important;
   margin-bottom: 4px !important;
   border-radius: 4px !important;
-  border: 1px solid #5c4435 !important;
+  /* border: 1px solid #5c4435 !important; */
 }
 
 #pomodoki-timer-overlay .close-button {

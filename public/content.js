@@ -50,8 +50,13 @@ function createTimerOverlay() {
   closeButton.innerHTML = '×';
   closeButton.className = 'close-button';
 
-  closeButton.addEventListener('click', () => {
-    hideTimerOverlay();
+  closeButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('Close button clicked - stopping timer');
+    // Notify background script to stop the timer completely
+    chrome.runtime.sendMessage({ action: 'stopTimer' });
+    removeTimerOverlay();
   });
 
   timerOverlay.appendChild(avatarImg);
@@ -129,6 +134,27 @@ function hideTimerOverlay() {
     clearInterval(timerInterval);
     timerInterval = null;
   }
+  // Clear session data locally
+  sessionData = null;
+  currentAvatar = null;
+}
+
+// Completely remove the timer overlay
+function removeTimerOverlay() {
+  console.log('Removing timer overlay');
+  if (timerOverlay) {
+    timerOverlay.remove();
+    timerOverlay = null;
+    console.log('Timer overlay removed from DOM');
+  }
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+    console.log('Timer interval cleared');
+  }
+  sessionData = null;
+  currentAvatar = null;
+  console.log('Session data cleared');
 }
 
 // Update timer display
@@ -140,7 +166,7 @@ function updateTimer() {
   const remaining = sessionData.duration - elapsed;
 
   if (remaining <= 0) {
-    hideTimerOverlay();
+    removeTimerOverlay();
     return;
   }
 
@@ -150,8 +176,7 @@ function updateTimer() {
 
   const timerText = document.getElementById('pomodoki-timer-text');
   if (timerText) {
-    timerText.innerHTML = `
-      <div style="font-size: 10px; margin-bottom: 4px;">POMODOKI</div>
+    timerText.innerHTML = ` 
       <div style="font-size: 16px; font-weight: bold;">${timeString}</div>
     `;
   }
@@ -199,9 +224,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
   
   if (request.action === 'stopTimer') {
-    hideTimerOverlay();
-    sessionData = null;
-    currentAvatar = null;
+    removeTimerOverlay();
     sendResponse({ status: 'timer stopped' });
   }
   
