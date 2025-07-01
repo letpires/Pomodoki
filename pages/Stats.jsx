@@ -5,6 +5,8 @@ import BottomNav from "../components/BottomNav";
 import { CurrentUserContext } from "../context/CurrentUserProvider";
 import { useOverviewStore } from "../stores/overviewStore";
 import { useBattleStore } from "../stores/battleStore";
+import Leaderboard from "../components/Leaderboard";
+import battleStyles from "../styles/Battles.module.css";
 
 const tabs = ["Stats", "My battles"];
 
@@ -30,6 +32,7 @@ export default function Stats({ onHandlePage }) {
     useContext(CurrentUserContext);
   const { overview, setOverview, resetOverview } = useOverviewStore();
   const { battles, setBattles } = useBattleStore();
+  const [selectedBattle, setSelectedBattle] = useState(null);
 
   const fetchBattles = async () => {
     const battles = await getUserBattles(currentUser.publicAddress);
@@ -232,16 +235,17 @@ export default function Stats({ onHandlePage }) {
           {battles.length === 0 ? (
             <div className={styles.emptyBattlesMessage}>
               You haven&apos;t joined any battles yet.
-            </div> 
-          ) : ( 
-            <div 
-              style={{ 
-                margin: " 20px",
-              }}
-            > 
+            </div>
+          ) : (
+            <div style={{ margin: " 20px" }}>
               <div className={styles.myBattlesGrid}>
                 {battles.map((battle) => (
-                  <div key={battle.id} className={styles.battleCardStats}>
+                  <div
+                    key={battle.id}
+                    className={styles.battleCardStats}
+                    onClick={() => setSelectedBattle(battle)}
+                    style={{ cursor: "pointer" }}
+                  >
                     <div
                       className={styles.battleCardStatsImageWrapper}
                       style={{ position: "relative" }}
@@ -293,7 +297,16 @@ export default function Stats({ onHandlePage }) {
                   </div>
                 ))}
               </div>
-            </div> 
+            </div>
+          )}
+          {selectedBattle && (
+            <div className={battleStyles.leaderboardOverlay}>
+              <Leaderboard
+                battle={selectedBattle}
+                onClose={() => setSelectedBattle(null)}
+                onJoinBattle={() => {}}
+              />
+            </div>
           )}
         </div>
       )}
