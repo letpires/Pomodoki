@@ -201,17 +201,15 @@ export default function Stats({ onHandlePage }) {
         </>
       )}
 
-      {selectedTab === "My battles" && (
+{selectedTab === "My battles" && (
         <div className={styles.myBattlesSection}>
-          <div className={styles.myBattlesGrid}>
-            {battles.length === 0 ? (
-              <div
-                style={{ textAlign: "center", color: "#bfa76a", marginTop: 24 }}
-              >
-                You haven&apos;t joined any battles yet.
-              </div>
-            ) : (
-              battles.map((battle) => (
+          {battles.length === 0 ? (
+            <div className={styles.emptyBattlesMessage}>
+              You haven&apos;t joined any battles yet.
+            </div>
+          ) : (
+            <div className={styles.myBattlesGrid}>
+              {battles.map((battle) => (
                 <div key={battle.id} className={styles.battleCardStats}>
                   <div
                     className={styles.battleCardStatsImageWrapper}
@@ -262,11 +260,12 @@ export default function Stats({ onHandlePage }) {
                     </div>
                   </div>
                 </div>
-              ))
-            )}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
+
 
       <div className={styles.footer}>{/* Ícones de navegação aqui */}</div>
       <BottomNav
