@@ -237,7 +237,7 @@
   color: #fff;
 }
 .badgeUpcoming {
-  background: rgba(0, 0, 255, 0.85);
+  background: rgba(0, 168, 232, 0.75); /* azul praia translúcido */
   color: #fff;
 }
 .footer {

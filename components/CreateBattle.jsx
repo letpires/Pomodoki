@@ -3,6 +3,7 @@ import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import styles from "../styles/Leaderboard.module.css";
 import { CurrentUserContext } from "../context/CurrentUserProvider";
+import { createPortal } from 'react-dom';
 
 export default function CreateBattle({ onClose, onCreated }) {
   const [formData, setFormData] = useState({
@@ -18,6 +19,10 @@ export default function CreateBattle({ onClose, onCreated }) {
   const { createBattle } = useContext(CurrentUserContext);
   const startPickerRef = useRef(null);
   const endPickerRef = useRef(null);
+  const [calendarPosition, setCalendarPosition] = useState({ top: 0, left: 0, width: 0 });
+  const [calendarType, setCalendarType] = useState(null); // 'start' ou 'end'
+  const startInputRef = useRef(null);
+  const endInputRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -131,6 +136,37 @@ export default function CreateBattle({ onClose, onCreated }) {
     }
   };
 
+  const openCalendar = (type) => {
+    const ref = type === 'start' ? startInputRef : endInputRef;
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const calendarHeight = 380; // altura estimada do DayPicker
+    const margin = 8;
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const spaceAbove = rect.top;
+    let top;
+    if (spaceBelow >= calendarHeight) {
+      // Cabe abaixo
+      top = rect.bottom + window.scrollY;
+    } else if (spaceAbove >= calendarHeight) {
+      // Cabe acima
+      top = rect.top + window.scrollY - calendarHeight;
+    } else if (spaceBelow >= spaceAbove) {
+      // Mostra o máximo possível abaixo
+      top = Math.min(rect.bottom + window.scrollY, window.innerHeight - margin - calendarHeight);
+    } else {
+      // Mostra o máximo possível acima
+      top = Math.max(margin, rect.top + window.scrollY - calendarHeight);
+    }
+    setCalendarPosition({
+      top,
+      left: rect.left + window.scrollX,
+      width: rect.width,
+    });
+    setCalendarType(type);
+  };
+  const closeCalendar = () => setCalendarType(null);
+
   return (
     <div
       style={{
@@ -152,6 +188,8 @@ export default function CreateBattle({ onClose, onCreated }) {
           borderRadius: 32,
           boxShadow: '0 2px 16px #bfa76a44',
           background: '#ffedae',
+          width: '380px',
+          height: '580px',
           padding: '40px 32px 32px 32px',
           boxSizing: 'border-box',
         }}
@@ -262,10 +300,13 @@ export default function CreateBattle({ onClose, onCreated }) {
             >
               Start Date
             </label>
-            <div style={{ position: "relative" }} ref={startPickerRef}>
-              <button
-                type="button" 
-                onClick={() => setShowStartPicker(!showStartPicker)}
+            <div style={{ position: "relative" }}>
+              <input
+                ref={startInputRef}
+                type="text"
+                value={formData.startDate ? formatDate(formData.startDate) : "Select start date..."}
+                readOnly
+                onClick={() => openCalendar('start')}
                 style={{
                   width: "100%",
                   padding: "12px 16px",
@@ -275,66 +316,11 @@ export default function CreateBattle({ onClose, onCreated }) {
                   fontFamily: "VT323, monospace",
                   fontSize: "16px",
                   color: "#5a4a2c",
+                  outline: "none",
+                  boxShadow: "none",
                   cursor: "pointer",
-                  textAlign: "left",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
                 }}
-              >
-                <span>{formatDate(formData.startDate)}</span>
-                <span>📅</span>
-              </button>
-              {showStartPicker && (
-                <div
-                  style={{ 
-                    top: "100%",
-                    left: 0,
-                    right: 0,
-                    zIndex: 1000,
-                    backgroundColor: "#fef6bf",
-                    border: "1.5px solid #655f4d",
-                    borderRadius: "12px",
-                    padding: "6px 2px 16px 2px",
-                    marginTop: "4px",
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                  }}
-                >
-                  <DayPicker
-                    mode="single"
-                    selected={formData.startDate}
-                    onSelect={(date) => handleDateSelect(date, 'startDate')}
-                    disabled={{ before: new Date() }}
-                    styles={{
-                      caption: { color: "#5a4a2c", fontFamily: "VT323, monospace" },
-                      head_cell: { color: "#5a4a2c", fontFamily: "VT323, monospace" },
-                      cell: { color: "#5a4a2c", fontFamily: "VT323, monospace" },
-                      day_selected: { backgroundColor: "#4caf50", color: "white" },
-                      day_today: { color: "#4caf50", fontWeight: "bold" },
-                    }} 
-                  />
-                  <div style={{ marginTop: "12px" }}>
-                    <label style={{ color: "#5a4a2c", fontFamily: "VT323, monospace", fontSize: "14px" }}>
-                      Time:
-                    </label>
-                    <input
-                      type="time"
-                      value={formatTime(formData.startDate)}
-                      onChange={(e) => handleTimeChange(e, 'startDate')}
-                      style={{
-                        width: "100%",
-                        padding: "6px",
-                        border: "1px solid #655f4d",
-                        borderRadius: "6px",
-                        backgroundColor: "#fff",
-                        fontFamily: "VT323, monospace",
-                        fontSize: "14px",
-                        marginTop: "4px",
-                      }}
-                    />
-                  </div>
-                </div>
-              )}
+              />
             </div>
           </div>
 
@@ -351,10 +337,13 @@ export default function CreateBattle({ onClose, onCreated }) {
             >
               End Date
             </label>
-            <div style={{ position: "relative" }} ref={endPickerRef}>
-              <button
-                type="button"
-                onClick={toggleEndPicker}
+            <div style={{ position: "relative" }}>
+              <input
+                ref={endInputRef}
+                type="text"
+                value={formData.endDate ? formatDate(formData.endDate) : "Select end date..."}
+                readOnly
+                onClick={() => openCalendar('end')}
                 style={{
                   width: "100%",
                   padding: "12px 16px",
@@ -364,75 +353,15 @@ export default function CreateBattle({ onClose, onCreated }) {
                   fontFamily: "VT323, monospace",
                   fontSize: "16px",
                   color: "#5a4a2c",
+                  outline: "none",
+                  boxShadow: "none",
                   cursor: "pointer",
-                  textAlign: "left",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
                 }}
-              >
-                <span>{formData.endDate ? formatDate(formData.endDate) : "Select end date..."}</span>
-                <span>📅</span>
-              </button>
-              {showEndPicker && (
-                <div
-                  style={{ 
-                    position: "absolute",
-                    [pickerPosition === 'top' ? 'bottom' : 'top']: "100%",
-                    left: 0,
-                    right: 0,
-                    maxHeight: "400px",
-                    overflowY: "auto",
-                    zIndex: 1000,
-                    backgroundColor: "#fef6bf",
-                    border: "1.5px solid #655f4d",
-                    borderRadius: "12px",
-                    padding: "6px 2px 16px 2px",
-                    marginTop: pickerPosition === 'top' ? "0px" : "4px",
-                    marginBottom: pickerPosition === 'top' ? "4px" : "0px",
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                    transform: "translateY(0)",
-                    maxWidth: "calc(100vw - 32px)",
-                  }}
-                >
-                  <DayPicker
-                    mode="single"
-                    selected={formData.endDate}
-                    onSelect={(date) => handleDateSelect(date, 'endDate')}
-                    disabled={{ before: formData.startDate }}
-                    styles={{
-                      caption: { color: "#5a4a2c", fontFamily: "VT323, monospace" },
-                      head_cell: { color: "#5a4a2c", fontFamily: "VT323, monospace" },
-                      cell: { color: "#5a4a2c", fontFamily: "VT323, monospace" },
-                      day_selected: { backgroundColor: "#4caf50", color: "white" },
-                      day_today: { color: "#4caf50", fontWeight: "bold" },
-                    }}
-                  /> 
-                  <div style={{ marginTop: "12px" }}>
-                    <label style={{ color: "#5a4a2c", fontFamily: "VT323, monospace", fontSize: "14px" }}>
-                      Time:
-                    </label>
-                    <input
-                      type="time"
-                      value={formData.endDate ? formatTime(formData.endDate) : ""}
-                      onChange={(e) => handleTimeChange(e, 'endDate')}
-                      style={{
-                        width: "100%",
-                        padding: "8px",
-                        border: "1px solid #655f4d",
-                        borderRadius: "6px",
-                        backgroundColor: "#fff",
-                        fontFamily: "VT323, monospace",
-                        fontSize: "14px",
-                        marginTop: "4px",
-                      }}
-                    />
-                  </div>
-                </div>
-              )}
+              />
             </div>
           </div>
         </form>
+        <div style={{ flexGrow: 1 }} />
         <button
           className={styles.joinBtn}
           onClick={handleSubmit}
@@ -458,6 +387,64 @@ export default function CreateBattle({ onClose, onCreated }) {
           {loading ? "Creating..." : "Create Battle"}
         </button>
       </div>
+      {calendarType && createPortal(
+        <div
+          style={{
+            position: 'absolute',
+            top: calendarPosition.top,
+            left: calendarPosition.left,
+            width: calendarPosition.width,
+            zIndex: 9999,
+            background: '#fef6bf',
+            border: '1.5px solid #655f4d',
+            borderRadius: '18px',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.18)',
+            padding: 32,
+            maxHeight: 480,
+            overflowY: 'auto',
+          }}
+        >
+          <DayPicker
+            mode="single"
+            selected={calendarType === 'start' ? formData.startDate : formData.endDate}
+            onSelect={date => {
+              handleDateSelect(date, calendarType === 'start' ? 'startDate' : 'endDate');
+            }}
+            disabled={calendarType === 'end' ? { before: formData.startDate || new Date() } : { before: new Date() }}
+            styles={{
+              caption: { color: "#5a4a2c", fontFamily: "VT323, monospace" },
+              head_cell: { color: "#5a4a2c", fontFamily: "VT323, monospace" },
+              cell: { color: "#5a4a2c", fontFamily: "VT323, monospace" },
+              day_selected: { backgroundColor: "#4caf50", color: "white" },
+              day_today: { color: "#4caf50", fontWeight: "bold" },
+            }}
+          />
+          <div style={{ marginTop: 12 }}>
+            <label style={{ color: "#5a4a2c", fontFamily: "VT323, monospace", fontSize: "14px" }}>
+              Time:
+            </label>
+            <input
+              type="time"
+              value={calendarType === 'start' ? formatTime(formData.startDate) : (formData.endDate ? formatTime(formData.endDate) : "")}
+              onChange={e => handleTimeChange(e, calendarType === 'start' ? 'startDate' : 'endDate')}
+              style={{
+                width: "100%",
+                padding: "8px",
+                border: "1px solid #655f4d",
+                borderRadius: "6px",
+                backgroundColor: "#fff",
+                fontFamily: "VT323, monospace",
+                fontSize: "14px",
+                marginTop: "4px",
+              }}
+            />
+          </div>
+          <div style={{ textAlign: 'right', marginTop: 8 }}>
+            <button onClick={closeCalendar} style={{ fontFamily: 'VT323, monospace', fontSize: 16, background: 'none', border: 'none', color: '#4caf50', cursor: 'pointer' }}>Close</button>
+          </div>
+        </div>,
+        document.body
+      )}
     </div>
   );
 }
