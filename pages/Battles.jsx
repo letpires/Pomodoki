@@ -119,7 +119,7 @@ export default function Battles({ onHandlePage }) {
     const battles = await getBattles();
     // TODO: remove this filter
     const newBattles = battles
-      .filter((x) => network === "testnet" ? x.id > 17 : x.id > 0)
+      .filter((x) => network === "testnet" ? x.id > 25 : x.id > 0)
       .map((battle) => ({
         ...battle,
         title: battle.title || battle.name,
@@ -134,8 +134,7 @@ export default function Battles({ onHandlePage }) {
               : "active"
             : "finished",
       }));
-    console.log("newBattles", newBattles);
-    // Ordenar por id decrescente (mais recente primeiro)
+    console.log("newBattles", newBattles); 
     newBattles.sort((a, b) => b.id - a.id);
     setStoreBattles(newBattles);
   };
