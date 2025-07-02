@@ -69,6 +69,10 @@ access(all) contract BattleContract_V2 {
         pre {
             self.battles[battleId] != nil: "Battle does not exist"
         } 
+        
+        if self.battles[battleId]!.users.contains(user) {
+            return
+        }
 
         self.battles[battleId]!.users.append(user) 
         if self.battlesByUser[user] == nil {

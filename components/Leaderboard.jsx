@@ -9,48 +9,57 @@ export default function Leaderboard({ onClose, onJoinBattle, battle }) {
   const [leaderboard, setLeaderboard] = useState([]);
   const [joining, setJoining] = useState(false);
   const [joined, setJoined] = useState(false);
+  const [isUserInBattle, setIsUserInBattle] = useState(false);
 
   // Detecta se o usuário já está na batalha
-  const isUserInBattle = battle?.users?.includes(currentUser?.publicAddress);
+  const fetchBattleStats = async () => {
+    const battleStats = await getBattleStats(battle.id);
+
+    if (!battleStats) return;
+
+    const users = battleStats.users;
+    setIsUserInBattle(users?.includes(currentUser?.publicAddress));
+    const usersWithHistory = battleStats.usersWithHistory;
+    const leaderboard = users.map((user) => {
+      const userHistory = usersWithHistory[user];
+      const totalTimeCommitted =
+        userHistory
+          ?.filter((stat) => stat.totalUnstaked > 0)
+          .filter((stat) => stat.startDate >= battle.startDate)
+          .filter((stat) => stat.endDate <= battle.endDate)
+          .reduce((acc, stat) => acc + parseInt(stat.timeCommitted), 0) ?? 0;
+
+      return {
+        name: user,
+        avatar: "/images/tomash_profile.png",
+        focus: totalTimeCommitted,
+      };
+    });
+
+    // it should be sorted by the total focus time
+    const sortedLeaderboard = leaderboard
+      .filter((user) => user)
+      .sort((a, b) => b.focus - a.focus);
+ 
+    setLeaderboard(sortedLeaderboard);
+  };
 
   useEffect(() => {
-    const fetchBattleStats = async () => {
-      const battleStats = await getBattleStats(battle.id);
-
-      if (!battleStats) return;
-
-      const users = battleStats.users;
-      const usersWithHistory = battleStats.usersWithHistory;
-      const leaderboard = users.map((user) => {
-        const userHistory = usersWithHistory[user];
-        const totalTimeCommitted =
-          userHistory
-            ?.filter((stat) => stat.totalUnstaked > 0)
-            .filter((stat) => stat.startDate >= battle.startDate)
-            .filter((stat) => stat.endDate <= battle.endDate)
-            .reduce((acc, stat) => acc + parseInt(stat.timeCommitted), 0) ?? 0;
-
-        return {
-          name: user,
-          avatar: "/images/tomash_profile.png",
-          focus: totalTimeCommitted,
-        };
-      });
-
-      // it should be sorted by the total focus time
-      const sortedLeaderboard = leaderboard
-        .filter((user) => user)
-        .sort((a, b) => b.focus - a.focus);
-
-      console.log("sortedLeaderboard", sortedLeaderboard);
-      setLeaderboard(sortedLeaderboard);
-    };
     fetchBattleStats();
-  }, [battle, getBattleStats]);
+  }, [currentUser, battle, getBattleStats]);
 
   const handleJoin = async () => {
     setJoining(true);
     await onJoinBattle();
+    const newLeaderboard = [
+      ...leaderboard,
+      {
+        name: currentUser?.publicAddress,
+        avatar: "/images/tomash_profile.png",
+        focus: 0,
+      },
+    ];
+    setLeaderboard(newLeaderboard);
     setJoining(false);
     setJoined(true);
   };
@@ -88,7 +97,7 @@ export default function Leaderboard({ onClose, onJoinBattle, battle }) {
           </div>
         ))}
       </div>
-      {!isUserInBattle && (
+      {!isUserInBattle && !joined && (
         <button
           className={styles.joinBtn}
           onClick={handleJoin}
