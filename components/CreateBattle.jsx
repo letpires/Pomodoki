@@ -44,7 +44,7 @@ export default function CreateBattle({ onClose, onCreated }) {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: name === "name" ? value.slice(0, 16) : value,
     }));
   };
 
@@ -108,6 +108,13 @@ export default function CreateBattle({ onClose, onCreated }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validação manual dos campos obrigatórios
+    if (!formData.name || !formData.description || !formData.startDate || !formData.endDate) {
+      alert("Por favor, preencha todos os campos obrigatórios.");
+      return;
+    }
+
     setLoading(true);
     try {
       const title = formData.name;
@@ -217,7 +224,7 @@ export default function CreateBattle({ onClose, onCreated }) {
           Battle
         </h1>
         <form onSubmit={handleSubmit} className={styles.list} style={{width: '100%', padding: 0, margin: 0, boxSizing: 'border-box'}}>
-          <div style={{ marginBottom: "16px" }}>
+          <div style={{ marginBottom: "16px", position: 'relative' }}>
             <label
               style={{
                 display: "block",
@@ -236,6 +243,7 @@ export default function CreateBattle({ onClose, onCreated }) {
               value={formData.name}
               onChange={handleInputChange}
               placeholder="Enter battle name..."
+              maxLength={16}
               style={{
                 width: "100%",
                 padding: "12px 16px",
@@ -250,6 +258,14 @@ export default function CreateBattle({ onClose, onCreated }) {
               }}
               required
             />
+            <span style={{
+              position: 'absolute',
+              right: 12,
+              bottom: 8,
+              fontSize: 12,
+              color: '#bfa76a',
+              fontFamily: 'VT323, monospace',
+            }}>{formData.name.length}/16</span>
           </div>
 
           <div style={{ marginBottom: "16px" }}>
@@ -320,6 +336,7 @@ export default function CreateBattle({ onClose, onCreated }) {
                   boxShadow: "none",
                   cursor: "pointer",
                 }}
+                required
               />
             </div>
           </div>
@@ -357,6 +374,7 @@ export default function CreateBattle({ onClose, onCreated }) {
                   boxShadow: "none",
                   cursor: "pointer",
                 }}
+                required
               />
             </div>
           </div>
