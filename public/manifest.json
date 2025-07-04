@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Pomodoki",
   "short_name": "Pomodoki",
-  "version": "1.3",
+  "version": "1.4",
   "description": "Pomodoki is a Chrome extension that helps you stay focused and productive.",
   "icons": {
     "16": "/icons/favicon.png",
