@@ -1,0 +1,22 @@
+{
+  "name": "Pomodoki",
+  "tagline": "Tamagotchi-style virtual pet that helps you to focus!",
+  "description": "Pomodoki is a Chrome extension that gamifies productivity by combining the Pomodoro technique with Flow blockchain staking and a Tamagotchi-style pet. Users focus in timed intervals, stake FLOW tokens, and interact with an animated pet that responds to their performance.",
+  "team": [
+    {
+      "name": "Glaicon Peixer",
+      "email": "gjpeixer@gmail.com"
+    },
+    {
+      "name": "Leticia Pires",
+      "email": "leticiapyres@gmail.com"
+    }
+  ],
+  "demo_url": "https://pomodoki.com/",
+  "video_url": "https://youtube.com/watch?v=your-demo-video",
+  "technologies": ["FLOW", "CHROME EXTENSION", "JavaScript", "CSS"]
+}
+
+
+
+
