@@ -79,7 +79,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if ((changeInfo.url || tab.url) && startTime) {
     const openedUrl = changeInfo.url ?? tab.url;
 
-    console.log("New page opened/changed", openedUrl);
+    console.error("New page opened/changed", openedUrl);
 
     for (const site of blockedSites) {
       if (openedUrl.includes(site)) {
