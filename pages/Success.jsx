@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import PixelSuccess from "../components/PixelSuccess";
 import { CurrentUserContext } from "../context/CurrentUserProvider";
-import * as fcl from "@onflow/fcl"; 
+import * as fcl from "@onflow/fcl";
 import redeemCode from "../constants/redeem";
 
 const Success = ({ avatar = "bubbiberry", onRestart }) => {
@@ -12,16 +12,23 @@ const Success = ({ avatar = "bubbiberry", onRestart }) => {
 
   const handleRedeem = async () => {
     try {
-      setIsLoading(true); 
-      const transactionId = await fcl.mutate({
-        cadence: redeemCode,
-        proposer: AUTHORIZATION_FUNCTION,
-        authorizations: [AUTHORIZATION_FUNCTION],
-        payer: AUTHORIZATION_FUNCTION,
-        limit: 9999,
-      });
-
-      await fcl.tx(transactionId).onceSealed();
+      setIsLoading(true);
+      fcl
+        .mutate({
+          cadence: redeemCode,
+          proposer: AUTHORIZATION_FUNCTION,
+          authorizations: [AUTHORIZATION_FUNCTION],
+          payer: AUTHORIZATION_FUNCTION,
+          limit: 9999,
+        })
+        .then((transactionId) => {
+          fcl
+            .tx(transactionId)
+            .onceExecuted()
+            .then((event) => {
+              console.log("Transaction executed", event);
+            });
+        });
 
       setRedeemed(true);
       // Refresh balance after successful redemption

@@ -19,21 +19,29 @@ const Setup = ({ onStart, selectedAvatar = "tomash", onHandlePage }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { balance, balanceLoading, fetchBalance, currentUser, magic } =
     useContext(CurrentUserContext);
-  const AUTHORIZATION_FUNCTION = magic?.flow.authorization; 
+  const AUTHORIZATION_FUNCTION = magic?.flow.authorization;
 
   const handleStart = async () => {
     try {
       setIsLoading(true);
-      const { breakTime } = getDurations(); 
-      const transactionId = await fcl.mutate({
-        cadence: stakeCode,
-        args: (arg, t) => [arg(stake.toFixed(2), t.UFix64), arg(selectedTime, t.UInt64)],
-        proposer: AUTHORIZATION_FUNCTION,
-        authorizations: [AUTHORIZATION_FUNCTION],
-        payer: AUTHORIZATION_FUNCTION,
-        limit: 9999,
-      });
-      await fcl.tx(transactionId).onceSealed();
+      const { breakTime } = getDurations();
+      fcl
+        .mutate({
+          cadence: stakeCode,
+          args: (arg, t) => [
+            arg(stake.toFixed(2), t.UFix64),
+            arg(selectedTime, t.UInt64),
+          ],
+          proposer: AUTHORIZATION_FUNCTION,
+          authorizations: [AUTHORIZATION_FUNCTION],
+          payer: AUTHORIZATION_FUNCTION,
+          limit: 9999,
+        })
+        .then((transactionId) => {
+          fcl.tx(transactionId).onceExecuted().then((event) => {
+            console.log("Transaction executed", event);
+          });
+        });
 
       localStorage.removeItem("pomodokiStart");
 
