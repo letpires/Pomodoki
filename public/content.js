@@ -236,10 +236,10 @@ function updateTimer() {
 
   // Update avatar if available
   const avatarImg = document.getElementById('pomodoki-avatar');
-  if (avatarImg && currentAvatar) {
+  if (avatarImg && currentAvatar && !avatarImg.src) {
     const avatarImages = {
       tomash: chrome.runtime.getURL('/images/tomash_session.png'),
-      bubbiberry: chrome.runtime.getURL('/images/bubbi_session.png'),
+      bubbiberry: chrome.runtime.getURL('/images/bubbi_session.png'), 
       batatack: chrome.runtime.getURL('/images/batatack_session.png')
     };
     

@@ -83,6 +83,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 
     for (const site of blockedSites) {
       if (openedUrl.includes(site)) {
+        console.error("Blocked site opened", openedUrl, "stopping timer", site);
         chrome.storage.local.set({ pomodokiStatus: "failure" });
 
         if (timer) clearInterval(timer);
