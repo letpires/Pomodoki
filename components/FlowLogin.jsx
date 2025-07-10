@@ -5,6 +5,12 @@ export default function FlowLogin({ handleConnectWallet }) {
   const { isLoggedIn, handleLogin, handleLogout, currentUser } =
     useContext(CurrentUserContext);
 
+  const handleLogoutFlow = async () => {
+    await handleLogout();
+    const extensionUrl = `chrome-extension://${chrome.runtime?.id}/index.html`;
+    window.open(extensionUrl);
+  };
+
   return (
     <div className="flow-login text-center w-full">
       {!isLoggedIn ? (
@@ -40,7 +46,7 @@ export default function FlowLogin({ handleConnectWallet }) {
             Connected as: {currentUser.publicAddress}
           </p>
           <button
-            onClick={handleLogout}
+            onClick={handleLogoutFlow}
             style={{
               marginTop: "20px",
               backgroundColor: "#fed35c",
