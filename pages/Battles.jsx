@@ -17,6 +17,7 @@ function BattleCard({ battle }) {
     const end = deadline * 1000;
     const diff = end - now;
     if (diff <= 0) return "Finished";
+
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
@@ -26,6 +27,7 @@ function BattleCard({ battle }) {
     str += `${minutes}m`;
     return str.trim();
   }
+
   // Função para formatar data curta (sem hora)
   function formatDateShort(ts) {
     if (!ts) return "";
@@ -77,7 +79,7 @@ function BattleCard({ battle }) {
         ) : (
           <div className={styles.deadline}>
             {battle.status === "active" ? "Countdown" : "Start at"}:{" "}
-            {getCountdown(battle.deadline)}
+            {battle.status === "active" ? getCountdown(battle.deadline) : getCountdown(battle.startDate) }
           </div>
         )}
         <div
