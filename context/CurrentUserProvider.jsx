@@ -118,6 +118,7 @@ const CurrentUserProvider = ({ children }) => {
       login(data);
       // Fetch balance after successful login
       await fetchBalance();
+      return data;
     } catch (error) {
       console.error("Error logging in:", error);
       alert("Failed to log in. Please try again.");

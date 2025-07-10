@@ -26,7 +26,7 @@ const formatTimeDisplay = (totalMinutes) => {
   return `${hours}h ${minutes}m`;
 };
 
-export default function Stats({ onHandlePage }) {
+export default function Stats({ selectedAvatar, onHandlePage }) {
   const [selectedTab, setSelectedTab] = useState("Stats");
   const { currentUser, getUserHistory, balance, network, getUserBattles } =
     useContext(CurrentUserContext);
@@ -131,7 +131,7 @@ export default function Stats({ onHandlePage }) {
         paddingTop: "50px",
       }}
     >
-      <Navbar setPage={onHandlePage} />
+      <Navbar selectedAvatar={selectedAvatar} setPage={onHandlePage} />
 
       <div
         style={{

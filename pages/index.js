@@ -109,8 +109,10 @@ export default function Home() {
   };
  
   const handleConnectWallet = async () => {
-    await handleLogin();
-    setPage("allset");
+    const data = await handleLogin();
+    if (data) {
+      setPage("allset");
+    }
   };
   const handleTimerComplete = () => {
     chrome.runtime?.sendMessage({
@@ -164,8 +166,8 @@ export default function Home() {
         onTryAgain={() => setPage("setup")}
       />
     );
-  if (page === "stats") return <Stats onHandlePage={setPage} />;
-  if (page === "battles") return <Battles onHandlePage={setPage} />;
+  if (page === "stats") return <Stats selectedAvatar={selectedAvatar} onHandlePage={setPage} />;
+  if (page === "battles") return <Battles selectedAvatar={selectedAvatar} onHandlePage={setPage} />;
 
   return null;
 }

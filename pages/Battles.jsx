@@ -100,7 +100,7 @@ function NewBattleCard({ onOpenCreateBattle }) {
   );
 }
 
-export default function Battles({ onHandlePage }) {
+export default function Battles({ selectedAvatar, onHandlePage }) {
   const [selectedTab, setSelectedTab] = useState("created");
   const [selectedBattle, setSelectedBattle] = useState(null);
   const { currentUser, getBattles, joinBattle, network } =
@@ -186,7 +186,7 @@ export default function Battles({ onHandlePage }) {
         paddingTop: "60px",
       }}
     >
-      <Navbar setPage={onHandlePage} />
+      <Navbar selectedAvatar={selectedAvatar} setPage={onHandlePage} />
 
       <h1 className={styles.pageTitle}>Battles</h1>
 
