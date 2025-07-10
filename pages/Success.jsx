@@ -13,22 +13,13 @@ const Success = ({ avatar = "bubbiberry", onRestart }) => {
   const handleRedeem = async () => {
     try {
       setIsLoading(true);
-      fcl
-        .mutate({
-          cadence: redeemCode,
-          proposer: AUTHORIZATION_FUNCTION,
-          authorizations: [AUTHORIZATION_FUNCTION],
-          payer: AUTHORIZATION_FUNCTION,
-          limit: 9999,
-        })
-        .then((transactionId) => {
-          fcl
-            .tx(transactionId)
-            .onceExecuted()
-            .then((event) => {
-              console.log("Transaction executed", event);
-            });
-        });
+      await fcl.mutate({
+        cadence: redeemCode,
+        proposer: AUTHORIZATION_FUNCTION,
+        authorizations: [AUTHORIZATION_FUNCTION],
+        payer: AUTHORIZATION_FUNCTION,
+        limit: 9999,
+      });
 
       setRedeemed(true);
       // Refresh balance after successful redemption

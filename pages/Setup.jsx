@@ -1,47 +1,63 @@
-import React, { useState, useContext } from "react";
-import * as fcl from "@onflow/fcl"; 
+import React, { useState, useContext, useEffect } from "react";
+import * as fcl from "@onflow/fcl";
 import { CurrentUserContext } from "../context/CurrentUserProvider";
-import Navbar from "../components/Navbar"; 
+import Navbar from "../components/Navbar";
 import stakeCode from "../constants/stake";
-import PixelPomo from '../components/PixelPomo';
+import PixelPomo from "../components/PixelPomo";
 import BottomNav from "../components/BottomNav";
 
 function formatDuration(minutes) {
   if (minutes < 60) return `${minutes}m`;
   const h = Math.floor(minutes / 60);
   const m = minutes % 60;
-  return m === 0 ? `${h}h` : `${h}h${m.toString().padStart(2, '0')}`;
+  return m === 0 ? `${h}h` : `${h}h${m.toString().padStart(2, "0")}`;
 }
 
 const Setup = ({ onStart, selectedAvatar = "tomash", onHandlePage }) => {
   const [selectedTime, setSelectedTime] = useState(25);
   const [stake, setStake] = useState(1.0);
   const [isLoading, setIsLoading] = useState(false);
+  const [loadingDots, setLoadingDots] = useState(0);
   const { balance, balanceLoading, fetchBalance, currentUser, magic } =
     useContext(CurrentUserContext);
   const AUTHORIZATION_FUNCTION = magic?.flow.authorization;
 
+  // Update loading animation every second when isLoading is true
+  useEffect(() => {
+    let interval;
+    if (isLoading) {
+      interval = setInterval(() => {
+        setLoadingDots((prev) => (prev + 1) % 4);
+      }, 800);
+    } else {
+      setLoadingDots(0);
+    }
+    
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isLoading]);
+
   const handleStart = async () => {
     try {
       setIsLoading(true);
-      const { breakTime } = getDurations();
-      fcl
-        .mutate({
-          cadence: stakeCode,
-          args: (arg, t) => [
-            arg(stake.toFixed(2), t.UFix64),
-            arg(selectedTime, t.UInt64),
-          ],
-          proposer: AUTHORIZATION_FUNCTION,
-          authorizations: [AUTHORIZATION_FUNCTION],
-          payer: AUTHORIZATION_FUNCTION,
-          limit: 9999,
-        })
-        .then((transactionId) => {
-          fcl.tx(transactionId).onceExecuted().then((event) => {
-            console.log("Transaction executed", event);
-          });
-        });
+      const { breakTime } = getDurations(); 
+      if (balance < stake) {
+        alert("You don't have enough balance to stake");
+        return;
+      }
+
+      await fcl.mutate({
+        cadence: stakeCode,
+        args: (arg, t) => [
+          arg(stake.toFixed(2), t.UFix64),
+          arg(selectedTime, t.UInt64),
+        ],
+        proposer: AUTHORIZATION_FUNCTION,
+        authorizations: [AUTHORIZATION_FUNCTION],
+        payer: AUTHORIZATION_FUNCTION,
+        limit: 9999,
+      });
 
       localStorage.removeItem("pomodokiStart");
 
@@ -82,13 +98,16 @@ const Setup = ({ onStart, selectedAvatar = "tomash", onHandlePage }) => {
             maxWidth: 370,
             margin: "0 auto",
             padding: "8px 12px 0 12px",
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
           <div style={{ margin: "10px 0 8px 0" }}>
-            <PixelPomo type={selectedAvatar} style={{ width: 160, height: 160 }} />
+            <PixelPomo
+              type={selectedAvatar}
+              style={{ width: 160, height: 160 }}
+            />
           </div>
           <div
             style={{
@@ -105,7 +124,14 @@ const Setup = ({ onStart, selectedAvatar = "tomash", onHandlePage }) => {
               color: "#5c4435",
             }}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: 12,
+              }}
+            >
               <span>Duration</span>
               <span>{formatDuration(selectedTime)}</span>
             </div>
@@ -115,10 +141,10 @@ const Setup = ({ onStart, selectedAvatar = "tomash", onHandlePage }) => {
               max={180}
               step={1}
               value={selectedTime}
-              onChange={e => setSelectedTime(Number(e.target.value))}
+              onChange={(e) => setSelectedTime(Number(e.target.value))}
               className="custom-slider"
               style={{
-                '--percent': `${percent}%`
+                "--percent": `${percent}%`,
               }}
             />
             <div
@@ -152,7 +178,8 @@ const Setup = ({ onStart, selectedAvatar = "tomash", onHandlePage }) => {
               <span style={{ fontSize: "1.25rem" }}>Flow</span>
             </div>
             <div style={{ fontSize: "1.25rem" }}>
-              Balance: {balanceLoading ? "Loading..." : `${balance.toFixed(2)} Flow`}
+              Balance:{" "}
+              {balanceLoading ? "Loading..." : `${balance.toFixed(2)} Flow`}
               <button
                 onClick={fetchBalance}
                 disabled={balanceLoading}
@@ -194,7 +221,13 @@ const Setup = ({ onStart, selectedAvatar = "tomash", onHandlePage }) => {
               transition: "all 0.2s ease",
             }}
           >
-            Focus
+            {isLoading ? (
+              <span>
+                {'Focus' + '.'.repeat(loadingDots)}
+              </span>
+            ) : (
+              'Focus'
+            )}
           </button>
         </div>
       </div>
