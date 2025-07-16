@@ -20,30 +20,17 @@ const PomodoroTimer = ({
   };
 
   const handleCancel = () => {
+    console.error("handleCancel");
     chrome.runtime?.sendMessage({ action: "stopTimer" });
     if (onFail) onFail();
   };
 
   const handleLoseFocus = () => {
+    console.error("handleLoseFocus");
+
     chrome.runtime?.sendMessage({ action: "stopTimer" });
     if (onFail) onFail();
-  };
-
-  // Escutar mensagens do background (ex: tentativa de abrir sites bloqueados)
-  useEffect(() => {
-    const listener = (message) => {
-      if (message.action === "triggerFailure") {
-        console.warn("⚠️ Site bloqueado acessado:", message.reason);
-        handleLoseFocus(); // Gatilho para falha
-      }
-    };
-
-    chrome.runtime?.onMessage?.addListener(listener);
-
-    return () => {
-      chrome.runtime?.onMessage?.removeListener(listener);
-    };
-  }, []);
+  }; 
 
   return (
     <>

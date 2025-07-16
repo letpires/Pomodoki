@@ -79,6 +79,7 @@ export default function Home() {
     const checkFailure = () => {
       chrome.storage?.local.get("pomodokiStatus", (result) => {
         if (result.pomodokiStatus === "failure") {
+          console.error("checkFailure");
           chrome.storage.local.remove("pomodokiStatus");
           setPage("failure");
         }

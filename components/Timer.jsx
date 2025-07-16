@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import PixelButton from './PixelButton';
+import React, { useState, useEffect } from 'react'; 
 import PixelPomo from './PixelPomo';
 
 const Timer = ({ duration, avatar, onComplete, onCancel, onLoseFocus }) => {
-  const [timeLeft, setTimeLeft] = useState(duration * 60);
-  const [isActive, setIsActive] = useState(true);
+  const [timeLeft, setTimeLeft] = useState(duration * 60); 
 
   // Recupera o tempo restante com base no timestamp salvo
   useEffect(() => {
@@ -22,26 +20,12 @@ const Timer = ({ duration, avatar, onComplete, onCancel, onLoseFocus }) => {
       localStorage.setItem("pomodokiStart", Date.now().toString());
     }
   }, [duration, onComplete]);
-
-  useEffect(() => {
-    const handleLoseFocus = (message) => {
-      if (message.action === "loseFocus") {
-        onLoseFocus();
-      }
-    };
-  
-    chrome.runtime?.onMessage.addListener(handleLoseFocus);
-  
-    return () => {
-      chrome.runtime?.onMessage.removeListener(handleLoseFocus);
-    };
-  }, []);
   
   // Atualiza o cronômetro a cada segundo
   useEffect(() => {
     let interval = null;
 
-    if (isActive && timeLeft > 0) {
+    if (timeLeft > 0) {
       interval = setInterval(() => {
         setTimeLeft(prev => {
           const newTime = prev - 1;
@@ -57,18 +41,7 @@ const Timer = ({ duration, avatar, onComplete, onCancel, onLoseFocus }) => {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [isActive, timeLeft, onComplete]);
-
-  // Simula perda de foco (opcional)
-  useEffect(() => {
-    const randomLoseFocus = setTimeout(() => {
-      if (Math.random() < 0.1) {
-        onLoseFocus();
-      }
-    }, 5000);
-
-    return () => clearTimeout(randomLoseFocus);
-  }, [onLoseFocus]);
+  }, [timeLeft, onComplete]);
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
