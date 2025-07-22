@@ -46,7 +46,7 @@ const CurrentUserProvider = ({ children }) => {
     ) {
       setNetwork(savedNetwork);
     } else {
-      setNetwork("testnet");
+      setNetwork("mainnet");
     }
   }, []);
 
